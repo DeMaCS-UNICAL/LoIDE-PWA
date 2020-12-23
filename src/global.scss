@@ -1,0 +1,407 @@
+@import "./style/tabs.scss";
+
+:root {
+    --landscape-width: 25; // % OR vw for responsive window resizing!
+    --portrait-width: 80vw;
+    --secs: 0.4s;
+
+    --sidebar-width: 250px;
+    --border-radius: 10px;
+    --height-tab: 45px;
+
+    --bg-main: rgba(0, 0, 0, 0.06);
+    --tabs-color: rgb(247, 247, 247);
+    --tabs-color-hover: rgb(221, 221, 221);
+    --tabs-color-active: rgb(190, 186, 186);
+    --tab-background-color-selected: #ebebeb;
+    --tab-text-color-selected: black;
+    --tab-border-color-selected: white;
+
+    --version-color: #337ab7;
+    --sidebar-background-color: #fff5ee;
+    --run-settings-background-color: rgba(255, 245, 238, 1);
+    --output-border-color: #e0edfd;
+    --output-background-color: #f4f9ff;
+
+    --ion-color-medium: #424242;
+    --ion-color-medium-rgb: 66, 66, 66;
+    --ion-color-medium-contrast: #ffffff;
+    --ion-color-medium-contrast-rgb: 255, 255, 255;
+    --ion-color-medium-shade: #3a3a3a;
+    --ion-color-medium-tint: #555555;
+}
+
+@media (prefers-color-scheme: dark) {
+    body.dark {
+        --bg-main: rgba(0, 0, 0, 0);
+        --tabs-color: #2d2c2c;
+        --tabs-color-hover: #424040;
+        --tabs-color-active: #565454;
+        --tab-background-color-selected: #636363;
+        --tab-text-color-selected: white;
+        --tab-border-color-selected: var(--tab-list-background-color);
+        --tab-list-background-color: #242424;
+
+        --version-color: #337ab7;
+        --sidebar-background-color: #fff5ee;
+        --run-settings-background-color: rgba(255, 245, 238, 1);
+        --output-border-color: #292929;
+        --output-background-color: #292929;
+    }
+
+    body.dark .logo {
+        filter: invert(100%);
+    }
+}
+
+body.dark {
+    --bg-main: rgba(0, 0, 0, 0);
+    --tabs-color: #2d2c2c;
+    --tabs-color-hover: #424040;
+    --tabs-color-active: #565454;
+    --tab-background-color-selected: #636363;
+    --tab-text-color-selected: white;
+    --tab-border-color-selected: var(--tab-list-background-color);
+    --tab-list-background-color: #242424;
+
+    --version-color: #337ab7;
+    --sidebar-background-color: #fff5ee;
+    --run-settings-background-color: rgba(255, 245, 238, 1);
+    --output-border-color: #292929;
+    --output-background-color: #292929;
+}
+
+body.dark .logo {
+    filter: invert(100%);
+}
+
+.font-pwa {
+    font-family: "Dancing Script", cursive;
+    &.about-modal {
+        font-size: 2rem;
+    }
+    &.on-navbar {
+        @media (max-width: 366px) {
+            display: none;
+        }
+    }
+}
+
+.version {
+    color: var(--version-color);
+}
+
+.loide-tabs {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.loide-tab-list {
+    overflow: visible;
+    display: flex;
+    -webkit-box-flex: 0;
+    justify-content: space-between;
+    background-color: var(--tab-list-background-color);
+    min-height: var(--height-tab);
+
+    &.only-toolbar {
+        justify-content: center;
+        padding-top: 1px;
+        padding-bottom: 9px;
+    }
+
+    .loide-tab-list-container {
+        position: relative;
+        display: inline-block;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-flex: 1;
+        -ms-flex: auto;
+        flex: auto;
+        -ms-flex-item-align: stretch;
+        align-self: stretch;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .loide-tab-list-operation {
+        display: flex;
+        align-self: stretch;
+        position: relative;
+        flex: none;
+    }
+}
+
+.toolbar {
+    height: var(--height-tab);
+}
+
+.loide-editor {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.main-side-editor {
+    width: 100%;
+    overflow: hidden;
+}
+
+.tab-to-execute-divider {
+    min-height: 20px;
+}
+
+.side-toolbar {
+    --min-height: var(--height-tab);
+}
+
+.tab-button {
+    width: var(--height-tab);
+    height: var(--height-tab);
+
+    transition: all 0.2s;
+    border: 1px solid var(--tabs-color);
+    margin-left: 1px;
+    background-color: var(--tabs-color);
+
+    &:first-of-type {
+        margin-left: 0;
+    }
+
+    &.space-left {
+        margin-left: 5px;
+    }
+
+    &.space-right {
+        margin-right: 5px;
+    }
+
+    &:hover {
+        border-color: var(--tabs-color-hover);
+        background-color: var(--tabs-color-hover);
+    }
+    &:active {
+        border-color: var(--tabs-color-active);
+        background-color: var(--tabs-color-active);
+    }
+}
+
+.tab-button:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.sidebar {
+    position: relative;
+    transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    background-color: var(--sidebar-background-color);
+    overflow: hidden;
+    height: 100%;
+    border-radius: var(--border-radius);
+    will-change: transform;
+    &.opened {
+        transform: translateX(0);
+        margin-right: 8px;
+        min-width: var(--sidebar-width);
+    }
+
+    &.closed {
+        width: 0;
+        transform: translateX(calc(-1 * var(--sidebar-width)));
+    }
+}
+
+.run-settings {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .run-settings-title {
+        border-bottom: 1px dashed #dddddd;
+        background-color: var(--run-settings-background-color);
+        height: 40px;
+    }
+
+    .settings {
+        min-height: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+}
+
+.editor-layout {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+    overflow: hidden;
+
+    .orizontal {
+        display: flex;
+        flex-grow: 1;
+    }
+
+    .panel {
+        display: flex;
+        flex-grow: 1;
+        overflow: hidden;
+
+        &.east {
+            min-width: 280px;
+            width: 280px;
+        }
+
+        &.south {
+            min-height: 180px;
+        }
+
+        .content {
+            width: 100%;
+            height: 100%;
+        }
+    }
+}
+
+// react-panel-resize
+.loide-editor-border {
+    background-color: var(--bg-main);
+    cursor: ew-resize;
+    display: flex;
+    z-index: 10;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+
+    &.horizontal {
+        width: 5px;
+        flex-direction: column;
+    }
+
+    &.vertical {
+        height: 5px;
+    }
+}
+
+// react-panel-resize
+.loide-editor-handle {
+    background: white;
+    border: 2px solid lightgray;
+    border-radius: 8px;
+    z-index: 10;
+    overflow: hidden;
+    display: -webkit-box;
+    display: flex;
+
+    &.horizontal {
+        cursor: ew-resize;
+
+        width: 12px;
+        height: 70px;
+        align-items: center;
+        text-align: center;
+        -webkit-box-align: center;
+    }
+
+    &.vertical {
+        cursor: ns-resize;
+
+        width: 70px;
+        height: 12px;
+        -webkit-box-pack: center;
+        justify-content: center;
+    }
+}
+
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.delete-tab {
+    transition: all 0.2s;
+    color: black;
+}
+
+.delete-tab:hover {
+    color: red;
+}
+
+.loide-output {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    font-size: 25px;
+
+    padding: 10px;
+
+    .output-settings {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .output-title {
+            font-weight: 500;
+            font-size: 1.25rem;
+        }
+    }
+
+    .output-content {
+        display: flex;
+        flex-direction: column;
+
+        width: 100%;
+        flex-grow: 1;
+        overflow: scroll;
+        border: 1px var(--output-border-color) solid;
+        border-radius: 8px;
+        background: var(--output-background-color);
+        margin-top: 10px;
+        // padding: 5px 5px 5px 5px;
+        line-height: 1.5;
+        white-space: pre-wrap;
+
+        .output-error {
+            color: red;
+        }
+    }
+}
+
+.tab-content-of-hidden {
+    --overflow: hidden;
+}
+
+.margin-button {
+    &-left {
+        margin-left: 5px;
+    }
+    &-right {
+        margin-right: 5px;
+    }
+}
+
+.loading-files {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dropzone-text {
+    color: #b3b3b3;
+    font-size: 20px;
+    cursor: pointer;
+}
