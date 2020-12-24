@@ -76,7 +76,7 @@ const Appearance: React.FC<AppearanceProps> = (props) => {
                     <IonRange
                         value={fontSizeEditor}
                         onIonChange={onFontEditorChange}
-                        min={10}
+                        min={15}
                         max={30}
                         pin={true}
                         snaps={true}
