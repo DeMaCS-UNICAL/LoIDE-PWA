@@ -44,14 +44,22 @@ const About: React.FC = () => {
                 </a>
             </p>
             <p>
-                LoIDE is an Open Source project available on{" "}
-                <a href="#" rel="noopener noreferrer" target="_blank">
+                LoIDE PWA is an Open Source project available on{" "}
+                <a
+                    href="https://github.com/DeMaCS-UNICAL/LoIDE-PWA"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                >
                     Github <i className="fa fa-github"></i>
                 </a>
             </p>
             <p className="ion-text-justify">
                 It's released under{" "}
-                <a href="#" rel="noopener noreferrer" target="_blank">
+                <a
+                    href="https://github.com/DeMaCS-UNICAL/LoIDE-PWA/blob/main/LICENSE"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                >
                     MIT License
                 </a>
             </p>

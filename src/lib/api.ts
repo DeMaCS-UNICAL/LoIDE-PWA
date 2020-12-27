@@ -11,7 +11,7 @@ import { SocketStatusStore, UIStatusStore } from "./store";
 import { Toast } from "./constants";
 
 // LoIDE Web Server API URL
-const APIUrl = "192.168.1.13:8084";
+const APIUrl = "localhost:8084";
 
 var socket: SocketIOClient.Socket | undefined = undefined;
 
