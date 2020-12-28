@@ -18,7 +18,7 @@ const AboutTab: React.FC = () => {
                     <IonTitle>About LoIDE</IonTitle>
                 </IonToolbar>
             </IonHeader>
-            <IonContent fullscreen className="ion-padding">
+            <IonContent className="ion-padding">
                 <IonRow>
                     <IonCol
                         size-md="8"
