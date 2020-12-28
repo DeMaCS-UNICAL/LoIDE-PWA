@@ -25,7 +25,7 @@ const LoideTab = ({
     };
 
     const defaultOptions = {
-        shouldPreventDefault: true,
+        shouldPreventDefault: false,
         delay: 500,
     };
 
