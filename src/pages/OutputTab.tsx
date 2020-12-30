@@ -12,27 +12,25 @@ import {
     IonToolbar,
 } from "@ionic/react";
 import Output from "../components/Output";
-import { OutputStore, UIStatusStore } from "../lib/store";
 import { backspaceOutline, downloadOutline } from "ionicons/icons";
 import Utils from "../lib/utils";
+import { useDispatch, useSelector } from "react-redux";
+import { UIStatusSelector } from "../redux/slices/UIStatus";
+import { outputSelector, setEmpty } from "../redux/slices/Output";
 
 const OutputTab: React.FC = () => {
-    const outputModel = OutputStore.useState((o) => o.model);
-    const outputError = OutputStore.useState((o) => o.error);
+    const dispatch = useDispatch();
 
-    const outputFontSize = UIStatusStore.useState((u) => u.fontSizeOutput);
+    const { model, error } = useSelector(outputSelector);
+
+    const { fontSizeOutput } = useSelector(UIStatusSelector);
 
     const clearOutput = () => {
-        OutputStore.update((o) => {
-            o.model = "";
-            o.error = "";
-        });
+        dispatch(setEmpty);
     };
 
     const downloadOutput = () => {
-        let fileContent = `${outputModel} ${
-            outputModel.length > 0 ? "\n\n" : ""
-        } ${outputError}`;
+        let fileContent = `${model} ${model.length > 0 ? "\n\n" : ""} ${error}`;
 
         let fileTitle = "LoIDE_Output";
 
@@ -48,10 +46,7 @@ const OutputTab: React.FC = () => {
                             color="primary"
                             className="ion-hide-sm-up"
                             title="Download"
-                            disabled={
-                                outputModel.length === 0 &&
-                                outputError.length === 0
-                            }
+                            disabled={model.length === 0 && error.length === 0}
                             onClick={downloadOutput}
                         >
                             <IonIcon icon={downloadOutline} />
@@ -63,10 +58,7 @@ const OutputTab: React.FC = () => {
                             color="primary"
                             className="ion-hide-sm-down"
                             title="Download"
-                            disabled={
-                                outputModel.length === 0 &&
-                                outputError.length === 0
-                            }
+                            disabled={model.length === 0 && error.length === 0}
                             onClick={downloadOutput}
                         >
                             <IonIcon icon={downloadOutline} />
@@ -76,10 +68,7 @@ const OutputTab: React.FC = () => {
                             size="small"
                             color="medium"
                             title="Clear"
-                            disabled={
-                                outputModel.length === 0 &&
-                                outputError.length === 0
-                            }
+                            disabled={model.length === 0 && error.length === 0}
                             onClick={clearOutput}
                         >
                             <IonIcon icon={backspaceOutline} />
@@ -99,9 +88,9 @@ const OutputTab: React.FC = () => {
                         style={{ height: "100%" }}
                     >
                         <Output
-                            model={outputModel}
-                            error={outputError}
-                            fontSize={outputFontSize}
+                            model={model}
+                            error={error}
+                            fontSize={fontSizeOutput}
                         />
                     </IonCol>
                 </IonRow>

@@ -1,5 +1,7 @@
 import { ILanguageData } from "./LoideAPIInterfaces";
 
+export interface EditorTabMap extends Record<number, ILoideTab> {}
+
 export interface ISolverOption {
     id: number;
     name: string;
@@ -17,18 +19,18 @@ export interface IToggleItem {
     show: boolean;
 }
 
-export interface ILanguagesStore {
+export interface ILanguagesState {
     languages: ILanguageData[];
 }
 
-export interface IRunSettingsStore {
+export interface IRunSettingsState {
     currentLanguage: string;
     currentSolver: string;
     currentExecutor: string;
 
     currentOptions: ISolverOption[];
 
-    IDTabsToExecute: number[];
+    tabsIDToExecute: number[];
 
     runAuto: boolean;
 }
@@ -39,19 +41,20 @@ export interface ILoideTab {
     value: string;
 }
 
-export interface IEditorStore {
+export interface IEditorState {
     tabCountID: number;
-    currentTab: number;
-    tabs: Map<number, ILoideTab>;
+    currentTabIndex: number;
+    tabs: EditorTabMap;
+    tabsEditorSessions: any[];
     prevTabsSize: number;
 }
 
-export interface IOutputStore {
+export interface IOutputState {
     model: string;
     error: string;
 }
 
-export interface IUIStatusStore {
+export interface IUIStatusState {
     connectingToTheServer: boolean;
     loadingFiles: boolean;
     darkMode: boolean;
@@ -65,7 +68,7 @@ export interface IDimensions {
     height: number;
 }
 
-export interface ISocketStatusStore {
+export interface ISocketStatusState {
     connected: boolean;
 }
 
@@ -75,10 +78,10 @@ export interface ILoideProject {
     executor: string;
     options: ISolverOption[];
 
-    IDTabsToExecute: number[];
+    tabsIDToExecute: number[];
 
     tabs: ILoideTab[];
-    IDTabs: number[];
+    tabsID: number[];
 
     runAuto: boolean;
     outputError: string;

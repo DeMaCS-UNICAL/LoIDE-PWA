@@ -43,36 +43,36 @@ import "./theme/variables.scss";
 
 import "./global.scss";
 import AboutTab from "./pages/AboutTab";
-import { LanguagesDataStore, OutputStore, UIStatusStore } from "./lib/store";
 import API from "./lib/api";
 import { IOutputData } from "./lib/LoideAPIInterfaces";
 import { LoidePath } from "./lib/constants";
 import AppearanceTab from "./pages/AppearanceTab";
 import Utils from "./lib/utils";
+import { useDispatch, useSelector } from "react-redux";
+import { UIStatusSelector } from "./redux/slices/UIStatus";
+import { setError, setModel } from "./redux/slices/Output";
+import { setLanguages } from "./redux/slices/LanguagesData";
 
 const App: React.FC = () => {
-    const newOutput = UIStatusStore.useState((u) => u.newOutput);
+    const dispatch = useDispatch();
+    const { newOutput } = useSelector(UIStatusSelector);
 
     useEffect(() => {
         API.createSocket();
 
         API.setGetLanguagesListener((output) => {
-            LanguagesDataStore.update((l) => {
-                l.languages = output;
-            });
+            dispatch(setLanguages(output));
         });
 
         API.setRunProjectListener((output: IOutputData) => {
-            OutputStore.update((o) => {
-                o.model = output.model;
-                o.error = output.error;
-            });
+            dispatch(setModel(output.model));
+            dispatch(setError(output.error));
 
             Utils.addNewOutputBadge();
         });
 
         return () => API.disconnectAndClearSocket();
-    }, []);
+    }, [dispatch]);
 
     useEffect(() => {
         const button = document.querySelector(".output-tab-button");

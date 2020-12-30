@@ -7,8 +7,10 @@ import {
     IOutputData,
     IOutputProblemData,
 } from "./LoideAPIInterfaces";
-import { SocketStatusStore, UIStatusStore } from "./store";
 import { Toast } from "./constants";
+import { store } from "../redux";
+import { setConnectingToTheServer } from "../redux/slices/UIStatus";
+import { setConnected } from "../redux/slices/SocketStatus";
 
 // LoIDE Web Server API URL
 const APIUrl = "localhost:8084";
@@ -31,12 +33,11 @@ const createSocket = () => {
                 .then((toast) => {
                     toast.present();
                 });
-            SocketStatusStore.update((s) => {
-                s.connected = false;
-            });
-            UIStatusStore.update((s) => {
-                s.connectingToTheServer = false;
-            });
+
+            store.dispatch(setConnected(false));
+
+            store.dispatch(setConnectingToTheServer(false));
+
             console.error(Errors.ConnectionError);
         });
     }
@@ -52,9 +53,8 @@ const setRunProjectListener = (
         socket.on(
             APIWSEvents.on.problem,
             async (response: IOutputProblemData) => {
-                SocketStatusStore.update((s) => {
-                    s.connected = true;
-                });
+                store.dispatch(setConnected(true));
+
                 await toastController
                     .create({
                         position: "top",
@@ -71,9 +71,7 @@ const setRunProjectListener = (
         );
 
         socket.on(APIWSEvents.on.output, (response: IOutputData) => {
-            SocketStatusStore.update((s) => {
-                s.connected = true;
-            });
+            store.dispatch(setConnected(true));
             callbackOutput(response);
         });
     }
@@ -86,12 +84,10 @@ const setGetLanguagesListener = (
         socket.off(APIWSEvents.on.languages);
         socket.on(APIWSEvents.on.languages, (response: string) => {
             let data: ILanguageData[] = Array.from(JSON.parse(response));
-            SocketStatusStore.update((s) => {
-                s.connected = true;
-            });
-            UIStatusStore.update((s) => {
-                s.connectingToTheServer = false;
-            });
+            store.dispatch(setConnected(true));
+
+            store.dispatch(setConnectingToTheServer(false));
+
             callbackLanguages(data);
         });
     }
@@ -100,9 +96,7 @@ const setGetLanguagesListener = (
 const emitGetLanguages = () => {
     if (socket) {
         if (socket.disconnected) {
-            UIStatusStore.update((s) => {
-                s.connectingToTheServer = true;
-            });
+            store.dispatch(setConnectingToTheServer(true));
             socket.connect();
         }
         socket.emit(APIWSEvents.emit.getLanguages);
@@ -112,9 +106,7 @@ const emitGetLanguages = () => {
 const emitRunProject = (data: ILoideRunData) => {
     if (socket) {
         if (socket.disconnected) {
-            UIStatusStore.update((s) => {
-                s.connectingToTheServer = true;
-            });
+            store.dispatch(setConnectingToTheServer(true));
             socket.connect();
         }
         socket.emit(APIWSEvents.emit.run, JSON.stringify(data));

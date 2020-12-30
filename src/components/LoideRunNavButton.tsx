@@ -2,14 +2,14 @@ import { IonButton, IonIcon } from "@ionic/react";
 import { play } from "ionicons/icons";
 import React from "react";
 import { useLanguageAvailable } from "../hooks/useLanguageAvailable";
-import { useGetLoideRunData } from "../hooks/useGetLoideRunData";
 import API from "../lib/api";
+import Utils from "../lib/utils";
 
 const LoideRunNavButton: React.FC = () => {
-    const dataToRun = useGetLoideRunData();
     const languageAvailable = useLanguageAvailable();
 
     const onRun = () => {
+        let dataToRun = Utils.getLoideRunData();
         API.emitRunProject(dataToRun);
     };
 

@@ -1,26 +1,29 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import TabToExecute from "../../components/TabToExecute";
-import { ionFireEvent as fireEvent } from "@ionic/react-test-utils";
+import {
+    ionFireEvent as fireEvent,
+    ionFireEvent,
+} from "@ionic/react-test-utils";
 
-import { ILoideTab } from "../../lib/LoideInterfaces";
+import { EditorTabMap } from "../../lib/LoideInterfaces";
 
 import { mockIonicReact } from "@ionic/react-test-utils";
-import { SuffixNameTab } from "../../lib/constants";
+import { AllTabs, CurrentTab, SuffixNameTab } from "../../lib/constants";
 mockIonicReact();
 
-var tabs: Map<number, ILoideTab> = new Map<number, ILoideTab>();
-tabs.set(1, {
+var tabs: EditorTabMap = {};
+tabs[1] = {
     title: `${SuffixNameTab}1`,
     type: "",
     value: "node(1)",
-});
+};
 
-tabs.set(2, {
+tabs[2] = {
     title: `${SuffixNameTab}2`,
     type: "",
     value: "color(2)",
-});
+};
 
 test("renders without crashing", () => {
     const { baseElement } = render(
@@ -74,57 +77,87 @@ test("renders the tab items", async () => {
         />
     );
 
-    await screen.findByText(tabs.get(1)!.title);
-    await screen.findByText(tabs.get(2)!.title);
+    await screen.findByText(tabs[1].title);
+    await screen.findByText(tabs[2].title);
 });
 
 test("test click the current tab radio item", async () => {
+    let tabsIDToExecute: number[] = [1, 2];
+    const onCheckCurrentTab = jest.fn((value: boolean) => {
+        if (value) {
+            tabsIDToExecute = [];
+        }
+    });
     render(
         <TabToExecute
             tabs={tabs}
-            tabsIDToExecute={[]}
-            onCheckCurrentTab={jest.fn()}
+            tabsIDToExecute={tabsIDToExecute}
+            onCheckCurrentTab={onCheckCurrentTab}
             onCheckTab={jest.fn()}
             onCheckAllTabs={jest.fn()}
         />
     );
 
-    const radio = await screen.findByTitle("Current tab");
+    const radioGroup = await screen.findByTestId("group-radio-tab");
 
-    fireEvent.click(radio!, "");
+    fireEvent(
+        radioGroup,
+        new CustomEvent("ionChange", { detail: { value: CurrentTab } })
+    );
+
+    expect(onCheckCurrentTab).toBeCalled();
+    expect(tabsIDToExecute.length).toBe(0);
 });
 
 test("test click the all tabs radio item", async () => {
+    let tabsIDToExecute: number[] = [];
+    const onCheckAllTabs = jest.fn((value: boolean) => {
+        if (value) {
+            tabsIDToExecute = [
+                ...Object.keys(tabs).map((item) => Number(item)),
+            ];
+        }
+    });
     render(
         <TabToExecute
             tabs={tabs}
-            tabsIDToExecute={[]}
+            tabsIDToExecute={tabsIDToExecute}
             onCheckCurrentTab={jest.fn()}
             onCheckTab={jest.fn()}
-            onCheckAllTabs={jest.fn()}
+            onCheckAllTabs={onCheckAllTabs}
         />
     );
 
-    const radio = await screen.findByTitle("All tabs");
+    const radioGroup = await screen.findByTestId("group-radio-tab");
 
-    fireEvent.click(radio!, "");
+    fireEvent(
+        radioGroup,
+        new CustomEvent("ionChange", { detail: { value: AllTabs } })
+    );
+
+    expect(onCheckAllTabs).toBeCalled();
+    expect(tabsIDToExecute.length).toBe(Object.keys(tabs).length);
 });
 
 test("test click the tab items", async () => {
+    let tabsIDToExecute: number[] = [];
+    const onCheckTab = jest.fn((id: number, value: boolean) => {
+        if (value) tabsIDToExecute.push(id);
+    });
     render(
         <TabToExecute
             tabs={tabs}
-            tabsIDToExecute={[]}
+            tabsIDToExecute={tabsIDToExecute}
             onCheckCurrentTab={jest.fn()}
-            onCheckTab={jest.fn()}
+            onCheckTab={onCheckTab}
             onCheckAllTabs={jest.fn()}
         />
     );
 
-    const item = await (await screen.findByText(tabs.get(1)!.title))
-        .nextElementSibling;
+    const item = await screen.findByTestId(`item-tab-1`);
 
-    fireEvent.click(item!, "");
+    ionFireEvent.click(item!);
 
-    expect(item).toHaveProperty("checked", true);
+    expect(onCheckTab).toBeCalled();
+    expect(tabsIDToExecute.length).toBe(1);
 });

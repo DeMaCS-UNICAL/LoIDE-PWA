@@ -3,6 +3,7 @@ export interface ILanguageData {
     value: string;
     solvers: ISolverData[];
 }
+
 export interface ISolverData {
     name: string;
     value: string;

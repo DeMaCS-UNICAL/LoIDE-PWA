@@ -1,13 +1,15 @@
 import { IonButton, IonCol, IonProgressBar, IonRow } from "@ionic/react";
 import React from "react";
 import API from "../lib/api";
-import { SocketStatusStore, UIStatusStore } from "../lib/store";
 import { Offline, Online } from "react-detect-offline";
+import { useSelector } from "react-redux";
+import { UIStatusSelector } from "../redux/slices/UIStatus";
+import { socketStatusSelector } from "../redux/slices/SocketStatus";
 
 const NoLanguageAvailable: React.FC = () => {
-    const reconnecting = UIStatusStore.useState((s) => s.connectingToTheServer);
+    const { connectingToTheServer } = useSelector(UIStatusSelector);
 
-    const connectedFromServer = SocketStatusStore.useState((s) => s.connected);
+    const { connected } = useSelector(socketStatusSelector);
 
     const onReconnect = () => {
         API.emitGetLanguages();
@@ -17,7 +19,7 @@ const NoLanguageAvailable: React.FC = () => {
             <IonProgressBar
                 type="indeterminate"
                 style={
-                    reconnecting
+                    connectingToTheServer
                         ? { position: "fixed" }
                         : { opacity: 0, position: "fixed" }
                 }
@@ -26,20 +28,20 @@ const NoLanguageAvailable: React.FC = () => {
                 <IonCol className="ion-text-center ion-padding">
                     <h4 className="ion-margin-bottom">No language available</h4>
                     <Online>
-                        {!connectedFromServer && (
+                        {!connected && (
                             <>
                                 <h5
                                     className="ion-margin-bottom"
                                     style={{ opacity: 0.6, minHeight: "50px" }}
                                 >
-                                    {!reconnecting && !connectedFromServer && (
+                                    {!connectingToTheServer && !connected && (
                                         <span>
                                             You are disconnect from the server,
                                             try to reconnect
                                         </span>
                                     )}
 
-                                    {reconnecting && (
+                                    {connectingToTheServer && (
                                         <span>
                                             Reconnecting to the server...
                                         </span>
@@ -54,7 +56,7 @@ const NoLanguageAvailable: React.FC = () => {
                                 >
                                     <IonButton
                                         onClick={onReconnect}
-                                        // disabled={reconnecting}
+                                        // disabled={connectingToTheServer}
                                     >
                                         Reconnect
                                     </IonButton>

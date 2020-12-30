@@ -10,21 +10,27 @@ import {
 } from "@ionic/react";
 import { moonOutline } from "ionicons/icons";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { LocalStorageItems } from "../lib/constants";
-import { UIStatusStore } from "../lib/store";
 import Utils from "../lib/utils";
+import {
+    setDarkMode,
+    setFontSizeEditor,
+    setFontSizeOutput,
+    UIStatusSelector,
+} from "../redux/slices/UIStatus";
 
 interface AppearanceProps {}
 
 const Appearance: React.FC<AppearanceProps> = (props) => {
-    const darkMode = UIStatusStore.useState((u) => u.darkMode);
-    const fontSizeEditor = UIStatusStore.useState((u) => u.fontSizeEditor);
-    const fontSizeOutput = UIStatusStore.useState((u) => u.fontSizeOutput);
+    const dispatch = useDispatch();
+
+    const { darkMode, fontSizeEditor, fontSizeOutput } = useSelector(
+        UIStatusSelector
+    );
 
     const onDarkModeChange = () => {
-        UIStatusStore.update((u) => {
-            u.darkMode = !darkMode;
-        });
+        dispatch(setDarkMode(!darkMode));
         localStorage.setItem(
             LocalStorageItems.darkMode,
             (!darkMode).toString()
@@ -34,9 +40,7 @@ const Appearance: React.FC<AppearanceProps> = (props) => {
     const onFontEditorChange = (e: any) => {
         let value = e?.detail?.value;
         if (value) {
-            UIStatusStore.update((u) => {
-                u.fontSizeEditor = value;
-            });
+            dispatch(setFontSizeEditor(value));
             localStorage.setItem(
                 LocalStorageItems.fontSizeEditor,
                 value.toString()
@@ -48,15 +52,14 @@ const Appearance: React.FC<AppearanceProps> = (props) => {
         let value = e?.detail?.value;
 
         if (value) {
-            UIStatusStore.update((u) => {
-                u.fontSizeOutput = value;
-            });
+            dispatch(setFontSizeOutput(value.toString()));
             localStorage.setItem(
                 LocalStorageItems.fontSizeOutput,
                 value.toString()
             );
         }
     };
+
     return (
         <>
             <IonList>

@@ -1,22 +1,17 @@
 import {
     IExecutorData,
     ILanguageData,
+    ILoideRunData,
     IOptionsData,
     ISolverData,
 } from "./LoideAPIInterfaces";
 import { toastController } from "@ionic/core";
-import { ILoideProject, ILoideTab, ISolverOption } from "./LoideInterfaces";
 import {
-    EditorStore,
-    initialEditorStore,
-    initialOutputStore,
-    initialRunSettingsStore,
-    initialUIStatusStore,
-    OutputStore,
-    RunSettingsStore,
-    UIStatusStore,
-} from "./store";
-import { enableMapSet } from "immer";
+    EditorTabMap,
+    ILoideProject,
+    ILoideTab,
+    ISolverOption,
+} from "./LoideInterfaces";
 import {
     InitalTabCountID,
     LocalStorageItems,
@@ -24,8 +19,40 @@ import {
     Toast,
     ValuesNotSupported,
 } from "./constants";
-
-enableMapSet();
+import { store } from "../redux";
+import {
+    initialUIStatusState,
+    setDarkMode,
+    setFontSizeEditor,
+    setFontSizeOutput,
+    setLoadingFiles,
+    setNewOutput,
+} from "../redux/slices/UIStatus";
+import { initialOutputState, setAllOutput } from "../redux/slices/Output";
+import {
+    initialRunSettingsState,
+    setAllRunSettings,
+    setCurrentExecutor,
+    setCurrentLanguage,
+    setCurrentOptions,
+    setCurrentSolver,
+    setRunAuto,
+    setTabsIDToExecute,
+} from "../redux/slices/RunSettings";
+import {
+    addNewTab,
+    changeTabName,
+    changeTabValue,
+    clearTabValue,
+    deleteTab,
+    duplicateTab,
+    initialEditorState,
+    selectTab,
+    setAllEditorState,
+    setAllTabs,
+    setTabCountID,
+    setTabIndex,
+} from "../redux/slices/Editor";
 
 const isJSON = (str: string) => {
     try {
@@ -42,9 +69,9 @@ const hasRightProperty = (config: any): boolean => {
         "solver" in config &&
         "executor" in config &&
         "options" in config &&
-        "IDTabsToExecute" in config &&
+        "tabsIDToExecute" in config &&
         "tabs" in config &&
-        "IDTabs" in config &&
+        "tabsID" in config &&
         "runAuto" in config &&
         "outputModel" in config &&
         "outputError" in config
@@ -264,114 +291,35 @@ const downloadTextFile = (title: string, text: string) => {
 };
 
 const resetInput = () => {
-    EditorStore.update((e) => {
-        e.tabs = initialEditorStore.tabs;
-        e.currentTab = initialEditorStore.currentTab;
-        e.tabCountID = initialEditorStore.tabCountID;
-        e.prevTabsSize = initialEditorStore.prevTabsSize;
-    });
+    store.dispatch(setAllEditorState(initialEditorState));
 };
 
-const addTab = () => {
-    EditorStore.update((e) => {
-        let nextID = e.tabCountID + 1;
-
-        let nextTabs = new Map(e.tabs);
-        nextTabs.set(nextID, {
-            title: `${SuffixNameTab}${nextID}`,
-            type: "",
-            value: "",
-        });
-
-        e.currentTab = nextTabs.size - 1;
-        e.prevTabsSize = e.tabs.size;
-        e.tabs = nextTabs;
-        e.tabCountID = nextID;
-    });
+const addEditorTab = () => {
+    store.dispatch(addNewTab());
 };
 
-const deleteTab = (tabKey: number) => {
-    EditorStore.update((e) => {
-        let nextTabs = new Map(e.tabs);
-        nextTabs.delete(tabKey);
-        let shift = e.tabs.size - 1 === e.currentTab ? true : false;
-
-        e.currentTab = shift ? e.currentTab - 1 : e.currentTab;
-        e.tabs = nextTabs;
-        e.prevTabsSize = e.tabs.size;
-    });
+const deleteEditorTab = (tabKey: number) => {
+    store.dispatch(deleteTab(tabKey));
 };
 
-const selectTab = (index: number) => {
-    EditorStore.update((e) => {
-        e.currentTab = index;
-    });
+const selectEditorTab = (index: number) => {
+    store.dispatch(selectTab(index));
 };
 
-const changeTabValue = (tabKey: number, value: string) => {
-    EditorStore.update((e) => {
-        let tab: ILoideTab = Object.assign({}, e.tabs.get(tabKey));
-
-        if (tab) {
-            tab.value = value;
-
-            let nextTabs = new Map(e.tabs);
-            nextTabs.set(tabKey, tab);
-
-            e.tabs = nextTabs;
-        }
-    });
+const changeEditorTabValue = (tabKey: number, value: string) => {
+    store.dispatch(changeTabValue({ tabKey, value }));
 };
 
-const changeTabName = (tabKey: number, name: string) => {
-    EditorStore.update((e) => {
-        let tab: ILoideTab = Object.assign({}, e.tabs.get(tabKey));
-
-        if (tab) {
-            tab.title = name;
-
-            let nextTabs = new Map(e.tabs);
-            nextTabs.set(tabKey, tab);
-
-            e.tabs = nextTabs;
-        }
-    });
+const changeTabEditorName = (tabKey: number, name: string) => {
+    store.dispatch(changeTabName({ tabKey, name }));
 };
 
-const duplicateTab = (tabKey: number) => {
-    EditorStore.update((e) => {
-        let tab: ILoideTab = Object.assign({}, e.tabs.get(tabKey));
-        if (tab) {
-            let nextID = e.tabCountID + 1;
-
-            let nextTabs = new Map(e.tabs);
-            nextTabs.set(nextID, {
-                title: `${SuffixNameTab}${nextID}`,
-                type: tab.type,
-                value: tab.value,
-            });
-
-            e.currentTab = nextTabs.size - 1;
-            e.prevTabsSize = e.tabs.size;
-            e.tabs = nextTabs;
-            e.tabCountID = nextID;
-        }
-    });
+const duplicateEditorTab = (tabKey: number) => {
+    store.dispatch(duplicateTab(tabKey));
 };
 
-const clearTabValue = (tabKey: number) => {
-    EditorStore.update((e) => {
-        let tab: ILoideTab = Object.assign({}, e.tabs.get(tabKey));
-
-        if (tab) {
-            tab.value = "";
-
-            let nextTabs = new Map(e.tabs);
-            nextTabs.set(tabKey, tab);
-
-            e.tabs = nextTabs;
-        }
-    });
+const clearEditorTabValue = (tabKey: number) => {
+    store.dispatch(clearTabValue(tabKey));
 };
 
 const saveTabContent = (tab: ILoideTab) => {
@@ -379,41 +327,30 @@ const saveTabContent = (tab: ILoideTab) => {
 };
 
 const resetProject = () => {
-    RunSettingsStore.update((s) => {
-        s.currentLanguage = initialRunSettingsStore.currentLanguage;
-        s.currentSolver = initialRunSettingsStore.currentSolver;
-        s.currentExecutor = initialRunSettingsStore.currentExecutor;
-        s.currentOptions = initialRunSettingsStore.currentOptions;
-        s.runAuto = initialRunSettingsStore.runAuto;
-        s.IDTabsToExecute = initialRunSettingsStore.IDTabsToExecute;
-    });
+    store.dispatch(setAllRunSettings(initialRunSettingsState));
 
     Utils.Editor.resetInput();
 
-    OutputStore.update((o) => {
-        o.error = initialOutputStore.error;
-        o.model = initialOutputStore.model;
-    });
+    store.dispatch(setAllOutput(initialOutputState));
 };
 
 const createTabsFromArray = (textTabs: string[]) => {
-    let newTabs = new Map<number, ILoideTab>();
+    let newTabs: EditorTabMap = {};
     let indexTab = InitalTabCountID;
     textTabs.forEach((text) => {
-        newTabs.set(indexTab, {
+        newTabs[indexTab] = {
             title: `${SuffixNameTab}${indexTab}`,
             type: "",
             value: text,
-        });
+        };
         indexTab++;
     });
-    EditorStore.update((e) => {
-        e.tabCountID = indexTab;
-        e.tabs = newTabs;
-    });
-    UIStatusStore.update((u) => {
-        u.loadingFiles = false;
-    });
+
+    store.dispatch(setTabCountID(indexTab));
+    store.dispatch(setAllTabs(newTabs));
+
+    store.dispatch(setLoadingFiles(false));
+
     Utils.generateGeneralToast(
         Toast.FileOpenedSuccessfully.message,
         Toast.FileOpenedSuccessfully.header,
@@ -435,17 +372,13 @@ const setProjectFromConfig = (
 
         // set the current language
         if (Utils.canSetLanguage(project.language, languages)) {
-            RunSettingsStore.update((s) => {
-                s.currentLanguage = project.language;
-            });
+            store.dispatch(setCurrentLanguage(project.language));
 
             // set the current solver
             if (
                 Utils.canSetSolver(project.solver, project.language, languages)
             ) {
-                RunSettingsStore.update((s) => {
-                    s.currentSolver = project.solver;
-                });
+                store.dispatch(setCurrentSolver(project.solver));
 
                 // set the current executor
                 if (
@@ -456,9 +389,7 @@ const setProjectFromConfig = (
                         languages
                     )
                 ) {
-                    RunSettingsStore.update((s) => {
-                        s.currentExecutor = project.executor;
-                    });
+                    store.dispatch(setCurrentExecutor(project.executor));
                 } else {
                     valuesNotSupported.push(ValuesNotSupported.Executor);
                 }
@@ -486,34 +417,34 @@ const setProjectFromConfig = (
         }
 
         // set the ID tabs to execute, the options supported and the runAuto option
-        RunSettingsStore.update((s) => {
-            s.currentOptions = optionsSupported;
-            s.IDTabsToExecute = project.IDTabsToExecute;
-            s.runAuto = project.runAuto;
-        });
+        store.dispatch(setCurrentOptions(optionsSupported));
+        store.dispatch(setTabsIDToExecute(project.tabsIDToExecute));
+        store.dispatch(setRunAuto(project.runAuto));
 
         // set the tabs and their IDs
-        let newTabs = new Map<number, ILoideTab>();
+        let newTabs: EditorTabMap = {};
 
         project.tabs.forEach((program, index) => {
-            newTabs.set(project.IDTabs[index], {
+            newTabs[project.tabsID[index]] = {
                 title: program.title,
                 type: program.type,
                 value: program.value,
-            });
+            };
         });
 
-        EditorStore.update((e) => {
-            e.currentTab = 0;
-            e.tabs = newTabs;
-            e.tabCountID = project.IDTabs[project.IDTabs.length - 1]; // set the last ID
-        });
+        store.dispatch(setTabIndex(0));
+        store.dispatch(
+            setTabCountID(project.tabsID[project.tabsID.length - 1])
+        );
+        store.dispatch(setAllTabs(newTabs));
 
         // set the output
-        OutputStore.update((o) => {
-            o.model = project.outputModel;
-            o.error = project.outputError;
-        });
+        store.dispatch(
+            setAllOutput({
+                model: project.outputModel,
+                error: project.outputError,
+            })
+        );
 
         if (valuesNotSupported.length > 0) {
             Utils.generateGeneralToast(
@@ -556,9 +487,8 @@ const setProjectFromConfig = (
         );
         if (onFinishCallback) onFinishCallback(false);
     }
-    UIStatusStore.update((u) => {
-        u.loadingFiles = false;
-    });
+
+    store.dispatch(setLoadingFiles(false));
 };
 
 const setProjectFromLink = (
@@ -575,17 +505,13 @@ const setProjectFromLink = (
 
         // set the current language
         if (Utils.canSetLanguage(project.language, languages)) {
-            RunSettingsStore.update((s) => {
-                s.currentLanguage = project.language;
-            });
+            store.dispatch(setCurrentLanguage(project.language));
 
             // set the current solver
             if (
                 Utils.canSetSolver(project.solver, project.language, languages)
             ) {
-                RunSettingsStore.update((s) => {
-                    s.currentSolver = project.solver;
-                });
+                store.dispatch(setCurrentSolver(project.solver));
 
                 // set the current executor
                 if (
@@ -596,9 +522,7 @@ const setProjectFromLink = (
                         languages
                     )
                 ) {
-                    RunSettingsStore.update((s) => {
-                        s.currentExecutor = project.executor;
-                    });
+                    store.dispatch(setCurrentExecutor(project.executor));
                 } else {
                     valuesNotSupported.push(ValuesNotSupported.Executor);
                 }
@@ -626,34 +550,34 @@ const setProjectFromLink = (
         }
 
         // set the ID tabs to execute, the options supported and the runAuto option
-        RunSettingsStore.update((s) => {
-            s.currentOptions = optionsSupported;
-            s.IDTabsToExecute = project.IDTabsToExecute;
-            s.runAuto = project.runAuto;
-        });
+        store.dispatch(setCurrentOptions(optionsSupported));
+        store.dispatch(setTabsIDToExecute(project.tabsIDToExecute));
+        store.dispatch(setRunAuto(project.runAuto));
 
         // set the tabs and their IDs
-        let newTabs = new Map<number, ILoideTab>();
+        let newTabs: EditorTabMap = {};
 
         project.tabs.forEach((program, index) => {
-            newTabs.set(project.IDTabs[index], {
+            newTabs[project.tabsID[index]] = {
                 title: program.title,
                 type: program.type,
                 value: program.value,
-            });
+            };
         });
 
-        EditorStore.update((e) => {
-            e.currentTab = 0;
-            e.tabs = newTabs;
-            e.tabCountID = project.IDTabs[project.IDTabs.length - 1]; // set the last ID
-        });
+        store.dispatch(setTabIndex(0));
+        store.dispatch(
+            setTabCountID(project.tabsID[project.tabsID.length - 1])
+        );
+        store.dispatch(setAllTabs(newTabs));
 
         // set the output
-        OutputStore.update((o) => {
-            o.model = project.outputModel;
-            o.error = project.outputError;
-        });
+        store.dispatch(
+            setAllOutput({
+                model: project.outputModel,
+                error: project.outputError,
+            })
+        );
 
         if (valuesNotSupported.length > 0) {
             Utils.generateGeneralToast(
@@ -696,19 +620,16 @@ const setProjectFromLink = (
         );
         if (onFinishCallback) onFinishCallback(false);
     }
-    UIStatusStore.update((u) => {
-        u.loadingFiles = false;
-    });
+    store.dispatch(setLoadingFiles(false));
 };
 
 const resetAppearanceOptions = () => {
     let darkModeMatches = window.matchMedia("(prefers-color-scheme: dark)")
         .matches;
-    UIStatusStore.update((u) => {
-        u.fontSizeEditor = initialUIStatusStore.fontSizeEditor;
-        u.fontSizeOutput = initialUIStatusStore.fontSizeOutput;
-        u.darkMode = darkModeMatches;
-    });
+
+    store.dispatch(setFontSizeEditor(initialUIStatusState.fontSizeEditor));
+    store.dispatch(setFontSizeOutput(initialUIStatusState.fontSizeOutput));
+    store.dispatch(setDarkMode(darkModeMatches));
 
     localStorage.setItem(LocalStorageItems.darkMode, "");
     localStorage.setItem(LocalStorageItems.fontSizeEditor, "");
@@ -716,46 +637,109 @@ const resetAppearanceOptions = () => {
 };
 
 const removeNewOutputBadge = () => {
-    UIStatusStore.update((u) => {
-        u.newOutput = false;
-    });
+    store.dispatch(setNewOutput(false));
 };
 
 const addNewOutputBadge = () => {
-    UIStatusStore.update((u) => {
-        u.newOutput = true;
-    });
+    store.dispatch(setNewOutput(true));
 };
 
 const restoreAppearanceFromLocalStorage = () => {
     let darkMode = localStorage.getItem(LocalStorageItems.darkMode);
-    if (darkMode)
-        UIStatusStore.update((u) => {
-            u.darkMode = Boolean(darkMode);
-        });
+    if (darkMode) {
+        store.dispatch(setDarkMode(Boolean(darkMode)));
+    }
 
     let fontEditor = localStorage.getItem(LocalStorageItems.fontSizeEditor);
-    if (fontEditor)
-        UIStatusStore.update((u) => {
-            u.fontSizeEditor = Number(fontEditor);
-        });
+    if (fontEditor) {
+        store.dispatch(setFontSizeEditor(Number(fontEditor)));
+    }
 
     let fontOutput = localStorage.getItem(LocalStorageItems.fontSizeOutput);
-    if (fontOutput)
-        UIStatusStore.update((u) => {
-            u.fontSizeOutput = Number(fontOutput);
-        });
+    if (fontOutput) {
+        store.dispatch(setFontSizeOutput(Number(fontOutput)));
+    }
+};
+
+const getLoideRunData = (): ILoideRunData => {
+    let runSettings = store.getState().runSettings;
+
+    let editorTabs = store.getState().editor.tabs;
+    let editorTabIndex = store.getState().editor.currentTabIndex;
+
+    let data: ILoideRunData = {} as ILoideRunData;
+    data.language = runSettings.currentLanguage;
+    data.engine = runSettings.currentSolver;
+    data.executor = runSettings.currentExecutor;
+
+    if (runSettings.currentOptions.length === 0) {
+        data.option = [{ name: "", value: [""] }];
+    } else {
+        for (let option of runSettings.currentOptions) {
+            data.option = [];
+            if (!option.disabled)
+                data.option.push({
+                    name: option.name,
+                    value: option.values,
+                });
+        }
+    }
+
+    data.program = [];
+
+    if (runSettings.tabsIDToExecute.length === 0) {
+        let program = editorTabs[editorTabIndex + 1].value;
+        if (program !== undefined) {
+            data.program.push(program);
+        }
+    } else {
+        for (let tabID of runSettings.tabsIDToExecute) {
+            let program = editorTabs[tabID].value;
+            if (program !== undefined) {
+                data.program.push(program);
+            }
+        }
+    }
+
+    return data;
+};
+
+const getLoideProjectData = (): ILoideProject => {
+    let runSettings = store.getState().runSettings;
+
+    let editorTabs = store.getState().editor.tabs;
+    let output = store.getState().output;
+
+    let data: ILoideProject = {} as ILoideProject;
+
+    data.language = runSettings.currentLanguage;
+    data.solver = runSettings.currentSolver;
+    data.executor = runSettings.currentExecutor;
+
+    data.options = runSettings.currentOptions;
+
+    data.tabsIDToExecute = runSettings.tabsIDToExecute;
+
+    data.tabs = Object.values(editorTabs);
+    data.tabsID = Object.keys(editorTabs).map((item) => Number(item));
+
+    data.runAuto = runSettings.runAuto;
+
+    data.outputModel = output.model;
+    data.outputError = output.error;
+
+    return data;
 };
 
 const Editor = {
     resetInput,
-    addTab,
-    deleteTab,
-    selectTab,
-    changeTabValue,
-    changeTabName,
-    duplicateTab,
-    clearTabValue,
+    addTab: addEditorTab,
+    deleteTab: deleteEditorTab,
+    selectTab: selectEditorTab,
+    changeTabValue: changeEditorTabValue,
+    changeTabName: changeTabEditorName,
+    duplicateTab: duplicateEditorTab,
+    clearTabValue: clearEditorTabValue,
     saveTabContent,
 };
 
@@ -766,6 +750,8 @@ const Utils = {
     canSetLanguage,
     generateGeneralToast,
     getPropName,
+    getLoideRunData,
+    getLoideProjectData,
     canSetSolver,
     canSetExecutor,
     canSetOption,

@@ -1,11 +1,15 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import OpenProjectModal from "../../modals/OpenProjectModal";
+import { Provider } from "react-redux";
+import { store } from "../../redux";
 
 test("renders without crashing", () => {
     const onDismiss = jest.fn();
     const { baseElement } = render(
-        <OpenProjectModal isOpen={false} onDismiss={onDismiss} />
+        <Provider store={store}>
+            <OpenProjectModal isOpen={false} onDismiss={onDismiss} />
+        </Provider>
     );
     expect(baseElement).toBeDefined();
 });
@@ -13,14 +17,22 @@ test("renders without crashing", () => {
 test("displays the title", async () => {
     const onDismiss = jest.fn();
 
-    render(<OpenProjectModal isOpen={true} onDismiss={onDismiss} />);
+    render(
+        <Provider store={store}>
+            <OpenProjectModal isOpen={true} onDismiss={onDismiss} />
+        </Provider>
+    );
     await screen.findByText("Open project or text files");
 });
 
 test("test close button", async () => {
     const onDismiss = jest.fn();
 
-    render(<OpenProjectModal isOpen={true} onDismiss={onDismiss} />);
+    render(
+        <Provider store={store}>
+            <OpenProjectModal isOpen={true} onDismiss={onDismiss} />
+        </Provider>
+    );
     const button = await screen.findByText("Close");
 
     fireEvent.click(button);

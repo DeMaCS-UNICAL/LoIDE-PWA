@@ -10,7 +10,6 @@ import {
 } from "@ionic/react";
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { useGetLoideProjectData } from "../hooks/useGetLoideProjectData";
 import { APIURLShortening, LoidePath, Toast, URLInput } from "../lib/constants";
 import Utils from "../lib/utils";
 
@@ -19,9 +18,10 @@ interface ShareProjectProps {
 }
 
 const ShareProject: React.FC<ShareProjectProps> = (props) => {
-    const [clipboardWriteSupported, setClipboardWriteSupported] = useState<
-        boolean
-    >(false);
+    const [
+        clipboardWriteSupported,
+        setClipboardWriteSupported,
+    ] = useState<boolean>(false);
 
     useEffect(() => {
         let supp = Utils.isClipboardWriteSupported();
@@ -29,7 +29,8 @@ const ShareProject: React.FC<ShareProjectProps> = (props) => {
     }, []);
 
     const [url, setUrl] = useState<string>(URLInput.Loading);
-    const loideProjectData = useGetLoideProjectData();
+
+    const loideProjectData = Utils.getLoideProjectData();
 
     const [urlLoading, setUrlLoading] = useState<boolean>(true);
 

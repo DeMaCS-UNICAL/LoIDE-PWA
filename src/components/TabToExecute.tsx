@@ -10,10 +10,10 @@ import {
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import { AllTabs, CurrentTab } from "../lib/constants";
-import { ILoideTab } from "../lib/LoideInterfaces";
+import { EditorTabMap } from "../lib/LoideInterfaces";
 
 interface TabToExecuteProps {
-    tabs: Map<number, ILoideTab>;
+    tabs: EditorTabMap;
     tabsIDToExecute: number[];
     onCheckCurrentTab: (value: boolean) => void;
     onCheckAllTabs: (value: boolean) => void;
@@ -26,7 +26,9 @@ const TabToExecute: React.FC<TabToExecuteProps> = (props) => {
     useEffect(() => {
         if (props.tabsIDToExecute.length === 0) {
             setTabRadioValue(CurrentTab);
-        } else if (props.tabsIDToExecute.length === props.tabs.size) {
+        } else if (
+            props.tabsIDToExecute.length === Object.keys(props.tabs).length
+        ) {
             setTabRadioValue(AllTabs);
         } else {
             setTabRadioValue("");
@@ -42,10 +44,7 @@ const TabToExecute: React.FC<TabToExecuteProps> = (props) => {
             props.onCheckAllTabs(true);
         }
     };
-    const onChange = (event: any) => {
-        const name: string = event.target?.name;
-        const value: boolean = event.target?.checked;
-
+    const onChange = (name: string, value: boolean) => {
         if (!name) return;
         let idTab = Number(name);
         if (isNaN(idTab)) throw new Error("Can't cast name into a number!");
@@ -102,18 +101,25 @@ const TabToExecute: React.FC<TabToExecuteProps> = (props) => {
             <IonList className="ion-no-padding">
                 <IonItemDivider mode="ios" className="tab-to-execute-divider" />
 
-                {[...props.tabs.keys()].map((key) => (
-                    <IonItem key={`item-tab-${key}`}>
-                        <IonLabel> {`${props.tabs.get(key)!.title}`} </IonLabel>
-                        <IonCheckbox
-                            slot="start"
-                            title={props.tabs.get(key)!.title}
-                            name={`${key}`}
-                            checked={getIfChecked(key)}
-                            onIonChange={onChange}
-                        />
-                    </IonItem>
-                ))}
+                {[...Object.keys(props.tabs).map((item) => Number(item))].map(
+                    (key) => (
+                        <IonItem
+                            key={`item-tab-${key}`}
+                            onClick={() =>
+                                onChange(`${key}`, !getIfChecked(key))
+                            }
+                            data-testid={`item-tab-${key}`}
+                        >
+                            <IonLabel> {`${props.tabs[key].title}`} </IonLabel>
+                            <IonCheckbox
+                                slot="start"
+                                title={props.tabs[key].title}
+                                name={`${key}`}
+                                checked={getIfChecked(key)}
+                            />
+                        </IonItem>
+                    )
+                )}
             </IonList>
         </>
     );

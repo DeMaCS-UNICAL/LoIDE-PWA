@@ -1,8 +1,10 @@
 import React, { CSSProperties, useCallback, useEffect, useMemo } from "react";
 import { useDropzone } from "react-dropzone";
+import { useDispatch, useSelector } from "react-redux";
 import { Toast } from "../lib/constants";
-import { LanguagesDataStore, UIStatusStore } from "../lib/store";
 import Utils from "../lib/utils";
+import { languagesDataSelector } from "../redux/slices/LanguagesData";
+import { setLoadingFiles } from "../redux/slices/UIStatus";
 
 const darkModeColor: CSSProperties = {
     backgroundColor: "#262626",
@@ -42,11 +44,13 @@ const rejectStyle = {
 
 interface LoideFileDropzoneProps {
     onFinishLoad?: (value: boolean) => void;
-    darkMode: boolean;
+    darkMode?: boolean;
 }
 
 const LoideFileDropzone: React.FC<LoideFileDropzoneProps> = (props) => {
-    const languages = LanguagesDataStore.useState((l) => l.languages);
+    const dispatch = useDispatch();
+
+    const { languages } = useSelector(languagesDataSelector);
 
     const setJSONInput = useCallback(
         (config: any) => {
@@ -74,9 +78,7 @@ const LoideFileDropzone: React.FC<LoideFileDropzoneProps> = (props) => {
 
     useEffect(() => {
         if (acceptedFiles.length > 0) {
-            UIStatusStore.update((u) => {
-                u.loadingFiles = true;
-            });
+            dispatch(setLoadingFiles(true));
 
             let count = acceptedFiles.length;
             let textsTabs: string[] = [];
@@ -141,7 +143,7 @@ const LoideFileDropzone: React.FC<LoideFileDropzoneProps> = (props) => {
                 reader.readAsText(file);
             }
         }
-    }, [acceptedFiles, setJSONInput, setTabsFromFiles]);
+    }, [acceptedFiles, dispatch, setJSONInput, setTabsFromFiles]);
 
     const style = useMemo(
         () => ({

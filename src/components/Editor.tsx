@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import LoideAceEditor from "./LoideAceEditor";
 import { Tabs, TabList, TabPanel } from "react-tabs";
-import { EditorStore, RunSettingsStore, UIStatusStore } from "../lib/store";
 import {
     ActionSheet,
     ButtonText,
@@ -16,39 +15,46 @@ import AceEditor from "react-ace";
 import Utils from "../lib/utils";
 import { useIsDarkMode } from "../hooks/useIsDarkMode";
 import { alertController, actionSheetController } from "@ionic/core";
+import { useDispatch, useSelector } from "react-redux";
+import { UIStatusSelector } from "../redux/slices/UIStatus";
+import { runSettingsSelector } from "../redux/slices/RunSettings";
+import { editorSelector, setTabsEditorSessions } from "../redux/slices/Editor";
 
 const Editor: React.FC = () => {
-    const tabCountID = EditorStore.useState((e) => e.tabCountID);
-    const tabIndex = EditorStore.useState((e) => e.currentTab);
-    const tabs = EditorStore.useState((e) => e.tabs);
-    const prevTabsSize = EditorStore.useState((l) => l.prevTabsSize);
-    const currentLanguage = RunSettingsStore.useState((s) => s.currentLanguage);
-    const currentSolver = RunSettingsStore.useState((s) => s.currentSolver);
+    const dispatch = useDispatch();
+
+    const {
+        tabCountID,
+        currentTabIndex,
+        tabs,
+        prevTabsSize,
+        tabsEditorSessions,
+    } = useSelector(editorSelector);
+
+    const { currentLanguage, currentSolver } = useSelector(runSettingsSelector);
 
     const [currentTabKey, setCurrentTabKey] = useState<number>(tabCountID);
 
     const editorsRef = useRef<AceEditor>(null);
 
-    const [editorSessions, setEditorSessions] = useState<any[]>([]);
-
     const darkMode = useIsDarkMode();
 
-    const fontEditorSize = UIStatusStore.useState((u) => u.fontSizeEditor);
+    const { fontSizeEditor } = useSelector(UIStatusSelector);
 
     // set the current tab ID depending on selected tab
     useEffect(() => {
-        let keysTab = [...tabs.keys()];
-        setCurrentTabKey(keysTab[tabIndex]);
-    }, [tabIndex, tabs]);
+        let keysTab = [...Object.keys(tabs).map((item) => Number(item))];
+        setCurrentTabKey(keysTab[currentTabIndex]);
+    }, [currentTabIndex, tabs]);
 
     useEffect(() => {
-        if (tabs.size > prevTabsSize) {
+        if (Object.keys(tabs).length > prevTabsSize) {
             var arr = document.getElementsByClassName("react-tabs__tab");
             arr[arr.length - 1].scrollIntoView({
                 behavior: "smooth",
             });
         }
-    }, [prevTabsSize, tabs.size]);
+    }, [prevTabsSize, tabs]);
 
     const onChange = (tabKey: number, value: string) => {
         Utils.Editor.changeTabValue(tabKey, value);
@@ -59,15 +65,15 @@ const Editor: React.FC = () => {
     };
 
     const deleteTab = (tabKey: number) => {
-        if (tabs.size === 1) {
-            setEditorSessions([]);
+        if (Object.keys(tabs).length === 1) {
+            dispatch(setTabsEditorSessions([]));
             Utils.Editor.resetInput();
             return;
         }
         // delete tab session
-        let newSessions = [...editorSessions];
+        let newSessions = [...tabsEditorSessions];
         delete newSessions[tabKey];
-        setEditorSessions(newSessions);
+        dispatch(setTabsEditorSessions(newSessions));
 
         Utils.Editor.deleteTab(tabKey);
     };
@@ -128,7 +134,7 @@ const Editor: React.FC = () => {
     };
 
     const downloadTab = () => {
-        let currentTab = tabs.get(currentTabKey);
+        let currentTab = tabs[currentTabKey];
         if (currentTab) {
             let tabContent = currentTab.value;
             let tabTitle = currentTab.title;
@@ -137,9 +143,9 @@ const Editor: React.FC = () => {
     };
 
     const onSaveSession = (tabKey: number, session: any) => {
-        let newSessions = [...editorSessions];
+        let newSessions = [...tabsEditorSessions];
         newSessions[tabKey] = session;
-        setEditorSessions(newSessions);
+        dispatch(setTabsEditorSessions(newSessions));
     };
 
     const showRenameAlert = (tabKey: number) => {
@@ -187,7 +193,7 @@ const Editor: React.FC = () => {
                     {
                         text: ButtonText.SaveContent,
                         handler: () => {
-                            let tab = tabs.get(tabKey);
+                            let tab = tabs[tabKey];
                             if (tab) Utils.Editor.saveTabContent(tab);
                         },
                     },
@@ -209,40 +215,44 @@ const Editor: React.FC = () => {
             });
     };
 
-    const loideTabs = [...tabs.keys()].map((key) => (
-        <LoideTab
-            key={`tab-${key}`}
-            tabkey={key}
-            onDeleteTab={showDeleteTabAlert}
-            onLongPress={showTabActionSheet}
-            onContextMenu={showTabActionSheet}
-        >
-            {tabs.get(key)!.title}
-        </LoideTab>
-    ));
+    const loideTabs = [...Object.keys(tabs).map((item) => Number(item))].map(
+        (key) => (
+            <LoideTab
+                key={`tab-${key}`}
+                tabkey={key}
+                onDeleteTab={showDeleteTabAlert}
+                onLongPress={showTabActionSheet}
+                onContextMenu={showTabActionSheet}
+            >
+                {tabs[key].title}
+            </LoideTab>
+        )
+    );
 
-    const tabPanels = [...tabs.keys()].map((key) => (
-        <TabPanel key={`tabpanel-${key}`}>
-            <LoideAceEditor
-                ref={editorsRef}
-                tabKey={key}
-                session={editorSessions[key]}
-                mode={currentLanguage}
-                solver={currentSolver}
-                value={tabs.get(key)!.value}
-                darkTheme={darkMode}
-                fontSize={fontEditorSize}
-                onChange={onChange}
-                onSaveSession={onSaveSession}
-            />
-        </TabPanel>
-    ));
+    const tabPanels = [...Object.keys(tabs).map((item) => Number(item))].map(
+        (key) => (
+            <TabPanel key={`tabpanel-${key}`}>
+                <LoideAceEditor
+                    ref={editorsRef}
+                    tabKey={key}
+                    session={tabsEditorSessions[key]}
+                    mode={currentLanguage}
+                    solver={currentSolver}
+                    value={tabs[key].value}
+                    darkTheme={darkMode}
+                    fontSize={fontSizeEditor}
+                    onChange={onChange}
+                    onSaveSession={onSaveSession}
+                />
+            </TabPanel>
+        )
+    );
 
     return (
         <div className="loide-editor">
             <Tabs
                 className="loide-tabs"
-                selectedIndex={tabIndex}
+                selectedIndex={currentTabIndex}
                 onSelect={onSelectTab}
             >
                 <div className="loide-tab-list">

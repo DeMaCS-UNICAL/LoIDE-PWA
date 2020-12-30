@@ -23,6 +23,7 @@
         "@ionic/react": "^5.5.2",
         "@ionic/react-router": "^5.5.2",
         "@ionic/react-test-utils": "0.0.3",
+        "@reduxjs/toolkit": "^1.5.0",
         "@testing-library/jest-dom": "^5.11.6",
         "@testing-library/react": "^11.2.2",
         "@testing-library/user-event": "^12.5.0",
@@ -42,12 +43,12 @@
         "helmet": "^4.2.0",
         "ionicons": "^5.2.3",
         "node-sass": "^4.14.1",
-        "pullstate": "^1.20.4",
         "react": "^17.0.1",
         "react-ace": "^9.2.1",
         "react-detect-offline": "^2.4.0",
         "react-dom": "^17.0.1",
         "react-dropzone": "^11.2.3",
+        "react-redux": "^7.2.2",
         "react-router": "^5.2.0",
         "react-router-dom": "^5.2.0",
         "react-scripts": "4.0.1",
@@ -108,5 +109,8 @@
             "name": "Francesco Calimeri",
             "email": "calimeri@mat.unical.it"
         }
-    ]
+    ],
+    "devDependencies": {
+        "@types/react-redux": "^7.1.14"
+    }
 }

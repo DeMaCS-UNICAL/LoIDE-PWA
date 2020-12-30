@@ -1,28 +1,32 @@
-import React, { useEffect } from "react";
-import { UIStatusStore } from "../lib/store";
+import React, { useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setDarkMode, UIStatusSelector } from "../redux/slices/UIStatus";
 
 export const darkModeContext = React.createContext(false);
 
 export const DarkModeProvider: React.FC = ({ children }) => {
-    const darkMode = UIStatusStore.useState((u) => u.darkMode);
+    const dispatch = useDispatch();
+
+    const { darkMode } = useSelector(UIStatusSelector);
 
     useEffect(() => {
         if (darkMode) document.body.classList.add("dark");
         else document.body.classList.remove("dark");
     }, [darkMode]);
 
-    const handleDarkModeChange = (e: MediaQueryListEvent) => {
-        UIStatusStore.update((u) => {
-            u.darkMode = e.matches;
-        });
-    };
+    const handleDarkModeChange = useCallback(
+        (e: MediaQueryListEvent) => {
+            dispatch(setDarkMode(e.matches));
+        },
+        [dispatch]
+    );
 
     React.useEffect(() => {
-        UIStatusStore.update((u) => {
-            u.darkMode = window.matchMedia(
-                "(prefers-color-scheme: dark)"
-            ).matches;
-        });
+        dispatch(
+            setDarkMode(
+                window.matchMedia("(prefers-color-scheme: dark)").matches
+            )
+        );
 
         window
             .matchMedia("(prefers-color-scheme: dark)")
@@ -31,7 +35,7 @@ export const DarkModeProvider: React.FC = ({ children }) => {
             window
                 .matchMedia("(prefers-color-scheme: dark)")
                 .removeEventListener("change", handleDarkModeChange);
-    }, []);
+    }, [dispatch, handleDarkModeChange]);
 
     return (
         <darkModeContext.Provider value={darkMode}>

@@ -6,17 +6,21 @@ import { DarkModeProvider } from "./providers/DarkModeProvider";
 import { ViewportProvider } from "./providers/ViewportProvider";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
+import { Provider } from "react-redux";
+import { store } from "./redux";
 
 setupConfig({
     // mode: "ios",
 });
 
 ReactDOM.render(
-    <DarkModeProvider>
-        <ViewportProvider>
-            <App />
-        </ViewportProvider>
-    </DarkModeProvider>,
+    <Provider store={store}>
+        <DarkModeProvider>
+            <ViewportProvider>
+                <App />
+            </ViewportProvider>
+        </DarkModeProvider>
+    </Provider>,
     document.getElementById("root")
 );
 

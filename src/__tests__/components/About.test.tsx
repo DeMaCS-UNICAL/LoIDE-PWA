@@ -26,13 +26,19 @@ test("has the project url", async () => {
 test("has the github repo url", async () => {
     render(<About />);
     const element = screen.getByText("Github").closest("a");
-    expect(element).toHaveAttribute("href", "#");
+    expect(element).toHaveAttribute(
+        "href",
+        "https://github.com/DeMaCS-UNICAL/LoIDE-PWA"
+    );
 });
 
 test("has the license project url", async () => {
     render(<About />);
     const element = screen.getByText("MIT License").closest("a");
-    expect(element).toHaveAttribute("href", "#");
+    expect(element).toHaveAttribute(
+        "href",
+        "https://github.com/DeMaCS-UNICAL/LoIDE-PWA/blob/main/LICENSE"
+    );
 });
 
 test("has the license project url", async () => {

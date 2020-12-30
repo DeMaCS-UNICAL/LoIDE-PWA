@@ -37,7 +37,8 @@ import {
 import Utils from "../lib/utils";
 import ShareProjectModal from "../modals/ShareProjectModal";
 import { RouteComponentProps } from "react-router";
-import { LanguagesDataStore } from "../lib/store";
+import { useSelector } from "react-redux";
+import { languagesDataSelector } from "../redux/slices/LanguagesData";
 
 interface MainTabPageProps
     extends RouteComponentProps<{
@@ -53,7 +54,7 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
         event: Event | undefined;
     }>({ open: false, event: undefined });
 
-    const languages = LanguagesDataStore.useState((l) => l.languages);
+    const { languages } = useSelector(languagesDataSelector);
 
     useEffect(() => {
         if (languages.length > 0) {

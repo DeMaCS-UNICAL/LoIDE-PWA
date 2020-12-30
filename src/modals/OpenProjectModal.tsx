@@ -10,8 +10,9 @@ import {
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import { useIsDarkMode } from "../hooks/useIsDarkMode";
-import { UIStatusStore } from "../lib/store";
 import LoideFileDropzone from "../components/LoideFileDropzone";
+import { useSelector } from "react-redux";
+import { UIStatusSelector } from "../redux/slices/UIStatus";
 
 interface OpenFileModalModalProps {
     isOpen: boolean;
@@ -23,7 +24,7 @@ const OpenProjectModal: React.FC<OpenFileModalModalProps> = (props) => {
 
     const darkMode = useIsDarkMode();
 
-    const loadingFiles = UIStatusStore.useState((u) => u.loadingFiles);
+    const { loadingFiles } = useSelector(UIStatusSelector);
 
     useEffect(() => {
         setShowModal(props.isOpen);

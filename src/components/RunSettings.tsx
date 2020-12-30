@@ -8,11 +8,6 @@ import {
 } from "../lib/LoideAPIInterfaces";
 import { ISolverOption } from "../lib/LoideInterfaces";
 import {
-    EditorStore,
-    LanguagesDataStore,
-    RunSettingsStore,
-} from "../lib/store";
-import {
     IonButton,
     IonCol,
     IonIcon,
@@ -29,17 +24,32 @@ import TabToExecute from "./TabToExecute";
 import { useLanguageAvailable } from "../hooks/useLanguageAvailable";
 import NoLanguageAvailable from "./NoLangualeAvailable";
 import { useSetRunSettings } from "../hooks/useSetRunSettings";
+import { useDispatch, useSelector } from "react-redux";
+import { languagesDataSelector } from "../redux/slices/LanguagesData";
+import {
+    runSettingsSelector,
+    setCurrentExecutor,
+    setCurrentLanguage,
+    setCurrentOptions,
+    setCurrentSolver,
+    setTabsIDToExecute,
+} from "../redux/slices/RunSettings";
+import { editorSelector } from "../redux/slices/Editor";
 
 const RunSettings: React.FC = () => {
-    const languages = LanguagesDataStore.useState((l) => l.languages);
+    const dispatch = useDispatch();
 
-    const currentLanguage = RunSettingsStore.useState((l) => l.currentLanguage);
-    const currentSolver = RunSettingsStore.useState((l) => l.currentSolver);
-    const currentExecutor = RunSettingsStore.useState((l) => l.currentExecutor);
-    const currentOptions = RunSettingsStore.useState((l) => l.currentOptions);
-    const tabsIDToExecute = RunSettingsStore.useState((l) => l.IDTabsToExecute);
+    const { languages } = useSelector(languagesDataSelector);
 
-    const editorTabs = EditorStore.useState((e) => e.tabs);
+    const {
+        currentLanguage,
+        currentSolver,
+        currentExecutor,
+        currentOptions,
+        tabsIDToExecute,
+    } = useSelector(runSettingsSelector);
+
+    const { tabs } = useSelector(editorSelector);
 
     const languageAvailable = useLanguageAvailable();
 
@@ -88,34 +98,29 @@ const RunSettings: React.FC = () => {
             }
         }
         if (languageSelected) {
-            RunSettingsStore.update((settings) => {
-                settings.currentLanguage = languageSelected!.value;
-            });
-            RunSettingsStore.update((settings) => {
-                settings.currentSolver = languageSelected!.solvers[0].value;
-            });
-            RunSettingsStore.update((settings) => {
-                settings.currentExecutor = languageSelected!.solvers[0].executors[0].value;
-            });
+            dispatch(setCurrentLanguage(languageSelected!.value));
+
+            dispatch(setCurrentSolver(languageSelected!.solvers[0].value));
+
+            dispatch(
+                setCurrentExecutor(
+                    languageSelected!.solvers[0].executors[0].value
+                )
+            );
+
             // reset all the options
-            RunSettingsStore.update((settings) => {
-                settings.currentOptions = [];
-            });
+            dispatch(setCurrentOptions([]));
         }
     };
 
     const selectSolver = (e: any) => {
         let value = e.target.value;
-        RunSettingsStore.update((settings) => {
-            settings.currentSolver = value;
-        });
+        dispatch(setCurrentSolver(value));
     };
 
     const selectExecutor = (e: any) => {
         let value = e.target.value;
-        RunSettingsStore.update((settings) => {
-            settings.currentExecutor = value;
-        });
+        setCurrentExecutor(value);
     };
 
     const addOption = () => {
@@ -130,9 +135,7 @@ const RunSettings: React.FC = () => {
                     disabled: false,
                 },
             ];
-            RunSettingsStore.update((settings) => {
-                settings.currentOptions = nextOptions;
-            });
+            dispatch(setCurrentOptions(nextOptions));
         }
     };
 
@@ -143,9 +146,7 @@ const RunSettings: React.FC = () => {
 
         nextOptions.splice(id, 1);
         nextOptions.map((opt, index) => (opt.id = index));
-        RunSettingsStore.update((settings) => {
-            settings.currentOptions = nextOptions;
-        });
+        dispatch(setCurrentOptions(nextOptions));
     };
 
     const onChangeDisableOption = (id: number, value: boolean) => {
@@ -158,9 +159,7 @@ const RunSettings: React.FC = () => {
                 break;
             }
         }
-        RunSettingsStore.update((settings) => {
-            settings.currentOptions = nextOptions;
-        });
+        dispatch(setCurrentOptions(nextOptions));
     };
 
     const onChangeOptionType = (newValue: any, id: number) => {
@@ -173,9 +172,7 @@ const RunSettings: React.FC = () => {
                 break;
             }
         }
-        RunSettingsStore.update((settings) => {
-            settings.currentOptions = nextOptions;
-        });
+        dispatch(setCurrentOptions(nextOptions));
     };
 
     const onChangeOptionValues = (newValues: string[], id: number) => {
@@ -188,36 +185,32 @@ const RunSettings: React.FC = () => {
                 break;
             }
         }
-        RunSettingsStore.update((settings) => {
-            settings.currentOptions = nextOptions;
-        });
+        dispatch(setCurrentOptions(nextOptions));
     };
 
     const onCheckTab = (idTab: number, value: boolean) => {
-        RunSettingsStore.update((settings) => {
-            let index = settings.IDTabsToExecute.indexOf(idTab);
-            let nextTabIDs = [...settings.IDTabsToExecute];
-            if (index === -1) {
-                if (value) nextTabIDs.push(idTab);
-            } else {
-                if (!value) nextTabIDs.splice(index, 1);
-            }
-            settings.IDTabsToExecute = nextTabIDs;
-        });
+        let index = tabsIDToExecute.indexOf(idTab);
+        let nextTabIDs = [...tabsIDToExecute];
+        if (index === -1) {
+            if (value) nextTabIDs.push(idTab);
+        } else {
+            if (!value) nextTabIDs.splice(index, 1);
+        }
+        dispatch(setTabsIDToExecute(nextTabIDs));
     };
     const onCheckCurrentTab = (value: boolean) => {
-        if (value)
-            RunSettingsStore.update((settings) => {
-                settings.IDTabsToExecute = [];
-            });
+        if (value) {
+            dispatch(setTabsIDToExecute([]));
+        }
     };
 
     const onCheckAllTabs = (value: boolean) => {
-        if (value)
-            RunSettingsStore.update((settings) => {
-                let nextTabIDs = [...editorTabs.keys()];
-                settings.IDTabsToExecute = nextTabIDs;
-            });
+        if (value) {
+            let nextTabIDs: number[] = Object.keys(tabs).map((item) =>
+                Number(item)
+            );
+            dispatch(setTabsIDToExecute(nextTabIDs));
+        }
     };
 
     const languagesOptions = languages.map((lang, index) => (
@@ -325,7 +318,7 @@ const RunSettings: React.FC = () => {
                         )}
 
                         <TabToExecute
-                            tabs={editorTabs}
+                            tabs={tabs}
                             tabsIDToExecute={tabsIDToExecute}
                             onCheckCurrentTab={onCheckCurrentTab}
                             onCheckAllTabs={onCheckAllTabs}
