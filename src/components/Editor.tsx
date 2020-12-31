@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { UIStatusSelector } from "../redux/slices/UIStatus";
 import { runSettingsSelector } from "../redux/slices/RunSettings";
 import { editorSelector, setTabsEditorSessions } from "../redux/slices/Editor";
+import API from "../lib/api";
 
 const Editor: React.FC = () => {
     const dispatch = useDispatch();
@@ -31,7 +32,9 @@ const Editor: React.FC = () => {
         tabsEditorSessions,
     } = useSelector(editorSelector);
 
-    const { currentLanguage, currentSolver } = useSelector(runSettingsSelector);
+    const { currentLanguage, currentSolver, runAuto } = useSelector(
+        runSettingsSelector
+    );
 
     const [currentTabKey, setCurrentTabKey] = useState<number>(tabCountID);
 
@@ -56,8 +59,11 @@ const Editor: React.FC = () => {
         }
     }, [prevTabsSize, tabs]);
 
-    const onChange = (tabKey: number, value: string) => {
+    const onChange = (tabKey: number, value: string, runAuto: boolean) => {
         Utils.Editor.changeTabValue(tabKey, value);
+        if (runAuto) {
+            onRunAuto();
+        }
     };
 
     const onSelectTab = (index: number) => {
@@ -146,6 +152,11 @@ const Editor: React.FC = () => {
         let newSessions = [...tabsEditorSessions];
         newSessions[tabKey] = session;
         dispatch(setTabsEditorSessions(newSessions));
+    };
+
+    const onRunAuto = () => {
+        let dataToRun = Utils.getLoideRunData();
+        API.emitRunProject(dataToRun);
     };
 
     const showRenameAlert = (tabKey: number) => {
@@ -239,6 +250,7 @@ const Editor: React.FC = () => {
                     mode={currentLanguage}
                     solver={currentSolver}
                     value={tabs[key].value}
+                    runAuto={runAuto}
                     darkTheme={darkMode}
                     fontSize={fontSizeEditor}
                     onChange={onChange}

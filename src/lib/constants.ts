@@ -135,6 +135,7 @@ export const LocalStorageItems = {
     darkMode: "darkMode",
     fontSizeEditor: "fontSizeEditor",
     fontSizeOutput: "fontSizeOutput",
+    runAuto: "runAuto",
 };
 
 export const ActionSheet = {
@@ -173,7 +174,7 @@ export const Inputs = {
 };
 
 export const LoideLanguages = {
-    ASP: { name: "asp", highlightSupport: true },
+    ASP: { name: "asp", highlightSupport: true, runAutoSupported: true },
 };
 
 export const LoideSolvers = {

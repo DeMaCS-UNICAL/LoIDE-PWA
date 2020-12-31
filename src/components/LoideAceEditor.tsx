@@ -50,10 +50,11 @@ interface LoideAceEditorProps {
     solver: string;
     tabKey: number;
     value?: string;
+    runAuto?: boolean;
     session?: any;
     fontSize?: number;
 
-    onChange?: (tabKey: number, value: string) => void;
+    onChange?: (tabKey: number, value: string, runAuto: boolean) => void;
     onFocus?: (tabKey: number, e: any) => void;
     onSaveSession?: (tabKey: number, session: any) => void;
 }
@@ -131,19 +132,29 @@ const LoideAceEditor = React.forwardRef<AceEditor, LoideAceEditorProps>(
         const onChange = (value: any) => {
             inizializeAutoComplete(value);
             let lastCharacter = value[value.length - 1];
-            if (lastCharacter === "'") {
-                let edt = reactAce.current;
-                if (edt) {
-                    edt.editor.replaceAll('"', { needle: "'" });
-                    value = edt.editor.getValue();
-                }
+            let edt = reactAce.current;
+            let runAuto = false;
+            switch (lastCharacter) {
+                case "'":
+                    if (edt) {
+                        edt.editor.replaceAll('"', { needle: "'" });
+                        value = edt.editor.getValue();
+                    }
+                    break;
+
+                case ".":
+                    if (props.runAuto) runAuto = true;
+                    break;
+
+                default:
+                    break;
             }
-            if (props.onChange) props.onChange(props.tabKey, value);
+
+            if (props.onChange) props.onChange(props.tabKey, value, runAuto);
         };
 
         const onFocus = (e: any) => {
             window.dispatchEvent(new Event("resize"));
-
             if (props.onFocus) props.onFocus(props.tabKey, e);
         };
 

@@ -6,7 +6,7 @@ export const initialRunSettingsState: IRunSettingsState = {
     currentSolver: "",
     currentExecutor: "",
     currentOptions: [],
-    runAuto: false,
+    runAuto: true,
     tabsIDToExecute: [],
 };
 

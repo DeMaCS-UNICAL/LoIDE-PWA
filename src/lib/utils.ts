@@ -647,7 +647,7 @@ const addNewOutputBadge = () => {
 const restoreAppearanceFromLocalStorage = () => {
     let darkMode = localStorage.getItem(LocalStorageItems.darkMode);
     if (darkMode) {
-        store.dispatch(setDarkMode(Boolean(darkMode)));
+        store.dispatch(setDarkMode(darkMode === "true"));
     }
 
     let fontEditor = localStorage.getItem(LocalStorageItems.fontSizeEditor);
@@ -658,6 +658,13 @@ const restoreAppearanceFromLocalStorage = () => {
     let fontOutput = localStorage.getItem(LocalStorageItems.fontSizeOutput);
     if (fontOutput) {
         store.dispatch(setFontSizeOutput(Number(fontOutput)));
+    }
+};
+
+const restoreRunAutoFromLocalStorage = () => {
+    let runAuto = localStorage.getItem(LocalStorageItems.runAuto);
+    if (runAuto) {
+        store.dispatch(setRunAuto(runAuto === "true"));
     }
 };
 
@@ -768,6 +775,7 @@ const Utils = {
     removeNewOutputBadge,
     addNewOutputBadge,
     restoreAppearanceFromLocalStorage,
+    restoreRunAutoFromLocalStorage,
 };
 
 export default Utils;

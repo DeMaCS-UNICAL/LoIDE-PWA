@@ -18,6 +18,7 @@ import {
     IonRow,
     IonSelect,
     IonSelectOption,
+    IonToggle,
 } from "@ionic/react";
 import { addOutline } from "ionicons/icons";
 import TabToExecute from "./TabToExecute";
@@ -32,9 +33,11 @@ import {
     setCurrentLanguage,
     setCurrentOptions,
     setCurrentSolver,
+    setRunAuto,
     setTabsIDToExecute,
 } from "../redux/slices/RunSettings";
 import { editorSelector } from "../redux/slices/Editor";
+import { LocalStorageItems } from "../lib/constants";
 
 const RunSettings: React.FC = () => {
     const dispatch = useDispatch();
@@ -47,6 +50,7 @@ const RunSettings: React.FC = () => {
         currentExecutor,
         currentOptions,
         tabsIDToExecute,
+        runAuto,
     } = useSelector(runSettingsSelector);
 
     const { tabs } = useSelector(editorSelector);
@@ -188,6 +192,11 @@ const RunSettings: React.FC = () => {
         dispatch(setCurrentOptions(nextOptions));
     };
 
+    const onRunAutoChange = () => {
+        dispatch(setRunAuto(!runAuto));
+        localStorage.setItem(LocalStorageItems.runAuto, (!runAuto).toString());
+    };
+
     const onCheckTab = (idTab: number, value: boolean) => {
         let index = tabsIDToExecute.indexOf(idTab);
         let nextTabIDs = [...tabsIDToExecute];
@@ -234,99 +243,106 @@ const RunSettings: React.FC = () => {
     // set language, solver and executor if they are empty or resetted
     useSetRunSettings();
 
+    if (!languageAvailable) return <NoLanguageAvailable />;
+
     return (
         <>
-            {!languageAvailable && <NoLanguageAvailable />}
-            {languageAvailable && (
-                <IonRow className="ion-no-padding">
-                    <IonCol
-                        size="12"
-                        className="ion-no-padding ion-margin-bottom"
-                    >
-                        <IonList className="ion-no-padding">
+            <IonRow className="ion-no-padding">
+                <IonCol size="12" className="ion-no-padding ion-margin-bottom">
+                    <IonList className="ion-no-padding">
+                        <IonListHeader>
+                            <IonLabel>Language, Solver and Executor</IonLabel>
+                        </IonListHeader>
+                        <IonItem>
+                            <IonLabel> Language </IonLabel>
+                            <IonSelect
+                                value={currentLanguage}
+                                onIonChange={selectLanguage}
+                            >
+                                {languagesOptions}
+                            </IonSelect>
+                        </IonItem>
+
+                        <IonItem>
+                            <IonLabel> Solver </IonLabel>
+                            <IonSelect
+                                value={currentSolver}
+                                onIonChange={selectSolver}
+                            >
+                                {solversOptions}
+                            </IonSelect>
+                        </IonItem>
+
+                        <IonItem>
+                            <IonLabel> Executor </IonLabel>
+                            <IonSelect
+                                value={currentExecutor}
+                                onIonChange={selectExecutor}
+                            >
+                                {executorsOptions}
+                            </IonSelect>
+                        </IonItem>
+                    </IonList>
+
+                    {getOptions().length > 0 && (
+                        <>
                             <IonListHeader>
-                                <IonLabel>
-                                    Language, Solver and Executor
-                                </IonLabel>
+                                <IonLabel>Solver options</IonLabel>
                             </IonListHeader>
-                            <IonItem>
-                                <IonLabel> Language </IonLabel>
-                                <IonSelect
-                                    value={currentLanguage}
-                                    onIonChange={selectLanguage}
-                                >
-                                    {languagesOptions}
-                                </IonSelect>
-                            </IonItem>
+                            {currentOptions.map((option) => (
+                                <Option
+                                    key={`solver-option-${option.id}`}
+                                    optionsAvailable={getOptions()}
+                                    optionData={option}
+                                    disabled={option.disabled}
+                                    onChangeOptionType={onChangeOptionType}
+                                    onChangeOptionValues={onChangeOptionValues}
+                                    onDeleteOption={onDeleteOption}
+                                    onChangeDisableOption={
+                                        onChangeDisableOption
+                                    }
+                                />
+                            ))}
+                            <IonButton
+                                className="ion-padding-start ion-padding-end"
+                                title="Add option"
+                                expand="block"
+                                onClick={addOption}
+                                style={{
+                                    marginTop: "10px",
+                                    marginBottom: "10px",
+                                }}
+                            >
+                                <IonIcon icon={addOutline} />
+                                Add Option
+                            </IonButton>
+                        </>
+                    )}
 
-                            <IonItem>
-                                <IonLabel> Solver </IonLabel>
-                                <IonSelect
-                                    value={currentSolver}
-                                    onIonChange={selectSolver}
-                                >
-                                    {solversOptions}
-                                </IonSelect>
-                            </IonItem>
+                    <IonList className="ion-no-padding">
+                        <IonListHeader>
+                            <IonLabel>Execution options</IonLabel>
+                        </IonListHeader>
+                        <IonItem>
+                            <IonLabel>Run automatically </IonLabel>
+                            <IonToggle
+                                title="Run automatically"
+                                checked={runAuto}
+                                slot="end"
+                                onIonChange={onRunAutoChange}
+                            />
+                        </IonItem>
+                    </IonList>
 
-                            <IonItem>
-                                <IonLabel> Executor </IonLabel>
-                                <IonSelect
-                                    value={currentExecutor}
-                                    onIonChange={selectExecutor}
-                                >
-                                    {executorsOptions}
-                                </IonSelect>
-                            </IonItem>
-                        </IonList>
-
-                        {getOptions().length > 0 && (
-                            <>
-                                <IonListHeader>
-                                    <IonLabel>Solver options</IonLabel>
-                                </IonListHeader>
-                                {currentOptions.map((option) => (
-                                    <Option
-                                        key={`solver-option-${option.id}`}
-                                        optionsAvailable={getOptions()}
-                                        optionData={option}
-                                        disabled={option.disabled}
-                                        onChangeOptionType={onChangeOptionType}
-                                        onChangeOptionValues={
-                                            onChangeOptionValues
-                                        }
-                                        onDeleteOption={onDeleteOption}
-                                        onChangeDisableOption={
-                                            onChangeDisableOption
-                                        }
-                                    />
-                                ))}
-                                <IonButton
-                                    className="ion-padding-start ion-padding-end"
-                                    title="Add option"
-                                    expand="block"
-                                    onClick={addOption}
-                                    style={{
-                                        marginTop: "10px",
-                                        marginBottom: "10px",
-                                    }}
-                                >
-                                    <IonIcon icon={addOutline} />
-                                    Add Option
-                                </IonButton>
-                            </>
-                        )}
-
-                        <TabToExecute
-                            tabs={tabs}
-                            tabsIDToExecute={tabsIDToExecute}
-                            onCheckCurrentTab={onCheckCurrentTab}
-                            onCheckAllTabs={onCheckAllTabs}
-                            onCheckTab={onCheckTab}
-                        />
-                    </IonCol>
-                </IonRow>
-            )}
+                    <TabToExecute
+                        tabs={tabs}
+                        tabsIDToExecute={tabsIDToExecute}
+                        onCheckCurrentTab={onCheckCurrentTab}
+                        onCheckAllTabs={onCheckAllTabs}
+                        onCheckTab={onCheckTab}
+                    />
+                </IonCol>
+            </IonRow>
         </>
     );
 };

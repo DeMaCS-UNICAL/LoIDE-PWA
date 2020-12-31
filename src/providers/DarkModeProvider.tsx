@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { LocalStorageItems } from "../lib/constants";
 import { setDarkMode, UIStatusSelector } from "../redux/slices/UIStatus";
 
 export const darkModeContext = React.createContext(false);
@@ -22,11 +23,16 @@ export const DarkModeProvider: React.FC = ({ children }) => {
     );
 
     React.useEffect(() => {
-        dispatch(
-            setDarkMode(
-                window.matchMedia("(prefers-color-scheme: dark)").matches
-            )
-        );
+        let darkModeString = localStorage.getItem(LocalStorageItems.darkMode);
+        if (darkModeString) {
+            dispatch(setDarkMode(darkModeString === "true"));
+        } else {
+            dispatch(
+                setDarkMode(
+                    window.matchMedia("(prefers-color-scheme: dark)").matches
+                )
+            );
+        }
 
         window
             .matchMedia("(prefers-color-scheme: dark)")
