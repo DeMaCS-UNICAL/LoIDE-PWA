@@ -39,6 +39,7 @@ import ShareProjectModal from "../modals/ShareProjectModal";
 import { RouteComponentProps } from "react-router";
 import { useSelector } from "react-redux";
 import { languagesDataSelector } from "../redux/slices/LanguagesData";
+import RestoreButton from "../components/RestoreButton";
 
 interface MainTabPageProps
     extends RouteComponentProps<{
@@ -61,7 +62,7 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
             let dataToLoad = decodeURIComponent(match.params.data);
             if (Utils.isJSON(dataToLoad)) {
                 let config = JSON.parse(dataToLoad);
-                Utils.setProjectFromLink(config, languages);
+                Utils.setProjectFromConfig(config, languages);
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -127,18 +128,20 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle>
-                        <img
-                            className="logo"
-                            style={{ marginTop: "6px" }}
-                            height="30px"
-                            src={logo}
-                            alt="loide-logo"
-                        />
-                    </IonTitle>
                     <IonButtons slot="start">
                         <LoideRunNavButton />
                     </IonButtons>
+                    <img
+                        className="logo"
+                        style={{
+                            marginTop: "6px",
+                            marginLeft: "10px",
+                        }}
+                        height="30px"
+                        src={logo}
+                        alt="loide-logo"
+                    />
+                    <RestoreButton />
                     <IonButtons slot="end">
                         <IonButton
                             title="Open"

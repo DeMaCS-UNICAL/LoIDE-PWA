@@ -38,20 +38,13 @@ export const Errors = {
 };
 
 export const Toast = {
-    FileOpenedSuccessfully: {
-        header: "",
-        message: "File opened successfully.",
+    SingleFileOpenedSuccessfully: {
+        header: "File opened successfully.",
+        message: "",
     },
-    FileNotOpenedProperly: {
-        header: "File not opened properly",
-        message: {
-            TheFollowingValuesCannotBeSetted:
-                "The following values cannot be set:",
-            FoundSolverOptions:
-                "Found solver options that cannot be set due above.",
-            FoundSolverOptionsIncompatibilitySolverLoaded:
-                "Found solver options that cannot be set due the incompatibility of the solver loaded.",
-        },
+    MoreFileOpenedSuccessfully: {
+        header: "Files opened successfully.",
+        message: "",
     },
     ProjectOpenedSuccessfully: {
         header: "Project opened successfully.",
@@ -68,15 +61,10 @@ export const Toast = {
                 "Found solver options that cannot be set due the incompatibility of the solver loaded.",
         },
     },
-    ConfigFileNotRecognized: {
-        header: "Config file not recognized",
-        message: "Error open file",
+    ConfigProjectNotRecognized: {
+        header: "Config project not recognized",
+        message: "Error open the config project",
     },
-    LinkFileNotRecognized: {
-        header: "Link not recognized",
-        message: "Error open the project from the link",
-    },
-
     ErrorOpenFile: {
         header: "Error open file",
         message: {
@@ -84,7 +72,6 @@ export const Toast = {
             FileReadingHasFailed: "File reading has failed",
         },
     },
-
     ErrorLinkGeneration: {
         header: "Error link generation",
         message: {
@@ -129,6 +116,7 @@ export const ButtonText = {
     Duplicate: "Duplicate",
     ClearContent: "Clear content",
     SaveContent: "Save content",
+    Restore: "Restore",
 };
 
 export const LocalStorageItems = {
@@ -136,6 +124,7 @@ export const LocalStorageItems = {
     fontSizeEditor: "fontSizeEditor",
     fontSizeOutput: "fontSizeOutput",
     runAuto: "runAuto",
+    loideProject: "loideProject",
 };
 
 export const ActionSheet = {
@@ -166,6 +155,11 @@ export const WindowConfirmMessages = {
     RenameTab: {
         header: "Rename tab",
         message: "",
+    },
+    RestoreProject: {
+        header: "Restore project",
+        message:
+            "Project found. Maybe you were working on a project.\nDo you wish to restore it? ",
     },
 };
 

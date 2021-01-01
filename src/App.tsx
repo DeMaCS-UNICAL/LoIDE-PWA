@@ -45,7 +45,7 @@ import "./global.scss";
 import AboutTab from "./pages/AboutTab";
 import API from "./lib/api";
 import { IOutputData } from "./lib/LoideAPIInterfaces";
-import { LoidePath } from "./lib/constants";
+import { LocalStorageItems, LoidePath } from "./lib/constants";
 import AppearanceTab from "./pages/AppearanceTab";
 import Utils from "./lib/utils";
 import { useDispatch, useSelector } from "react-redux";
@@ -79,8 +79,16 @@ const App: React.FC = () => {
         button?.addEventListener("click", () => {
             Utils.removeNewOutputBadge();
         });
+
         Utils.restoreRunAutoFromLocalStorage();
-        Utils.restoreAppearanceFromLocalStorage();
+
+        window.onbeforeunload = function () {
+            let loideProject = Utils.getLoideProjectData();
+            localStorage.setItem(
+                LocalStorageItems.loideProject,
+                JSON.stringify(loideProject)
+            );
+        };
     }, []);
 
     useEffect(() => {

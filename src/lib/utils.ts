@@ -351,11 +351,19 @@ const createTabsFromArray = (textTabs: string[]) => {
 
     store.dispatch(setLoadingFiles(false));
 
-    Utils.generateGeneralToast(
-        Toast.FileOpenedSuccessfully.message,
-        Toast.FileOpenedSuccessfully.header,
-        "success"
-    );
+    if (Object.keys(newTabs).length > 1) {
+        Utils.generateGeneralToast(
+            Toast.MoreFileOpenedSuccessfully.message,
+            Toast.MoreFileOpenedSuccessfully.header,
+            "success"
+        );
+    } else {
+        Utils.generateGeneralToast(
+            Toast.SingleFileOpenedSuccessfully.message,
+            Toast.SingleFileOpenedSuccessfully.header,
+            "success"
+        );
+    }
 };
 
 const setProjectFromConfig = (
@@ -449,14 +457,14 @@ const setProjectFromConfig = (
         if (valuesNotSupported.length > 0) {
             Utils.generateGeneralToast(
                 `${
-                    Toast.FileNotOpenedProperly.message
+                    Toast.ProjectNotOpenedProperly.message
                         .TheFollowingValuesCannotBeSetted
                 }\n<b>${valuesNotSupported.join(",\n")}\n${
                     optionsNotSupported
-                        ? `<br>${Toast.FileNotOpenedProperly.message.FoundSolverOptions}`
+                        ? `<br>${Toast.ProjectNotOpenedProperly.message.FoundSolverOptions}`
                         : ""
                 } <b/>`,
-                Toast.FileNotOpenedProperly.header,
+                Toast.ProjectNotOpenedProperly.header,
                 "warning",
                 10000
             );
@@ -464,140 +472,7 @@ const setProjectFromConfig = (
             if (onFinishCallback) onFinishCallback(true);
         } else if (optionsNotSupported) {
             Utils.generateGeneralToast(
-                Toast.FileNotOpenedProperly.message
-                    .FoundSolverOptionsIncompatibilitySolverLoaded,
-                Toast.FileNotOpenedProperly.header,
-                "warning",
-                7000
-            );
-            if (onFinishCallback) onFinishCallback(true);
-        } else {
-            Utils.generateGeneralToast(
-                Toast.FileOpenedSuccessfully.message,
-                Toast.FileOpenedSuccessfully.header,
-                "success"
-            );
-            if (onFinishCallback) onFinishCallback(true);
-        }
-    } else {
-        Utils.generateGeneralToast(
-            Toast.ConfigFileNotRecognized.message,
-            Toast.ConfigFileNotRecognized.header,
-            "danger"
-        );
-        if (onFinishCallback) onFinishCallback(false);
-    }
-
-    store.dispatch(setLoadingFiles(false));
-};
-
-const setProjectFromLink = (
-    config: any,
-    languages: ILanguageData[],
-    onFinishCallback?: (done: boolean) => void
-) => {
-    if (Utils.hasRightProperty(config)) {
-        let project: ILoideProject = config;
-
-        let valuesNotSupported: string[] = [];
-        let optionsSupported: ISolverOption[] = [];
-        let optionsNotSupported: boolean = false;
-
-        // set the current language
-        if (Utils.canSetLanguage(project.language, languages)) {
-            store.dispatch(setCurrentLanguage(project.language));
-
-            // set the current solver
-            if (
-                Utils.canSetSolver(project.solver, project.language, languages)
-            ) {
-                store.dispatch(setCurrentSolver(project.solver));
-
-                // set the current executor
-                if (
-                    Utils.canSetExecutor(
-                        project.executor,
-                        project.solver,
-                        project.language,
-                        languages
-                    )
-                ) {
-                    store.dispatch(setCurrentExecutor(project.executor));
-                } else {
-                    valuesNotSupported.push(ValuesNotSupported.Executor);
-                }
-            } else {
-                valuesNotSupported.push(ValuesNotSupported.Solver);
-                valuesNotSupported.push(ValuesNotSupported.Executor);
-            }
-        } else {
-            valuesNotSupported.push(ValuesNotSupported.Language);
-            valuesNotSupported.push(ValuesNotSupported.Solver);
-            valuesNotSupported.push(ValuesNotSupported.Executor);
-        }
-
-        for (let option of project.options) {
-            if (
-                Utils.canSetOption(
-                    option,
-                    project.solver,
-                    project.language,
-                    languages
-                )
-            )
-                optionsSupported.push(option);
-            else optionsNotSupported = true;
-        }
-
-        // set the ID tabs to execute, the options supported and the runAuto option
-        store.dispatch(setCurrentOptions(optionsSupported));
-        store.dispatch(setTabsIDToExecute(project.tabsIDToExecute));
-        store.dispatch(setRunAuto(project.runAuto));
-
-        // set the tabs and their IDs
-        let newTabs: EditorTabMap = {};
-
-        project.tabs.forEach((program, index) => {
-            newTabs[project.tabsID[index]] = {
-                title: program.title,
-                type: program.type,
-                value: program.value,
-            };
-        });
-
-        store.dispatch(setTabIndex(0));
-        store.dispatch(
-            setTabCountID(project.tabsID[project.tabsID.length - 1])
-        );
-        store.dispatch(setAllTabs(newTabs));
-
-        // set the output
-        store.dispatch(
-            setAllOutput({
-                model: project.outputModel,
-                error: project.outputError,
-            })
-        );
-
-        if (valuesNotSupported.length > 0) {
-            Utils.generateGeneralToast(
-                `${
-                    Toast.FileNotOpenedProperly.message
-                        .TheFollowingValuesCannotBeSetted
-                }\n<b>${valuesNotSupported.join(",\n")}${
-                    optionsNotSupported
-                        ? `<br>${Toast.FileNotOpenedProperly.message.FoundSolverOptions}`
-                        : ""
-                } <b/>`,
-                Toast.FileNotOpenedProperly.header,
-                "warning",
-                10000
-            );
-
-            if (onFinishCallback) onFinishCallback(true);
-        } else if (optionsNotSupported) {
-            Utils.generateGeneralToast(
-                Toast.FileNotOpenedProperly.message
+                Toast.ProjectNotOpenedProperly.message
                     .FoundSolverOptionsIncompatibilitySolverLoaded,
                 Toast.ProjectNotOpenedProperly.header,
                 "warning",
@@ -606,7 +481,7 @@ const setProjectFromLink = (
             if (onFinishCallback) onFinishCallback(true);
         } else {
             Utils.generateGeneralToast(
-                "",
+                Toast.ProjectOpenedSuccessfully.message,
                 Toast.ProjectOpenedSuccessfully.header,
                 "success"
             );
@@ -614,12 +489,13 @@ const setProjectFromLink = (
         }
     } else {
         Utils.generateGeneralToast(
-            Toast.LinkFileNotRecognized.message,
-            Toast.LinkFileNotRecognized.header,
+            Toast.ConfigProjectNotRecognized.message,
+            Toast.ConfigProjectNotRecognized.header,
             "danger"
         );
         if (onFinishCallback) onFinishCallback(false);
     }
+
     store.dispatch(setLoadingFiles(false));
 };
 
@@ -738,6 +614,25 @@ const getLoideProjectData = (): ILoideProject => {
     return data;
 };
 
+const getProjectFromLocalStorage = (): ILoideProject | undefined => {
+    let projectString = localStorage.getItem(LocalStorageItems.loideProject);
+    let project: ILoideProject | undefined;
+    if (projectString) {
+        try {
+            project = JSON.parse(projectString);
+        } catch (error) {
+            project = undefined;
+        }
+    }
+    return project;
+};
+
+const isValidProjectToLoad = (project: ILoideProject): boolean => {
+    if (project.tabs.length > 1 || project.tabs[0].value.trim().length > 0)
+        return true;
+    return false;
+};
+
 const Editor = {
     resetInput,
     addTab: addEditorTab,
@@ -759,6 +654,7 @@ const Utils = {
     getPropName,
     getLoideRunData,
     getLoideProjectData,
+    getProjectFromLocalStorage,
     canSetSolver,
     canSetExecutor,
     canSetOption,
@@ -770,12 +666,12 @@ const Utils = {
     copyTextToClipboard,
     createTabsFromArray,
     setProjectFromConfig,
-    setProjectFromLink,
     resetAppearanceOptions,
     removeNewOutputBadge,
     addNewOutputBadge,
     restoreAppearanceFromLocalStorage,
     restoreRunAutoFromLocalStorage,
+    isValidProjectToLoad,
 };
 
 export default Utils;
