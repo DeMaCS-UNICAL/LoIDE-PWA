@@ -21,7 +21,7 @@ interface TabToExecuteProps {
 }
 
 const TabToExecute: React.FC<TabToExecuteProps> = (props) => {
-    const [tabRadioValue, setTabRadioValue] = useState("");
+    const [tabRadioValue, setTabRadioValue] = useState<string>("");
 
     useEffect(() => {
         if (props.tabsIDToExecute.length === 0) {

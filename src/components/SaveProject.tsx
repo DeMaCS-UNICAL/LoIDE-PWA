@@ -8,10 +8,11 @@ import {
     IonRow,
 } from "@ionic/react";
 import React, { useState } from "react";
+import { defaultProjectName } from "../lib/constants";
 import Utils from "../lib/utils";
 
 const SaveProject: React.FC = () => {
-    const [nameProject, setNameProject] = useState<string>("LoIDE_Project");
+    const [nameProject, setNameProject] = useState<string>(defaultProjectName);
 
     const donwloadFile = () => {
         const loideProjectData = Utils.getLoideProjectData();

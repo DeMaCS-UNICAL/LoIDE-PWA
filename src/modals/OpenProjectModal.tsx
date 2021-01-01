@@ -20,7 +20,7 @@ interface OpenFileModalModalProps {
 }
 
 const OpenProjectModal: React.FC<OpenFileModalModalProps> = (props) => {
-    const [showModal, setShowModal] = useState(false);
+    const [showModal, setShowModal] = useState<boolean>(false);
 
     const darkMode = useIsDarkMode();
 

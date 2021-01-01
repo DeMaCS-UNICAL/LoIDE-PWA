@@ -6,7 +6,7 @@ import { store } from "../redux";
 import { ButtonText, WindowConfirmMessages } from "../lib/constants";
 
 const RestoreButton: React.FC = () => {
-    const [show, setShow] = useState(false);
+    const [show, setShow] = useState<boolean>(false);
     useEffect(() => {
         let project = Utils.getProjectFromLocalStorage();
         if (project && Utils.isValidProjectToLoad(project)) {

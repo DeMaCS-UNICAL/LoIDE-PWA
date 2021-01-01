@@ -1,9 +1,9 @@
 import React, { CSSProperties, useCallback, useEffect, useMemo } from "react";
 import { useDropzone } from "react-dropzone";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Toast } from "../lib/constants";
 import Utils from "../lib/utils";
-import { languagesDataSelector } from "../redux/slices/LanguagesData";
+import { store } from "../redux";
 import { setLoadingFiles } from "../redux/slices/UIStatus";
 
 const darkModeColor: CSSProperties = {
@@ -50,13 +50,12 @@ interface LoideFileDropzoneProps {
 const LoideFileDropzone: React.FC<LoideFileDropzoneProps> = (props) => {
     const dispatch = useDispatch();
 
-    const { languages } = useSelector(languagesDataSelector);
-
     const setJSONInput = useCallback(
         (config: any) => {
+            let languages = store.getState().languagesData.languages;
             Utils.setProjectFromConfig(config, languages, props.onFinishLoad);
         },
-        [props, languages]
+        [props]
     );
 
     const setTabsFromFiles = useCallback(

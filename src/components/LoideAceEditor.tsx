@@ -59,13 +59,15 @@ interface LoideAceEditorProps {
     onSaveSession?: (tabKey: number, session: any) => void;
 }
 
+const defaultFontSize = 12;
+
 const LoideAceEditor = React.forwardRef<AceEditor, LoideAceEditorProps>(
     (props, forwardRef) => {
         const ace = require("ace-builds/src-noconflict/ace");
 
         const reactAce = useRef<AceEditor>(null);
 
-        const [fontSize, setFontSize] = useState<number>(12);
+        const [fontSize, setFontSize] = useState<number>(defaultFontSize);
 
         useEffect(() => {
             if (fontSize !== props.fontSize && props.fontSize)

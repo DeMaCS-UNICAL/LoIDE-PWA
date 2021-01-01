@@ -16,7 +16,7 @@ interface SaveProjectModalProps {
 }
 
 const SaveProjectModal: React.FC<SaveProjectModalProps> = (props) => {
-    const [showModal, setShowModal] = useState(props.isOpen);
+    const [showModal, setShowModal] = useState<boolean>(props.isOpen);
 
     useEffect(() => {
         setShowModal(props.isOpen);

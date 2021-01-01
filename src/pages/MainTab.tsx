@@ -47,9 +47,9 @@ interface MainTabPageProps
     }> {}
 
 const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
-    const [showOpenModal, setShowOpenModal] = useState(false);
-    const [showSaveModal, setShowSaveModal] = useState(false);
-    const [showShareModal, setShowShareModal] = useState(false);
+    const [showOpenModal, setShowOpenModal] = useState<boolean>(false);
+    const [showSaveModal, setShowSaveModal] = useState<boolean>(false);
+    const [showShareModal, setShowShareModal] = useState<boolean>(false);
     const [buttonsPopover, setButtonsPopover] = useState<{
         open: boolean;
         event: Event | undefined;

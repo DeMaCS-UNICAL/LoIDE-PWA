@@ -30,11 +30,11 @@ const ShareProject: React.FC<ShareProjectProps> = (props) => {
 
     const [url, setUrl] = useState<string>(URLInput.Loading);
 
-    const loideProjectData = Utils.getLoideProjectData();
-
     const [urlLoading, setUrlLoading] = useState<boolean>(true);
 
     useEffect(() => {
+        const loideProjectData = Utils.getLoideProjectData();
+
         if (Object.keys(loideProjectData).length > 0) {
             let URL = window.location.host;
 
@@ -80,7 +80,7 @@ const ShareProject: React.FC<ShareProjectProps> = (props) => {
                     }
                 );
         }
-    }, [loideProjectData]);
+    }, []);
 
     const selectAll = (e: any) => {
         e.target.select();

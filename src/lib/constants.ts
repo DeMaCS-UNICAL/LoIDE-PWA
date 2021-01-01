@@ -193,3 +193,5 @@ export const screenBreakpoints = {
     medium: 992,
     large: 1200,
 };
+
+export const defaultProjectName = "LoIDE_Project";

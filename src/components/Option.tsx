@@ -29,7 +29,7 @@ const Option: React.FC<OptionProps> = (props) => {
     var option = props.optionData;
     var optionsAvailable = props.optionsAvailable;
 
-    const [values, setValues] = useState([""]);
+    const [values, setValues] = useState<string[]>([""]);
 
     const incompatibleCurrenOptionName = useCallback((): boolean => {
         for (let i = 0; i < optionsAvailable.length; i++) {

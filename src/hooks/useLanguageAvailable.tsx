@@ -5,7 +5,7 @@ import { languagesDataSelector } from "../redux/slices/LanguagesData";
 export const useLanguageAvailable = (): boolean => {
     const { languages } = useSelector(languagesDataSelector);
 
-    const [available, setAvailable] = useState(false);
+    const [available, setAvailable] = useState<boolean>(false);
 
     useEffect(() => {
         setAvailable(languages.length > 0 ? true : false);
