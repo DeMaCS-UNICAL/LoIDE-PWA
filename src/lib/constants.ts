@@ -169,12 +169,18 @@ export const Inputs = {
 
 export const LoideLanguages = {
     ASP: { name: "asp", highlightSupport: true, runAutoSupported: true },
+    DATALOG: {
+        name: "datalog",
+        highlightSupport: true,
+        runAutoSupported: true,
+    },
 };
 
 export const LoideSolvers = {
     DLV: "dlv",
     DLV2: "dlv2",
     Clingo: "clingo",
+    IDLV: "idlv",
 };
 
 export const InitalTabCountID: number = 1;

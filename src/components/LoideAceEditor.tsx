@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import AceEditor from "react-ace";
 
 import "../lib/ace/mode-asp";
+import "../lib/ace/mode-datalog";
 import "ace-builds/src-noconflict/theme-tomorrow";
 import "ace-builds/src-noconflict/theme-idle_fingers";
 import "ace-builds/src-noconflict/ext-language_tools";
@@ -167,6 +168,34 @@ const LoideAceEditor = React.forwardRef<AceEditor, LoideAceEditorProps>(
             var completer;
 
             switch (languageChosen) {
+                case LoideLanguages.DATALOG.name:
+                    switch (solverChosen) {
+                        case LoideSolvers.IDLV:
+                            completer = {
+                                identifierRegexps: [
+                                    /[a-zA-Z_0-9#:$\-\u00A2-\uFFFF]/,
+                                ],
+                                getCompletions: function (
+                                    editor: any,
+                                    session: any,
+                                    pos: any,
+                                    prefix: any,
+                                    callback: any
+                                ) {
+                                    var completions = [
+                                        {
+                                            caption: ":-",
+                                            snippet: ":- ${1:literals}.",
+                                            meta: "body/constraint",
+                                        },
+                                    ];
+                                    callback(null, completions);
+                                },
+                            };
+                            langTools.addCompleter(completer);
+                            break;
+                    }
+                    break;
                 case LoideLanguages.ASP.name:
                     switch (solverChosen) {
                         case LoideSolvers.DLV:
@@ -457,7 +486,34 @@ const LoideAceEditor = React.forwardRef<AceEditor, LoideAceEditorProps>(
                             langTools.addCompleter(completer);
                             break;
                         case LoideSolvers.Clingo:
-                            // add snippets
+                            completer = {
+                                identifierRegexps: [
+                                    /[a-zA-Z_0-9#:$\-\u00A2-\uFFFF]/,
+                                ],
+                                getCompletions: function (
+                                    editor: any,
+                                    session: any,
+                                    pos: any,
+                                    prefix: any,
+                                    callback: any
+                                ) {
+                                    var completions = [
+                                        {
+                                            caption: ":~",
+                                            snippet:
+                                                ":~ ${1:literals}. [${2:conditions}]",
+                                            meta: "weak constraint",
+                                        },
+                                        {
+                                            caption: ":-",
+                                            snippet: ":- ${1:literals}.",
+                                            meta: "body/constraint",
+                                        },
+                                    ];
+                                    callback(null, completions);
+                                },
+                            };
+                            langTools.addCompleter(completer);
                             break;
                     }
                     break;
@@ -471,7 +527,8 @@ const LoideAceEditor = React.forwardRef<AceEditor, LoideAceEditorProps>(
             inizializeSnippets();
 
             switch (languageChosen) {
-                case LoideLanguages.ASP.name: {
+                case LoideLanguages.ASP.name:
+                case LoideLanguages.DATALOG.name: {
                     let splitRegex = /(([a-zA-Z_]+[0-9]*)*)(\(.+?\))/gi;
                     let words = editorText.match(splitRegex);
                     if (words != null) {
