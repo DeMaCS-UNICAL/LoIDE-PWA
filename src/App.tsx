@@ -80,8 +80,6 @@ const App: React.FC = () => {
             Utils.removeNewOutputBadge();
         });
 
-        Utils.restoreRunAutoFromLocalStorage();
-
         window.onbeforeunload = function () {
             let loideProject = Utils.getLoideProjectData();
             localStorage.setItem(

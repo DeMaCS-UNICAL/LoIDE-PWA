@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Option from "./Option";
 import {
     IExecutorData,
@@ -28,6 +28,7 @@ import { useSetRunSettings } from "../hooks/useSetRunSettings";
 import { useDispatch, useSelector } from "react-redux";
 import { languagesDataSelector } from "../redux/slices/LanguagesData";
 import {
+    initialRunSettingsState,
     runSettingsSelector,
     setCurrentExecutor,
     setCurrentLanguage,
@@ -37,7 +38,8 @@ import {
     setTabsIDToExecute,
 } from "../redux/slices/RunSettings";
 import { editorSelector } from "../redux/slices/Editor";
-import { LocalStorageItems } from "../lib/constants";
+import { LocalStorageItems, LoideLanguages } from "../lib/constants";
+import Utils from "../lib/utils";
 
 const RunSettings: React.FC = () => {
     const dispatch = useDispatch();
@@ -56,6 +58,22 @@ const RunSettings: React.FC = () => {
     const { tabs } = useSelector(editorSelector);
 
     const languageAvailable = useLanguageAvailable();
+
+    const [showRunAutoToggle, setShowRunAutoToggle] = useState<boolean>(false);
+
+    // check if the current language supports the auto run
+    useEffect(() => {
+        let runAutoSupported = Object.values(LoideLanguages).some((lang) => {
+            return lang.name === currentLanguage && lang.runAutoSupported;
+        });
+        if (!runAutoSupported) {
+            dispatch(setRunAuto(false));
+        } else if (runAutoSupported) {
+            dispatch(setRunAuto(initialRunSettingsState.runAuto));
+            Utils.restoreRunAutoFromLocalStorage();
+        }
+        setShowRunAutoToggle(runAutoSupported);
+    }, [currentLanguage, dispatch]);
 
     const getSolvers = (): ISolverData[] => {
         for (let lang of languages) {
@@ -319,20 +337,22 @@ const RunSettings: React.FC = () => {
                         </>
                     )}
 
-                    <IonList className="ion-no-padding">
-                        <IonListHeader>
-                            <IonLabel>Execution options</IonLabel>
-                        </IonListHeader>
-                        <IonItem>
-                            <IonLabel>Run automatically </IonLabel>
-                            <IonToggle
-                                title="Run automatically"
-                                checked={runAuto}
-                                slot="end"
-                                onIonChange={onRunAutoChange}
-                            />
-                        </IonItem>
-                    </IonList>
+                    {showRunAutoToggle && (
+                        <IonList className="ion-no-padding">
+                            <IonListHeader>
+                                <IonLabel>Execution options</IonLabel>
+                            </IonListHeader>
+                            <IonItem>
+                                <IonLabel>Run automatically </IonLabel>
+                                <IonToggle
+                                    title="Run automatically"
+                                    checked={runAuto}
+                                    slot="end"
+                                    onIonChange={onRunAutoChange}
+                                />
+                            </IonItem>
+                        </IonList>
+                    )}
 
                     <TabToExecute
                         tabs={tabs}
