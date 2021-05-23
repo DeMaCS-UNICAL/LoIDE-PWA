@@ -26,7 +26,7 @@ const OutputTab: React.FC = () => {
     const { fontSizeOutput } = useSelector(UIStatusSelector);
 
     const clearOutput = () => {
-        dispatch(setEmpty);
+        dispatch(setEmpty());
     };
 
     const downloadOutput = () => {
