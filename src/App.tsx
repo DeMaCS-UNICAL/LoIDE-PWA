@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Redirect, Route } from "react-router-dom";
 import {
     IonApp,
@@ -52,9 +52,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { UIStatusSelector } from "./redux/slices/UIStatus";
 import { setError, setModel } from "./redux/slices/Output";
 import { setLanguages } from "./redux/slices/LanguagesData";
+import Mousetrap from "mousetrap";
+import ShortcutsModal from "./modals/ShortcutsModal";
 
 const App: React.FC = () => {
     const dispatch = useDispatch();
+
+    const [showShortcutsModal, setShowShortcutsModal] = useState<boolean>(
+        false
+    );
+
     const { newOutput } = useSelector(UIStatusSelector);
 
     useEffect(() => {
@@ -88,6 +95,23 @@ const App: React.FC = () => {
             );
         };
     }, []);
+
+    useEffect(() => {
+        Mousetrap.bind("?", () => {
+            setShowShortcutsModal(!showShortcutsModal);
+            return false;
+        });
+        Mousetrap.bind(["ctrl+enter", "command+enter"], () => {
+            let dataToRun = Utils.getLoideRunData();
+            API.emitRunProject(dataToRun);
+            return false;
+        });
+
+        return () => {
+            Mousetrap.unbind("?");
+            Mousetrap.unbind(["ctrl+enter", "command+enter"]);
+        };
+    }, [showShortcutsModal]);
 
     useEffect(() => {
         API.emitGetLanguages();
@@ -175,6 +199,10 @@ const App: React.FC = () => {
                         </IonTabButton>
                     </IonTabBar>
                 </IonTabs>
+                <ShortcutsModal
+                    isOpen={showShortcutsModal}
+                    onDismiss={setShowShortcutsModal}
+                />
             </IonReactRouter>
         </IonApp>
     );

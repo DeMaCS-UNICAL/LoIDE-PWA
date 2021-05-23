@@ -40,6 +40,7 @@ import { RouteComponentProps } from "react-router";
 import { useSelector } from "react-redux";
 import { languagesDataSelector } from "../redux/slices/LanguagesData";
 import RestoreButton from "../components/RestoreButton";
+import Mousetrap from "mousetrap";
 
 interface MainTabPageProps
     extends RouteComponentProps<{
@@ -67,6 +68,27 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [languages]);
+
+    useEffect(() => {
+        Mousetrap.bind(["ctrl+o", "command+o"], () => {
+            setShowOpenModal(!showOpenModal);
+            return false;
+        });
+        Mousetrap.bind(["ctrl+s", "command+s"], () => {
+            setShowSaveModal(!showSaveModal);
+            return false;
+        });
+        Mousetrap.bind(["ctrl+shift+s", "command+shift+s"], () => {
+            setShowShareModal(!showShareModal);
+            return false;
+        });
+
+        return () => {
+            Mousetrap.unbind(["ctrl+o", "command+o"]);
+            Mousetrap.unbind(["ctrl+s", "command+s"]);
+            Mousetrap.unbind(["ctrl+shift+s", "command+shift+s"]);
+        };
+    }, [showOpenModal, showSaveModal, showShareModal]);
 
     const showResetInputAlert = () => {
         alertController
