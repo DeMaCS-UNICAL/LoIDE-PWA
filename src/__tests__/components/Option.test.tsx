@@ -26,8 +26,8 @@ const optionData: ISolverOption = {
     disabled: false,
 };
 
-describe("Option component tests", () => {
-    test("renders without crashing", () => {
+describe("<Option />", () => {
+    it("renders without crashing", () => {
         const { baseElement } = render(
             <Option
                 optionsAvailable={optionsAvailable}
@@ -39,7 +39,7 @@ describe("Option component tests", () => {
         expect(baseElement).toBeDefined();
     });
 
-    test("tests delete option button", () => {
+    it("tests delete option button", () => {
         const onDeleteOption = jest.fn();
         render(
             <Option
@@ -55,7 +55,7 @@ describe("Option component tests", () => {
         expect(onDeleteOption).toHaveBeenCalledTimes(1);
     });
 
-    test("render Name label", () => {
+    it("render Name label", () => {
         render(
             <Option
                 optionsAvailable={optionsAvailable}
@@ -67,7 +67,7 @@ describe("Option component tests", () => {
         screen.getByText("Name");
     });
 
-    test("test select", async () => {
+    it("test select", async () => {
         const onChangeOptionType = jest.fn();
 
         render(
@@ -87,7 +87,7 @@ describe("Option component tests", () => {
         expect(onChangeOptionType).toBeCalledTimes(1);
     });
 
-    test("test word argument true", async () => {
+    it("test word argument true", async () => {
         let newOptionsAvailable: IOptionsData[] = [
             {
                 name: "Free choice",
@@ -107,7 +107,7 @@ describe("Option component tests", () => {
         expect(queryByText("Value")).toBeInTheDocument();
     });
 
-    test("test word argument false", async () => {
+    it("test word argument false", async () => {
         let newOptionsAvailable: IOptionsData[] = [
             {
                 name: "Free choice",
@@ -127,7 +127,7 @@ describe("Option component tests", () => {
         expect(queryByText("Value")).not.toBeInTheDocument();
     });
 
-    test("test disable option", async () => {
+    it("test disable option", async () => {
         const onChangeDisableOption = jest.fn();
         const onChangeOptionType = jest.fn();
         render(
@@ -145,8 +145,8 @@ describe("Option component tests", () => {
     });
 });
 
-describe("OptionTextValue component tests", () => {
-    test("test change input text", async () => {
+describe("<OptionTextValue />", () => {
+    it("test change input text", async () => {
         let newOptionsAvailable: IOptionsData[] = [
             {
                 name: "Free choice",
@@ -175,7 +175,7 @@ describe("OptionTextValue component tests", () => {
         expect(onChangeOptionValues).toBeCalledTimes(1);
     });
 
-    test("test add input text", async () => {
+    it("test add input text", async () => {
         let newOptionsAvailable: IOptionsData[] = [
             {
                 name: "Free choice",
@@ -199,18 +199,20 @@ describe("OptionTextValue component tests", () => {
 
         const button = await screen.findByTitle("Add value");
 
-        let inputs = await screen.findAllByPlaceholderText("Insert a value");
+        let inputs = await screen.findAllByTestId("option-text-value-item");
+
         expect(inputs.length).toBe(1);
 
         fireEvent.click(button);
 
         expect(onChangeOptionValues).toBeCalledTimes(1);
 
-        inputs = await screen.findAllByPlaceholderText("Insert a value");
+        inputs = await screen.findAllByTestId("option-text-value-item");
+
         expect(inputs.length).toBe(2);
     });
 
-    test("test delete swipe", async () => {
+    it("test delete swipe", async () => {
         const onChangeOptionValues = jest.fn();
         render(
             <Option

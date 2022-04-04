@@ -30,7 +30,7 @@ const OptionTextValue: React.FC<OptionTextValueProp> = (props) => {
 
     return (
         <IonItemSliding ref={slideOptions}>
-            <IonItem>
+            <IonItem data-testid="option-text-value-item">
                 <IonLabel style={props.disabled ? { opacity: 0.3 } : {}}>
                     <b> Value </b>
                 </IonLabel>
