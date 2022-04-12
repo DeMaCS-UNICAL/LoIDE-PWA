@@ -1,4 +1,3 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import { ionFireEvent as fireEvent } from "@ionic/react-test-utils";
 import Option from "../../components/Option";
@@ -231,51 +230,58 @@ describe("<OptionTextValue />", () => {
         expect(onChangeOptionValues).toBeCalledTimes(1);
     });
 
-    // test("test add and delete input text", async () => {
-    //     let newOptionsAvailable: IOptionsData[] = [
-    //         {
-    //             name: "Free choice",
-    //             value: "free choice",
-    //             word_argument: true,
-    //             description: "Missing description",
-    //         },
-    //     ];
+    it.skip("test add and delete input text", async () => {
+        let newOptionsAvailable: IOptionsData[] = [
+            {
+                name: "Free choice",
+                value: "free choice",
+                word_argument: true,
+                description: "Missing description",
+            },
+        ];
 
-    //     const onChangeOptionValues = jest.fn();
+        const onChangeOptionValues = jest.fn();
 
-    //     const ref = {
-    //         current: {
-    //             close: jest.fn(),
-    //         },
-    //     };
+        // const ref = {
+        //     current: {
+        //         close: jest.fn(),
+        //     },
+        // };
 
-    //     render(
-    //         <Option
-    //             optionsAvailable={newOptionsAvailable}
-    //             optionData={optionData}
-    //             onChangeOptionValues={onChangeOptionValues}
-    //         />
-    //     );
+        render(
+            <Option
+                optionsAvailable={newOptionsAvailable}
+                optionData={optionData}
+                onChangeOptionValues={onChangeOptionValues}
+                disabled={false}
+                onChangeDisableOption={function (
+                    id: number,
+                    value: boolean
+                ): void {
+                    throw new Error("Function not implemented.");
+                }}
+            />
+        );
 
-    //     const button = await screen.findByTitle("Add value");
+        const button = await screen.findByTitle("Add value");
 
-    //     let inputs = await screen.findAllByPlaceholderText("Insert a value");
-    //     expect(inputs.length).toBe(1);
+        let inputs = await screen.findAllByPlaceholderText("Insert a value");
+        expect(inputs.length).toBe(1);
 
-    //     fireEvent.click(button);
+        fireEvent.click(button);
 
-    //     expect(onChangeOptionValues).toBeCalledTimes(1);
+        expect(onChangeOptionValues).toBeCalledTimes(1);
 
-    //     inputs = await screen.findAllByPlaceholderText("Insert a value");
+        inputs = await screen.findAllByPlaceholderText("Insert a value");
 
-    //     const buttonsDelete = await screen.findAllByTitle(
-    //         "Delete option value"
-    //     );
-    //     fireEvent.click(buttonsDelete[0]);
+        const buttonsDelete = await screen.findAllByTitle(
+            "Delete option value"
+        );
+        fireEvent.click(buttonsDelete[0]);
 
-    //     expect(onChangeOptionValues).toBeCalledTimes(2);
+        expect(onChangeOptionValues).toBeCalledTimes(2);
 
-    //     inputs = await screen.findAllByPlaceholderText("Insert a value");
-    //     expect(inputs.length).toBe(1);
-    // });
+        inputs = await screen.findAllByPlaceholderText("Insert a value");
+        expect(inputs.length).toBe(1);
+    });
 });

@@ -1,4 +1,3 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import TabToExecute from "../../components/TabToExecute";
 import {
@@ -25,139 +24,141 @@ tabs[2] = {
     value: "color(2)",
 };
 
-test("renders without crashing", () => {
-    const { baseElement } = render(
-        <TabToExecute
-            tabs={tabs}
-            tabsIDToExecute={[]}
-            onCheckCurrentTab={jest.fn()}
-            onCheckTab={jest.fn()}
-            onCheckAllTabs={jest.fn()}
-        />
-    );
-    expect(baseElement).toBeDefined();
-});
-
-test("renders the header", async () => {
-    render(
-        <TabToExecute
-            tabs={tabs}
-            tabsIDToExecute={[]}
-            onCheckCurrentTab={jest.fn()}
-            onCheckTab={jest.fn()}
-            onCheckAllTabs={jest.fn()}
-        />
-    );
-
-    await screen.findByText("Choose tab to execute");
-});
-
-test("renders the curent tab item", async () => {
-    render(
-        <TabToExecute
-            tabs={tabs}
-            tabsIDToExecute={[]}
-            onCheckCurrentTab={jest.fn()}
-            onCheckTab={jest.fn()}
-            onCheckAllTabs={jest.fn()}
-        />
-    );
-
-    await screen.findByText("Current tab");
-});
-
-test("renders the tab items", async () => {
-    render(
-        <TabToExecute
-            tabs={tabs}
-            tabsIDToExecute={[]}
-            onCheckCurrentTab={jest.fn()}
-            onCheckTab={jest.fn()}
-            onCheckAllTabs={jest.fn()}
-        />
-    );
-
-    await screen.findByText(tabs[1].title);
-    await screen.findByText(tabs[2].title);
-});
-
-test("test click the current tab radio item", async () => {
-    let tabsIDToExecute: number[] = [1, 2];
-    const onCheckCurrentTab = jest.fn((value: boolean) => {
-        if (value) {
-            tabsIDToExecute = [];
-        }
+describe("<TabToExecute />", () => {
+    it("renders without crashing", () => {
+        const { baseElement } = render(
+            <TabToExecute
+                tabs={tabs}
+                tabsIDToExecute={[]}
+                onCheckCurrentTab={jest.fn()}
+                onCheckTab={jest.fn()}
+                onCheckAllTabs={jest.fn()}
+            />
+        );
+        expect(baseElement).toBeDefined();
     });
-    render(
-        <TabToExecute
-            tabs={tabs}
-            tabsIDToExecute={tabsIDToExecute}
-            onCheckCurrentTab={onCheckCurrentTab}
-            onCheckTab={jest.fn()}
-            onCheckAllTabs={jest.fn()}
-        />
-    );
 
-    const radioGroup = await screen.findByTestId("group-radio-tab");
+    it("renders the header", async () => {
+        render(
+            <TabToExecute
+                tabs={tabs}
+                tabsIDToExecute={[]}
+                onCheckCurrentTab={jest.fn()}
+                onCheckTab={jest.fn()}
+                onCheckAllTabs={jest.fn()}
+            />
+        );
 
-    fireEvent(
-        radioGroup,
-        new CustomEvent("ionChange", { detail: { value: CurrentTab } })
-    );
-
-    expect(onCheckCurrentTab).toBeCalled();
-    expect(tabsIDToExecute.length).toBe(0);
-});
-
-test("test click the all tabs radio item", async () => {
-    let tabsIDToExecute: number[] = [];
-    const onCheckAllTabs = jest.fn((value: boolean) => {
-        if (value) {
-            tabsIDToExecute = [
-                ...Object.keys(tabs).map((item) => Number(item)),
-            ];
-        }
+        await screen.findByText("Choose tab to execute");
     });
-    render(
-        <TabToExecute
-            tabs={tabs}
-            tabsIDToExecute={tabsIDToExecute}
-            onCheckCurrentTab={jest.fn()}
-            onCheckTab={jest.fn()}
-            onCheckAllTabs={onCheckAllTabs}
-        />
-    );
 
-    const radioGroup = await screen.findByTestId("group-radio-tab");
+    it("renders the curent tab item", async () => {
+        render(
+            <TabToExecute
+                tabs={tabs}
+                tabsIDToExecute={[]}
+                onCheckCurrentTab={jest.fn()}
+                onCheckTab={jest.fn()}
+                onCheckAllTabs={jest.fn()}
+            />
+        );
 
-    fireEvent(
-        radioGroup,
-        new CustomEvent("ionChange", { detail: { value: AllTabs } })
-    );
-
-    expect(onCheckAllTabs).toBeCalled();
-    expect(tabsIDToExecute.length).toBe(Object.keys(tabs).length);
-});
-
-test("test click the tab items", async () => {
-    let tabsIDToExecute: number[] = [];
-    const onCheckTab = jest.fn((id: number, value: boolean) => {
-        if (value) tabsIDToExecute.push(id);
+        await screen.findByText("Current tab");
     });
-    render(
-        <TabToExecute
-            tabs={tabs}
-            tabsIDToExecute={tabsIDToExecute}
-            onCheckCurrentTab={jest.fn()}
-            onCheckTab={onCheckTab}
-            onCheckAllTabs={jest.fn()}
-        />
-    );
 
-    const item = await screen.findByTestId(`item-tab-1`);
+    it("renders the tab items", async () => {
+        render(
+            <TabToExecute
+                tabs={tabs}
+                tabsIDToExecute={[]}
+                onCheckCurrentTab={jest.fn()}
+                onCheckTab={jest.fn()}
+                onCheckAllTabs={jest.fn()}
+            />
+        );
 
-    ionFireEvent.click(item!);
+        await screen.findByText(tabs[1].title);
+        await screen.findByText(tabs[2].title);
+    });
 
-    expect(onCheckTab).toBeCalled();
-    expect(tabsIDToExecute.length).toBe(1);
+    it("test click the current tab radio item", async () => {
+        let tabsIDToExecute: number[] = [1, 2];
+        const onCheckCurrentTab = jest.fn((value: boolean) => {
+            if (value) {
+                tabsIDToExecute = [];
+            }
+        });
+        render(
+            <TabToExecute
+                tabs={tabs}
+                tabsIDToExecute={tabsIDToExecute}
+                onCheckCurrentTab={onCheckCurrentTab}
+                onCheckTab={jest.fn()}
+                onCheckAllTabs={jest.fn()}
+            />
+        );
+
+        const radioGroup = await screen.findByTestId("group-radio-tab");
+
+        fireEvent(
+            radioGroup,
+            new CustomEvent("ionChange", { detail: { value: CurrentTab } })
+        );
+
+        expect(onCheckCurrentTab).toBeCalled();
+        expect(tabsIDToExecute.length).toBe(0);
+    });
+
+    it("test click the all tabs radio item", async () => {
+        let tabsIDToExecute: number[] = [];
+        const onCheckAllTabs = jest.fn((value: boolean) => {
+            if (value) {
+                tabsIDToExecute = [
+                    ...Object.keys(tabs).map((item) => Number(item)),
+                ];
+            }
+        });
+        render(
+            <TabToExecute
+                tabs={tabs}
+                tabsIDToExecute={tabsIDToExecute}
+                onCheckCurrentTab={jest.fn()}
+                onCheckTab={jest.fn()}
+                onCheckAllTabs={onCheckAllTabs}
+            />
+        );
+
+        const radioGroup = await screen.findByTestId("group-radio-tab");
+
+        fireEvent(
+            radioGroup,
+            new CustomEvent("ionChange", { detail: { value: AllTabs } })
+        );
+
+        expect(onCheckAllTabs).toBeCalled();
+        expect(tabsIDToExecute.length).toBe(Object.keys(tabs).length);
+    });
+
+    it("test click the tab items", async () => {
+        let tabsIDToExecute: number[] = [];
+        const onCheckTab = jest.fn((id: number, value: boolean) => {
+            if (value) tabsIDToExecute.push(id);
+        });
+        render(
+            <TabToExecute
+                tabs={tabs}
+                tabsIDToExecute={tabsIDToExecute}
+                onCheckCurrentTab={jest.fn()}
+                onCheckTab={onCheckTab}
+                onCheckAllTabs={jest.fn()}
+            />
+        );
+
+        const item = await screen.findByTestId(`item-tab-1`);
+
+        ionFireEvent.click(item!);
+
+        expect(onCheckTab).toBeCalled();
+        expect(tabsIDToExecute.length).toBe(1);
+    });
 });
