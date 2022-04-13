@@ -3,18 +3,18 @@ import { ILanguageData } from "../../lib/LoideAPIInterfaces";
 import { ILanguagesState } from "../../lib/LoideInterfaces";
 
 export const initialLanguagesDataState: ILanguagesState = {
-    languages: [],
+  languages: [],
 };
 
 // A slice for recipes with our 3 reducers
 const languagesDataSlice = createSlice({
-    name: "languagesData",
-    initialState: initialLanguagesDataState,
-    reducers: {
-        setLanguages: (state, { payload }: PayloadAction<ILanguageData[]>) => {
-            state.languages = payload;
-        },
+  name: "languagesData",
+  initialState: initialLanguagesDataState,
+  reducers: {
+    setLanguages: (state, { payload }: PayloadAction<ILanguageData[]>) => {
+      state.languages = payload;
     },
+  },
 });
 
 // Three actions generated from the slice
@@ -22,7 +22,7 @@ export const { setLanguages } = languagesDataSlice.actions;
 
 // A selector
 export const languagesDataSelector = (state: {
-    languagesData: ILanguagesState;
+  languagesData: ILanguagesState;
 }) => state.languagesData;
 
 // The reducer

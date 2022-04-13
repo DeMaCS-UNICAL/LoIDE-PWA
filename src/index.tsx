@@ -1,4 +1,4 @@
-import { setupIonicReact } from '@ionic/react';
+import { setupIonicReact } from "@ionic/react";
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
@@ -10,18 +10,18 @@ import { Provider } from "react-redux";
 import { store } from "./redux";
 
 setupIonicReact({
-    // mode: "ios",
+  // mode: "ios",
 });
 
 ReactDOM.render(
-    <Provider store={store}>
-        <DarkModeProvider>
-            <ViewportProvider>
-                <App />
-            </ViewportProvider>
-        </DarkModeProvider>
-    </Provider>,
-    document.getElementById("root")
+  <Provider store={store}>
+    <DarkModeProvider>
+      <ViewportProvider>
+        <App />
+      </ViewportProvider>
+    </DarkModeProvider>
+  </Provider>,
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change
