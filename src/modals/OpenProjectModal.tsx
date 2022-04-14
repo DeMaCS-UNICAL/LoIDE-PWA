@@ -37,7 +37,7 @@ const OpenProjectModal: React.FC<OpenFileModalModalProps> = (props) => {
   return (
     <IonModal
       isOpen={showModal}
-      swipeToClose={true}
+      canDismiss={true}
       onDidDismiss={() => props.onDismiss(false)}
     >
       <IonHeader>

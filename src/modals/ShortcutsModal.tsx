@@ -25,7 +25,7 @@ const ShortcutsModal: React.FC<ShortcutsModalProps> = (props) => {
   return (
     <IonModal
       isOpen={showModal}
-      swipeToClose={true}
+      canDismiss={true}
       onDidDismiss={() => props.onDismiss(false)}
     >
       <IonHeader>
