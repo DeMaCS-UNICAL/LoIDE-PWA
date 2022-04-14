@@ -6,7 +6,13 @@ export const viewportContext = React.createContext<IDimensions>({
   height: 0,
 });
 
-export const ViewportProvider: React.FC = ({ children }) => {
+type ViewportProviderProps = {
+  children?: React.ReactNode;
+};
+
+export const ViewportProvider: React.FC<ViewportProviderProps> = ({
+  children,
+}) => {
   const [width, setWidth] = React.useState<number>(window.innerWidth);
   const [height, setHeight] = React.useState<number>(window.innerHeight);
   const handleWindowResize = () => {

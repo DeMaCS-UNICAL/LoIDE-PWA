@@ -5,7 +5,13 @@ import { setDarkMode, UIStatusSelector } from "../redux/slices/UIStatus";
 
 export const darkModeContext = React.createContext(false);
 
-export const DarkModeProvider: React.FC = ({ children }) => {
+type DarkModeProviderProps = {
+  children?: React.ReactNode;
+};
+
+export const DarkModeProvider: React.FC<DarkModeProviderProps> = ({
+  children,
+}) => {
   const dispatch = useDispatch();
 
   const { darkMode } = useSelector(UIStatusSelector);

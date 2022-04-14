@@ -1,6 +1,5 @@
 import { setupIonicReact } from "@ionic/react";
 import React from "react";
-import ReactDOM from "react-dom";
 import App from "./App";
 import { DarkModeProvider } from "./providers/DarkModeProvider";
 import { ViewportProvider } from "./providers/ViewportProvider";
@@ -9,19 +8,23 @@ import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import { store } from "./redux";
 
+import { createRoot } from "react-dom/client";
+
 setupIonicReact({
   // mode: "ios",
 });
 
-ReactDOM.render(
+const container = document.getElementById("root");
+const root = createRoot(container!);
+
+root.render(
   <Provider store={store}>
     <DarkModeProvider>
       <ViewportProvider>
         <App />
       </ViewportProvider>
     </DarkModeProvider>
-  </Provider>,
-  document.getElementById("root")
+  </Provider>
 );
 
 // If you want your app to work offline and load faster, you can change
