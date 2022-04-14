@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import About from "../../components/About";
 
 describe("<About />", () => {
@@ -8,15 +8,13 @@ describe("<About />", () => {
   });
 
   it("renders the logo", async () => {
-    render(<About />);
-    await screen.findByAltText("loide-logo");
+    const { findByAltText } = render(<About />);
+    await findByAltText("loide-logo");
   });
 
   it("has the project url", async () => {
-    render(<About />);
-    const element = screen
-      .getByText("demacs-unical.github.io/LoIDE")
-      .closest("a");
+    const { getByText } = render(<About />);
+    const element = getByText("demacs-unical.github.io/LoIDE").closest("a");
     expect(element).toHaveAttribute(
       "href",
       "https://demacs-unical.github.io/LoIDE/"
@@ -24,8 +22,8 @@ describe("<About />", () => {
   });
 
   it("has the github repo url", async () => {
-    render(<About />);
-    const element = screen.getByText("Github").closest("a");
+    const { getByText } = render(<About />);
+    const element = getByText("Github").closest("a");
     expect(element).toHaveAttribute(
       "href",
       "https://github.com/DeMaCS-UNICAL/LoIDE-PWA"
@@ -33,8 +31,8 @@ describe("<About />", () => {
   });
 
   it("has the license project url", async () => {
-    render(<About />);
-    const element = screen.getByText("MIT License").closest("a");
+    const { getByText } = render(<About />);
+    const element = getByText("MIT License").closest("a");
     expect(element).toHaveAttribute(
       "href",
       "https://github.com/DeMaCS-UNICAL/LoIDE-PWA/blob/main/LICENSE"
@@ -42,14 +40,14 @@ describe("<About />", () => {
   });
 
   it("has the license project url", async () => {
-    render(<About />);
+    const { getByText } = render(<About />);
     const respectLicenseString =
       "Use of all solvers and systems is provided under the respective licenses; we refrain from taking any responsibility for any use that goes out of the scopes of such licenses.";
-    screen.getByText(respectLicenseString);
+    getByText(respectLicenseString);
   });
 
   it("has the email project", async () => {
-    render(<About />);
-    screen.getByText("loide@mat.unical.it");
+    const { getByText } = render(<About />);
+    getByText("loide@mat.unical.it");
   });
 });

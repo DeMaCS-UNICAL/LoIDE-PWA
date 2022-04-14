@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import ShortcutsModal from "../../modals/ShortcutsModal";
 
 describe("<ShortcutsModal />", () => {
@@ -13,15 +13,19 @@ describe("<ShortcutsModal />", () => {
   it("displays the title", async () => {
     const onDismiss = jest.fn();
 
-    render(<ShortcutsModal isOpen={true} onDismiss={onDismiss} />);
-    await screen.findByText("Keyboard Shortcuts");
+    const { findByText } = render(
+      <ShortcutsModal isOpen={true} onDismiss={onDismiss} />
+    );
+    await findByText("Keyboard Shortcuts");
   });
 
   it("test close button", async () => {
     const onDismiss = jest.fn();
 
-    render(<ShortcutsModal isOpen={true} onDismiss={onDismiss} />);
-    const button = await screen.findByText("Close");
+    const { findByText } = render(
+      <ShortcutsModal isOpen={true} onDismiss={onDismiss} />
+    );
+    const button = await findByText("Close");
 
     fireEvent.click(button);
 

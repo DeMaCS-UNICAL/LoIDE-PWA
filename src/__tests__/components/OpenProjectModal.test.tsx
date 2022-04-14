@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import OpenProjectModal from "../../modals/OpenProjectModal";
 import { Provider } from "react-redux";
 import { store } from "../../redux";
@@ -17,23 +17,23 @@ describe("<OpenProjectModal />", () => {
   it("displays the title", async () => {
     const onDismiss = jest.fn();
 
-    render(
+    const { findByText } = render(
       <Provider store={store}>
         <OpenProjectModal isOpen={true} onDismiss={onDismiss} />
       </Provider>
     );
-    await screen.findByText("Open project or text files");
+    await findByText("Open project or text files");
   });
 
   it("test close button", async () => {
     const onDismiss = jest.fn();
 
-    render(
+    const { findByText } = render(
       <Provider store={store}>
         <OpenProjectModal isOpen={true} onDismiss={onDismiss} />
       </Provider>
     );
-    const button = await screen.findByText("Close");
+    const button = await findByText("Close");
 
     fireEvent.click(button);
 

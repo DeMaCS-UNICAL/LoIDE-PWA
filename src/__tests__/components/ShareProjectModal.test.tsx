@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import ShareProjectModal from "../../modals/ShareProjectModal";
 
 describe("<ShareProjectModal />", () => {
@@ -13,15 +13,19 @@ describe("<ShareProjectModal />", () => {
   it("displays the title", async () => {
     const onDismiss = jest.fn();
 
-    render(<ShareProjectModal isOpen={true} onDismiss={onDismiss} />);
-    await screen.findByText("Share project");
+    const { findByText } = render(
+      <ShareProjectModal isOpen={true} onDismiss={onDismiss} />
+    );
+    await findByText("Share project");
   });
 
   it("test close button", async () => {
     const onDismiss = jest.fn();
 
-    render(<ShareProjectModal isOpen={true} onDismiss={onDismiss} />);
-    const button = await screen.findByText("Close");
+    const { findByText } = render(
+      <ShareProjectModal isOpen={true} onDismiss={onDismiss} />
+    );
+    const button = await findByText("Close");
 
     fireEvent.click(button);
 

@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import LoideFileDropzone from "../../components/LoideFileDropzone";
 import { Provider } from "react-redux";
 import { store } from "../../redux";
@@ -14,12 +14,12 @@ describe("<LoideFileDropzone />", () => {
   });
 
   it("displays the main dropzone text", async () => {
-    render(
+    const { findByText } = render(
       <Provider store={store}>
         <LoideFileDropzone />
       </Provider>
     );
-    await screen.findByText(
+    await findByText(
       "Drag 'n' drop some files here, or click to select files."
     );
   });

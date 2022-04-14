@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import Output from "../../components/Output";
 
 const outputModel = "logic program output";
@@ -13,12 +13,16 @@ describe("<Output />", () => {
   });
 
   it("displays the output model", async () => {
-    render(<Output model={outputModel} error={outputError} />);
-    await screen.findByText(outputModel);
+    const { findByText } = render(
+      <Output model={outputModel} error={outputError} />
+    );
+    await findByText(outputModel);
   });
 
   it("displays the output error", async () => {
-    render(<Output model={outputModel} error={outputError} />);
-    await screen.findByText(outputModel);
+    const { findByText } = render(
+      <Output model={outputModel} error={outputError} />
+    );
+    await findByText(outputModel);
   });
 });

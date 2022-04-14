@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
-import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import AppearanceTab from "../../pages/AppearanceTab";
 import { Provider } from "react-redux";
 import { store } from "../../redux";
@@ -17,11 +17,11 @@ describe("AppearanceTab page", () => {
   });
 
   it("renders the sidebar title", async () => {
-    render(
+    const { findByText } = render(
       <Provider store={store}>
         <AppearanceTab />
       </Provider>
     );
-    await screen.findByText("Appearance");
+    await findByText("Appearance");
   });
 });
