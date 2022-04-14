@@ -8,9 +8,9 @@ describe("<SaveProject />", () => {
   });
 
   it("displays the project name label", async () => {
-    const { findByText, findByPlaceholderText } = render(<SaveProject />);
+    const { findByText, findAllByPlaceholderText } = render(<SaveProject />);
     await findByText("Project name");
-    await findByPlaceholderText("Insert a project name");
+    await findAllByPlaceholderText("Insert a project name");
   });
 
   it("test download button", async () => {
