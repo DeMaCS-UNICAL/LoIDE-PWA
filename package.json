@@ -30,7 +30,7 @@
         "@ionic/react-test-utils": "^0.2.0",
         "@reduxjs/toolkit": "^1.8.0",
         "@testing-library/jest-dom": "^5.16.4",
-        "@testing-library/react": "^12.1.5",
+        "@testing-library/react": "^13.0.1",
         "@testing-library/user-event": "^13.2.1",
         "@types/ace": "0.0.48",
         "@types/jest": "^27.0.2",
