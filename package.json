@@ -25,8 +25,8 @@
         "prettier:write": "prettier --write ./src"
     },
     "dependencies": {
-        "@ionic/react": "^6.0.16",
-        "@ionic/react-router": "^6.0.16",
+        "@ionic/react": "^6.1.0",
+        "@ionic/react-router": "^6.1.0",
         "@ionic/react-test-utils": "^0.2.0",
         "@reduxjs/toolkit": "^1.8.0",
         "@testing-library/jest-dom": "^5.16.4",
@@ -35,7 +35,7 @@
         "@types/ace": "0.0.48",
         "@types/jest": "^27.0.2",
         "@types/mousetrap": "^1.6.8",
-        "@types/node": "^16.10.1",
+        "@types/node": "^16.11.27",
         "@types/react": "^17.0.44",
         "@types/react-dom": "^17.0.15",
         "@types/react-router": "^5.1.14",
@@ -78,7 +78,7 @@
         "workbox-streams": "^5.1.4"
     },
     "devDependencies": {
-        "@types/react-redux": "^7.1.23",
+        "@types/react-redux": "^7.1.24",
         "jest-watch-typeahead": "^0.6.5",
         "prettier": "2.6.2"
     },
