@@ -1,6 +1,6 @@
 import { IonButton, IonCol, IonProgressBar, IonRow } from "@ionic/react";
 import React from "react";
-import API from "../lib/api";
+import * as API from "../lib/api";
 import { Offline, Online } from "react-detect-offline";
 import { useSelector } from "react-redux";
 import { UIStatusSelector } from "../redux/slices/UIStatus";

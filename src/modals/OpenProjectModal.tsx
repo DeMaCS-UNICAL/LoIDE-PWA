@@ -35,11 +35,7 @@ const OpenProjectModal: React.FC<OpenFileModalModalProps> = (props) => {
   };
 
   return (
-    <IonModal
-      isOpen={showModal}
-      canDismiss={true}
-      onDidDismiss={() => props.onDismiss(false)}
-    >
+    <IonModal isOpen={showModal} onDidDismiss={() => props.onDismiss(false)}>
       <IonHeader>
         <IonToolbar>
           <IonTitle>Open project or text files</IonTitle>

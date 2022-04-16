@@ -17,7 +17,7 @@ const APIUrl = "localhost:8084";
 
 var socket: SocketIOClient.Socket | undefined = undefined;
 
-const createSocket = () => {
+export const createSocket = () => {
   if (!socket) {
     socket = io(APIUrl, { reconnection: false });
     socket.io.on("error", async (error: any) => {
@@ -43,7 +43,7 @@ const createSocket = () => {
   }
 };
 
-const setRunProjectListener = (
+export const setRunProjectListener = (
   callbackOutput: (output: IOutputData) => void
 ) => {
   if (socket) {
@@ -74,7 +74,7 @@ const setRunProjectListener = (
   }
 };
 
-const setGetLanguagesListener = (
+export const setGetLanguagesListener = (
   callbackLanguages: (output: ILanguageData[]) => void
 ) => {
   if (socket) {
@@ -90,7 +90,7 @@ const setGetLanguagesListener = (
   }
 };
 
-const emitGetLanguages = () => {
+export const emitGetLanguages = () => {
   if (socket) {
     if (socket.disconnected) {
       store.dispatch(setConnectingToTheServer(true));
@@ -100,7 +100,7 @@ const emitGetLanguages = () => {
   }
 };
 
-const emitRunProject = (data: ILoideRunData) => {
+export const emitRunProject = (data: ILoideRunData) => {
   if (socket) {
     if (socket.disconnected) {
       store.dispatch(setConnectingToTheServer(true));
@@ -110,28 +110,16 @@ const emitRunProject = (data: ILoideRunData) => {
   }
 };
 
-const isConnected = (): boolean => {
+export const isConnected = (): boolean => {
   if (socket) {
     return socket.connected;
   }
   return false;
 };
 
-const disconnectAndClearSocket = () => {
+export const disconnectAndClearSocket = () => {
   if (socket) {
     socket.removeAllListeners();
     socket.disconnect();
   }
 };
-
-const API = {
-  createSocket,
-  isConnected,
-  disconnectAndClearSocket,
-  setRunProjectListener,
-  setGetLanguagesListener,
-  emitRunProject,
-  emitGetLanguages,
-};
-
-export default API;

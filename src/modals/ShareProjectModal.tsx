@@ -23,11 +23,7 @@ const ShareProjectModal: React.FC<ShareProjectModalProps> = (props) => {
   }, [props.isOpen]);
 
   return (
-    <IonModal
-      isOpen={showModal}
-      canDismiss={true}
-      onDidDismiss={() => props.onDismiss(false)}
-    >
+    <IonModal isOpen={showModal} onDidDismiss={() => props.onDismiss(false)}>
       <IonHeader>
         <IonToolbar>
           <IonTitle>Share project</IonTitle>

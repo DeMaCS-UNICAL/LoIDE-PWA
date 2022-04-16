@@ -43,7 +43,7 @@ import "./theme/variables.scss";
 
 import "./global.scss";
 import AboutTab from "./pages/AboutTab";
-import API from "./lib/api";
+import * as API from "./lib/api";
 import { IOutputData } from "./lib/LoideAPIInterfaces";
 import { LocalStorageItems, LoidePath } from "./lib/constants";
 import AppearanceTab from "./pages/AppearanceTab";

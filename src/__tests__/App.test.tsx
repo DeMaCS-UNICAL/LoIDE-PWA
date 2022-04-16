@@ -4,7 +4,9 @@ import { LoidePath } from "../lib/constants";
 import { Provider } from "react-redux";
 import { store } from "../redux";
 
-describe("<App />", () => {
+jest.mock("../lib/api");
+
+describe.only("<App />", () => {
   beforeAll(() => {
     window.HTMLElement.prototype.scrollIntoView = jest.fn();
   });

@@ -19,7 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { UIStatusSelector } from "../redux/slices/UIStatus";
 import { runSettingsSelector } from "../redux/slices/RunSettings";
 import { editorSelector, setTabsEditorSessions } from "../redux/slices/Editor";
-import API from "../lib/api";
+import * as API from "../lib/api";
 
 const Editor: React.FC = () => {
   const dispatch = useDispatch();
