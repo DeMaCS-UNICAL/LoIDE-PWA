@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import Appearance from "../../components/Appearance";
 import { ionFireEvent } from "@ionic/react-test-utils";
 import { Provider } from "react-redux";
@@ -20,54 +18,54 @@ describe("<Appearance />", () => {
   });
 
   it("renders the header titles", async () => {
-    const { findByText } = render(
+    render(
       <Provider store={store}>
         <Appearance />
       </Provider>
     );
-    await findByText("General");
-    await findByText("Editor");
-    await findByText("Output");
+    await screen.findByText("General");
+    await screen.findByText("Editor");
+    await screen.findByText("Output");
   });
 
   it("test dark mode item", async () => {
-    const { findByText, findByTitle } = render(
+    render(
       <Provider store={store}>
         <Appearance />
       </Provider>
     );
-    await findByText("Dark mode");
-    const toogle = await findByTitle("Toogle dark mode");
+    await screen.findByText("Dark mode");
+    const toogle = await screen.findByTitle("Toogle dark mode");
     ionFireEvent.ionChange(toogle, "1");
   });
 
   it("test font size editor item", async () => {
-    const { findByTitle } = render(
+    render(
       <Provider store={store}>
         <Appearance />
       </Provider>
     );
 
-    const range = await findByTitle("Font size editor range");
-    const labelText = range.querySelector("ion-label")?.innerHTML.trim();
+    const range = await screen.findByTitle("Font size editor range");
+    const labelTexts = screen.queryAllByText("Font size");
     ionFireEvent.ionChange(range, "1");
 
-    expect(labelText).toBe("Font size");
+    expect(labelTexts.length).toBeGreaterThanOrEqual(1);
   });
 
   it("test font size output item", async () => {
-    const { findAllByText, findByTitle } = render(
+    render(
       <Provider store={store}>
         <Appearance />
       </Provider>
     );
-    await findAllByText("Font size");
+    await screen.findAllByText("Font size");
 
-    const range = await findByTitle("Font size output range");
-    const labelText = range.querySelector("ion-label")?.innerHTML.trim();
+    const range = await screen.findByTitle("Font size output range");
+    const labelTexts = screen.queryAllByText("Font size");
     ionFireEvent.ionChange(range, "1");
 
-    expect(labelText).toBe("Font size");
+    expect(labelTexts.length).toBeGreaterThanOrEqual(1);
   });
 
   it("test reset button", async () => {
@@ -85,13 +83,13 @@ describe("<Appearance />", () => {
       })),
     });
 
-    const { findByTitle } = render(
+    render(
       <Provider store={store}>
         <Appearance />
       </Provider>
     );
 
-    const button = await findByTitle("Reset appearance options");
+    const button = await screen.findByTitle("Reset appearance options");
     ionFireEvent.click(button);
   });
 });

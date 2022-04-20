@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import RunSettingsTab from "../../pages/RunSettingsTab";
 import { Provider } from "react-redux";
 import { store } from "../../redux";
@@ -17,11 +15,11 @@ describe("RunSettingsTab page", () => {
   });
 
   it("renders the sidebar title", async () => {
-    const { findByText } = render(
+    render(
       <Provider store={store}>
         <RunSettingsTab />
       </Provider>
     );
-    await findByText("Run settings");
+    await screen.findByText("Run settings");
   });
 });

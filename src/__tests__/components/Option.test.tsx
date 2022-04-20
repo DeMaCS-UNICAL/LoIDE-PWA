@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { ionFireEvent as fireEvent } from "@ionic/react-test-utils";
 import Option from "../../components/Option";
 import { IOptionsData } from "../../lib/LoideAPIInterfaces";
@@ -40,7 +40,7 @@ describe("<Option />", () => {
 
   it("tests delete option button", () => {
     const onDeleteOption = jest.fn();
-    const { getByTitle } = render(
+    render(
       <Option
         optionsAvailable={optionsAvailable}
         optionData={optionData}
@@ -49,13 +49,13 @@ describe("<Option />", () => {
         onChangeDisableOption={jest.fn()}
       />
     );
-    const button = getByTitle("Delete option");
+    const button = screen.getByTitle("Delete option");
     fireEvent.click(button);
     expect(onDeleteOption).toHaveBeenCalledTimes(1);
   });
 
   it("render Name label", () => {
-    const { getByText } = render(
+    render(
       <Option
         optionsAvailable={optionsAvailable}
         optionData={optionData}
@@ -63,13 +63,13 @@ describe("<Option />", () => {
         onChangeDisableOption={jest.fn()}
       />
     );
-    getByText("Name");
+    screen.getByText("Name");
   });
 
   it("test select", async () => {
     const onChangeOptionType = jest.fn();
 
-    const { getByText, findByTestId } = render(
+    render(
       <Option
         optionsAvailable={optionsAvailable}
         optionData={optionData}
@@ -78,9 +78,9 @@ describe("<Option />", () => {
         onChangeDisableOption={jest.fn()}
       />
     );
-    expect(getByText(optionsAvailable[0].name)).toBeInTheDocument();
+    expect(screen.getByText(optionsAvailable[0].name)).toBeInTheDocument();
 
-    const select = await findByTestId("select-name-options");
+    const select = await screen.findByTestId("select-name-options");
     expect(select.getAttribute("value")).toBe("free choice");
     fireEvent.ionChange(select, "silent");
     expect(onChangeOptionType).toBeCalledTimes(1);
@@ -95,7 +95,7 @@ describe("<Option />", () => {
         description: "Missing description",
       },
     ];
-    const { queryByText } = render(
+    render(
       <Option
         optionsAvailable={newOptionsAvailable}
         optionData={optionData}
@@ -103,7 +103,7 @@ describe("<Option />", () => {
         onChangeDisableOption={jest.fn()}
       />
     );
-    expect(queryByText("Value")).toBeInTheDocument();
+    expect(screen.getByText("Value")).toBeInTheDocument();
   });
 
   it("test word argument false", async () => {
@@ -115,7 +115,7 @@ describe("<Option />", () => {
         description: "Missing description",
       },
     ];
-    const { queryByText } = render(
+    render(
       <Option
         optionsAvailable={newOptionsAvailable}
         optionData={optionData}
@@ -123,13 +123,13 @@ describe("<Option />", () => {
         onChangeDisableOption={jest.fn()}
       />
     );
-    expect(queryByText("Value")).not.toBeInTheDocument();
+    expect(screen.queryByText("Value")).not.toBeInTheDocument();
   });
 
   it("test disable option", async () => {
     const onChangeDisableOption = jest.fn();
     const onChangeOptionType = jest.fn();
-    const { findByText } = render(
+    render(
       <Option
         optionsAvailable={optionsAvailable}
         optionData={optionData}
@@ -138,7 +138,7 @@ describe("<Option />", () => {
         onChangeOptionType={onChangeOptionType}
       />
     );
-    const badge = await findByText("Option 1");
+    const badge = await screen.findByText("Option 1");
     fireEvent.click(badge);
     expect(onChangeDisableOption).toBeCalledTimes(1);
   });
@@ -157,7 +157,7 @@ describe("<OptionTextValue />", () => {
 
     const onChangeOptionValues = jest.fn();
 
-    const { findByPlaceholderText } = render(
+    render(
       <Option
         optionsAvailable={newOptionsAvailable}
         optionData={optionData}
@@ -167,7 +167,7 @@ describe("<OptionTextValue />", () => {
       />
     );
 
-    const input = await findByPlaceholderText("Insert a value");
+    const input = await screen.findByPlaceholderText("Insert a value");
 
     fireEvent.ionChange(input, "--filter");
 
@@ -186,7 +186,7 @@ describe("<OptionTextValue />", () => {
 
     const onChangeOptionValues = jest.fn();
 
-    const { findByTitle, findAllByTestId } = render(
+    render(
       <Option
         optionsAvailable={newOptionsAvailable}
         optionData={optionData}
@@ -196,9 +196,9 @@ describe("<OptionTextValue />", () => {
       />
     );
 
-    const button = await findByTitle("Add value");
+    const button = await screen.findByTitle("Add value");
 
-    let inputs = await findAllByTestId("option-text-value-item");
+    let inputs = await screen.findAllByTestId("option-text-value-item");
 
     expect(inputs.length).toBe(1);
 
@@ -206,14 +206,14 @@ describe("<OptionTextValue />", () => {
 
     expect(onChangeOptionValues).toBeCalledTimes(1);
 
-    inputs = await findAllByTestId("option-text-value-item");
+    inputs = await screen.findAllByTestId("option-text-value-item");
 
     expect(inputs.length).toBe(2);
   });
 
   it("test delete swipe", async () => {
     const onChangeOptionValues = jest.fn();
-    const { findByTestId } = render(
+    render(
       <Option
         optionsAvailable={optionsAvailable}
         optionData={optionData}
@@ -223,7 +223,7 @@ describe("<OptionTextValue />", () => {
       />
     );
 
-    const swipeOpt = await findByTestId("swipe-delete");
+    const swipeOpt = await screen.findByTestId("swipe-delete");
 
     fireEvent.ionSwipe(swipeOpt, "right");
 
@@ -248,7 +248,7 @@ describe("<OptionTextValue />", () => {
     //     },
     // };
 
-    const { findByTitle, findAllByPlaceholderText, findAllByTitle } = render(
+    render(
       <Option
         optionsAvailable={newOptionsAvailable}
         optionData={optionData}
@@ -260,23 +260,23 @@ describe("<OptionTextValue />", () => {
       />
     );
 
-    const button = await findByTitle("Add value");
+    const button = await screen.findByTitle("Add value");
 
-    let inputs = await findAllByPlaceholderText("Insert a value");
+    let inputs = await screen.findAllByPlaceholderText("Insert a value");
     expect(inputs.length).toBe(1);
 
     fireEvent.click(button);
 
     expect(onChangeOptionValues).toBeCalledTimes(1);
 
-    inputs = await findAllByPlaceholderText("Insert a value");
+    inputs = await screen.findAllByPlaceholderText("Insert a value");
 
-    const buttonsDelete = await findAllByTitle("Delete option value");
+    const buttonsDelete = await screen.findAllByTitle("Delete option value");
     fireEvent.click(buttonsDelete[0]);
 
     expect(onChangeOptionValues).toBeCalledTimes(2);
 
-    inputs = await findAllByPlaceholderText("Insert a value");
+    inputs = await screen.findAllByPlaceholderText("Insert a value");
     expect(inputs.length).toBe(1);
   });
 });

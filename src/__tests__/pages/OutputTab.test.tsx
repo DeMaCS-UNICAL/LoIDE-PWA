@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-
-import { fireEvent, render } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import OutputTab from "../../pages/OutputTab";
 import { Provider } from "react-redux";
 import { store } from "../../redux";
@@ -17,35 +15,35 @@ describe("OutputTab page", () => {
   });
 
   it("renders the sidebar title", async () => {
-    const { findByText } = render(
+    render(
       <Provider store={store}>
         <OutputTab />
       </Provider>
     );
-    await findByText("Output");
+    await screen.findByText("Output");
   });
 
   it("test download button", async () => {
     global.URL.createObjectURL = jest.fn();
-    const { findAllByTitle } = render(
+    render(
       <Provider store={store}>
         <OutputTab />
       </Provider>
     );
-    const buttons = await findAllByTitle("Download");
+    const buttons = await screen.findAllByTitle("Download");
 
     fireEvent.click(buttons[0]);
     fireEvent.click(buttons[1]);
   });
 
-  it("test download button", async () => {
+  it("test clear button", async () => {
     global.URL.createObjectURL = jest.fn();
-    const { findByTitle } = render(
+    render(
       <Provider store={store}>
         <OutputTab />
       </Provider>
     );
-    const button = await findByTitle("Clear");
+    const button = await screen.findByTitle("Clear");
 
     fireEvent.click(button);
   });

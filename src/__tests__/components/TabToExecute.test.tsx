@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import TabToExecute from "../../components/TabToExecute";
 import {
   ionFireEvent as fireEvent,
@@ -39,7 +39,7 @@ describe("<TabToExecute />", () => {
   });
 
   it("renders the header", async () => {
-    const { findByText } = render(
+    render(
       <TabToExecute
         tabs={tabs}
         tabsIDToExecute={[]}
@@ -49,11 +49,11 @@ describe("<TabToExecute />", () => {
       />
     );
 
-    await findByText("Choose tab to execute");
+    await screen.findByText("Choose tab to execute");
   });
 
   it("renders the curent tab item", async () => {
-    const { findByText } = render(
+    render(
       <TabToExecute
         tabs={tabs}
         tabsIDToExecute={[]}
@@ -63,11 +63,11 @@ describe("<TabToExecute />", () => {
       />
     );
 
-    await findByText("Current tab");
+    await screen.findByText("Current tab");
   });
 
   it("renders the tab items", async () => {
-    const { findByText } = render(
+    render(
       <TabToExecute
         tabs={tabs}
         tabsIDToExecute={[]}
@@ -77,8 +77,8 @@ describe("<TabToExecute />", () => {
       />
     );
 
-    await findByText(tabs[1].title);
-    await findByText(tabs[2].title);
+    await screen.findByText(tabs[1].title);
+    await screen.findByText(tabs[2].title);
   });
 
   it("test click the current tab radio item", async () => {
@@ -88,7 +88,7 @@ describe("<TabToExecute />", () => {
         tabsIDToExecute = [];
       }
     });
-    const { findByTestId } = render(
+    render(
       <TabToExecute
         tabs={tabs}
         tabsIDToExecute={tabsIDToExecute}
@@ -98,7 +98,7 @@ describe("<TabToExecute />", () => {
       />
     );
 
-    const radioGroup = await findByTestId("group-radio-tab");
+    const radioGroup = await screen.findByTestId("group-radio-tab");
 
     fireEvent(
       radioGroup,
@@ -116,7 +116,7 @@ describe("<TabToExecute />", () => {
         tabsIDToExecute = [...Object.keys(tabs).map((item) => Number(item))];
       }
     });
-    const { findByTestId } = render(
+    render(
       <TabToExecute
         tabs={tabs}
         tabsIDToExecute={tabsIDToExecute}
@@ -126,7 +126,7 @@ describe("<TabToExecute />", () => {
       />
     );
 
-    const radioGroup = await findByTestId("group-radio-tab");
+    const radioGroup = await screen.findByTestId("group-radio-tab");
 
     fireEvent(
       radioGroup,
@@ -142,7 +142,7 @@ describe("<TabToExecute />", () => {
     const onCheckTab = jest.fn((id: number, value: boolean) => {
       if (value) tabsIDToExecute.push(id);
     });
-    const { findByTestId } = render(
+    render(
       <TabToExecute
         tabs={tabs}
         tabsIDToExecute={tabsIDToExecute}
@@ -152,7 +152,7 @@ describe("<TabToExecute />", () => {
       />
     );
 
-    const item = await findByTestId(`item-tab-1`);
+    const item = await screen.findByTestId(`item-tab-1`);
 
     ionFireEvent.click(item!);
 

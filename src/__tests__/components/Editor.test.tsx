@@ -1,4 +1,4 @@
-import { fireEvent, render } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import Editor from "../../components/Editor";
 import { Provider } from "react-redux";
 import { store } from "../../redux";
@@ -21,21 +21,21 @@ describe("<Editor />", () => {
   });
 
   it("renders the add tab button", async () => {
-    const { findByTitle } = render(
+    render(
       <Provider store={store}>
         <Editor />
       </Provider>
     );
-    await findByTitle("Add tab");
+    await screen.findByTitle("Add tab");
   });
 
   it("clicks the add tab button", async () => {
-    const { findByTitle } = render(
+    render(
       <Provider store={store}>
         <Editor />
       </Provider>
     );
-    const button = await findByTitle("Add tab");
+    const button = await screen.findByTitle("Add tab");
     fireEvent.click(button);
   });
 });

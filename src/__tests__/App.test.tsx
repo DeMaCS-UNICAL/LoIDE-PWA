@@ -1,6 +1,5 @@
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import App from "../App";
-import { LoidePath } from "../lib/constants";
 import { Provider } from "react-redux";
 import { store } from "../redux";
 
@@ -21,56 +20,47 @@ describe.only("<App />", () => {
   });
 
   it("renders the Editor tab button", async () => {
-    const { container } = render(
+    render(
       <Provider store={store}>
         <App />
       </Provider>
     );
-    const tabButton = container.querySelector(`[href="/${LoidePath.Editor}"]`);
-    expect(tabButton).toBeTruthy();
+    screen.getByText("Editor");
   });
 
   it("renders the Run Settings tab button", async () => {
-    const { container } = render(
+    render(
       <Provider store={store}>
         <App />
       </Provider>
     );
-    const tabButton = container.querySelector(
-      `[href="/${LoidePath.RunSettings}"]`
-    );
-    expect(tabButton).toBeTruthy();
+    screen.getByText("Run Settings");
   });
 
   it("renders the Output tab button", async () => {
-    const { container } = render(
+    render(
       <Provider store={store}>
         <App />
       </Provider>
     );
-    const tabButton = container.querySelector(`[href="/${LoidePath.Output}"]`);
-    expect(tabButton).toBeTruthy();
+    screen.getByText("Output");
   });
 
   it("renders the Appearance tab button", async () => {
-    const { container } = render(
+    render(
       <Provider store={store}>
         <App />
       </Provider>
     );
-    const tabButton = container.querySelector(
-      `[href="/${LoidePath.Appearance}"]`
-    );
-    expect(tabButton).toBeTruthy();
+    screen.getByText("Appearance");
   });
 
   it("renders the About tab button", async () => {
-    const { container } = render(
+    render(
       <Provider store={store}>
         <App />
       </Provider>
     );
-    const tabButton = container.querySelector(`[href="/${LoidePath.About}"]`);
-    expect(tabButton).toBeTruthy();
+    screen.getByText("About");
   });
 });

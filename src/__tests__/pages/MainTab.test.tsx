@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-
-import { fireEvent, render } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import MainTab from "../../pages/MainTab";
 import { Provider } from "react-redux";
 import { store } from "../../redux";
@@ -29,102 +27,81 @@ describe("MainTab page", () => {
   });
 
   it("renders the image logo on nav bar", async () => {
-    const { findByAltText } = render(
+    render(
       <Provider store={store}>
         <MainTab {...defaultProps} />
       </Provider>
     );
-    await findByAltText("loide-logo");
+    await screen.findByAltText("loide-logo");
   });
 
   it("renders the sidebar title", async () => {
-    const { findByText } = render(
+    render(
       <Provider store={store}>
         <MainTab {...defaultProps} />
       </Provider>
     );
-    await findByText("Run settings");
+    await screen.findByText("Run settings");
   });
 
   it("test open modal", async () => {
-    const { findByText, queryByText } = render(
+    render(
       <Provider store={store}>
         <MainTab {...defaultProps} />
       </Provider>
     );
-    const button = await findByText("Open");
+    const button = await screen.findByText("Open");
 
     fireEvent.click(button);
 
-    let modal: HTMLElement | null = await findByText(
+    let modal: HTMLElement | null = await screen.findByText(
       "Open project or text files"
     );
 
-    const closeButton = await findByText("Close");
+    const closeButton = await screen.findByText("Close");
 
     fireEvent.click(closeButton);
 
-    modal = await queryByText("Open project or text files");
+    modal = screen.queryByText("Open project or text files");
 
-    expect(modal).toBeNull;
+    expect(modal).toBeNull();
   });
 
   it("test save modal", async () => {
-    const { findByText, queryByText } = render(
+    render(
       <Provider store={store}>
         <MainTab {...defaultProps} />
       </Provider>
     );
-    const button = await findByText("Save");
+    const button = await screen.findByText("Save");
 
     fireEvent.click(button);
 
-    let modal: HTMLElement | null = await findByText("Save project");
+    let modal: HTMLElement | null = await screen.findByText("Save project");
 
-    const closeButton = await findByText("Close");
-
-    fireEvent.click(closeButton);
-
-    modal = await queryByText("Save project");
-
-    expect(modal).toBeNull;
-  });
-
-  it("test save modal", async () => {
-    const { findByText, queryByText } = render(
-      <Provider store={store}>
-        <MainTab {...defaultProps} />
-      </Provider>
-    );
-    const button = await findByText("Save");
-
-    fireEvent.click(button);
-
-    let modal: HTMLElement | null = await findByText("Save project");
-
-    const closeButton = await findByText("Close");
+    const closeButton = await screen.findByText("Close");
 
     fireEvent.click(closeButton);
 
-    modal = await queryByText("Save project");
+    modal = screen.queryByText("Save project");
 
-    expect(modal).toBeNull;
+    expect(modal).toBeNull();
   });
 
   it("test operations popover", async () => {
-    const { findByTitle, findByTestId, findAllByTitle } = render(
+    render(
       <Provider store={store}>
         <MainTab {...defaultProps} />
       </Provider>
     );
-    const button = await findByTitle("Operations");
+    const button = await screen.findByTitle("Operations");
 
     fireEvent.click(button);
 
-    await findByTestId("operations-popover");
+    await screen.findByTestId("operations-popover");
 
-    await findAllByTitle("Open");
-    await findAllByTitle("Save");
-    await findAllByTitle("Reset");
+    await screen.findAllByTitle("Open");
+    await screen.findAllByTitle("Save");
+    await screen.findAllByTitle("Reset");
   });
 });

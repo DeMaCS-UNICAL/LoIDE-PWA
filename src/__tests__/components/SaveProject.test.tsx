@@ -1,4 +1,4 @@
-import { fireEvent, render } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import SaveProject from "../../components/SaveProject";
 
 describe("<SaveProject />", () => {
@@ -8,15 +8,15 @@ describe("<SaveProject />", () => {
   });
 
   it("displays the project name label", async () => {
-    const { findByText, findAllByPlaceholderText } = render(<SaveProject />);
-    await findByText("Project name");
-    await findAllByPlaceholderText("Insert a project name");
+    render(<SaveProject />);
+    await screen.findByText("Project name");
+    await screen.findAllByPlaceholderText("Insert a project name");
   });
 
   it("test download button", async () => {
     global.URL.createObjectURL = jest.fn();
-    const { findByTitle } = render(<SaveProject />);
-    const button = await findByTitle("Download");
+    render(<SaveProject />);
+    const button = await screen.findByTitle("Download");
 
     fireEvent.click(button);
 

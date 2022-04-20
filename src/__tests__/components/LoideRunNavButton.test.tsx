@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import LoideRunNavButton from "../../components/LoideRunNavButton";
 import { ionFireEvent as fireEvent } from "@ionic/react-test-utils";
 import { store } from "../../redux";
@@ -15,21 +15,21 @@ describe("<LoideRunNavButton />", () => {
   });
 
   it("renders run button text", async () => {
-    const { findByText } = render(
+    render(
       <Provider store={store}>
         <LoideRunNavButton />
       </Provider>
     );
-    await findByText("Run");
+    await screen.findByText("Run");
   });
 
   it("clicks run button", async () => {
-    const { findByTitle } = render(
+    render(
       <Provider store={store}>
         <LoideRunNavButton />
       </Provider>
     );
-    const button = await findByTitle("run");
+    const button = await screen.findByTitle("run");
     fireEvent.click(button);
   });
 });

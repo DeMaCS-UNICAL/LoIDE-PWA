@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import AboutTab from "../../pages/AboutTab";
 
 describe("AboutTab page", () => {
@@ -11,7 +9,7 @@ describe("AboutTab page", () => {
   });
 
   it("renders the sidebar title", async () => {
-    const { findByText } = render(<AboutTab />);
-    await findByText("About LoIDE");
+    render(<AboutTab />);
+    await screen.findByText("About LoIDE");
   });
 });
