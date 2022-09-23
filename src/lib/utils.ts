@@ -6,12 +6,7 @@ import {
   ISolverData,
 } from "./LoideAPIInterfaces";
 import { toastController } from "@ionic/core";
-import {
-  EditorTabMap,
-  ILoideProject,
-  ILoideTab,
-  ISolverOption,
-} from "./LoideInterfaces";
+import { EditorTabMap, ILoideProject, ILoideTab, ISolverOption } from "./LoideInterfaces";
 import {
   InitalTabCountID,
   LocalStorageItems,
@@ -86,7 +81,7 @@ const generateGeneralToast = async (
   message: string,
   headerMessage: string,
   color: string,
-  duration?: number
+  duration?: number,
 ) => {
   await toastController
     .create({
@@ -102,11 +97,8 @@ const generateGeneralToast = async (
     });
 };
 
-const canSetLanguage = (
-  language: string,
-  languages: ILanguageData[]
-): boolean => {
-  let found: boolean = languages.some((lang) => {
+const canSetLanguage = (language: string, languages: ILanguageData[]): boolean => {
+  const found: boolean = languages.some((lang) => {
     return lang.value === language;
   });
 
@@ -116,11 +108,11 @@ const canSetLanguage = (
 const getExecutorsBySolversAndByLanguage = (
   solver: string,
   language: string,
-  languages: ILanguageData[]
+  languages: ILanguageData[],
 ): IExecutorData[] => {
-  let solvers: ISolverData[] = getSolversByLanguage(language, languages);
+  const solvers: ISolverData[] = getSolversByLanguage(language, languages);
 
-  for (let sol of solvers) {
+  for (const sol of solvers) {
     if (sol.value === solver) {
       return sol.executors;
     }
@@ -132,11 +124,11 @@ const getExecutorsBySolversAndByLanguage = (
 const getOptionsAvaliabeBySolverAndByLanguage = (
   solver: string,
   language: string,
-  languages: ILanguageData[]
+  languages: ILanguageData[],
 ): IOptionsData[] => {
-  let solvers: ISolverData[] = getSolversByLanguage(language, languages);
+  const solvers: ISolverData[] = getSolversByLanguage(language, languages);
 
-  for (let sol of solvers) {
+  for (const sol of solvers) {
     if (sol.value === solver) {
       if (sol.options) return sol.options;
       else {
@@ -148,11 +140,8 @@ const getOptionsAvaliabeBySolverAndByLanguage = (
   return new Array<IOptionsData>();
 };
 
-const getSolversByLanguage = (
-  language: string,
-  languages: ILanguageData[]
-): ISolverData[] => {
-  for (let lang of languages) {
+const getSolversByLanguage = (language: string, languages: ILanguageData[]): ISolverData[] => {
+  for (const lang of languages) {
     if (lang.value === language) {
       return lang.solvers;
     }
@@ -163,13 +152,13 @@ const getSolversByLanguage = (
 const canSetSolver = (
   solverToFind: string,
   language: string,
-  totalLanguages: ILanguageData[]
+  totalLanguages: ILanguageData[],
 ): boolean => {
-  let solvers: ISolverData[] = getSolversByLanguage(language, totalLanguages);
+  const solvers: ISolverData[] = getSolversByLanguage(language, totalLanguages);
 
   if (solvers.length === 0) return false;
 
-  let found: boolean = solvers.some((sol) => {
+  const found: boolean = solvers.some((sol) => {
     return sol.value === solverToFind;
   });
 
@@ -180,17 +169,17 @@ const canSetExecutor = (
   executorToFind: string,
   solver: string,
   language: string,
-  totalLanguages: ILanguageData[]
+  totalLanguages: ILanguageData[],
 ): boolean => {
-  let executors: IExecutorData[] = getExecutorsBySolversAndByLanguage(
+  const executors: IExecutorData[] = getExecutorsBySolversAndByLanguage(
     solver,
     language,
-    totalLanguages
+    totalLanguages,
   );
 
   if (executors.length === 0) return false;
 
-  for (let exe of executors) {
+  for (const exe of executors) {
     if (exe.value === executorToFind) return true;
   }
 
@@ -201,15 +190,11 @@ const canSetOption = (
   option: ISolverOption,
   solver: string,
   language: string,
-  totalLanguages: ILanguageData[]
+  totalLanguages: ILanguageData[],
 ): boolean => {
-  let optionsAvailable = getOptionsAvaliabeBySolverAndByLanguage(
-    solver,
-    language,
-    totalLanguages
-  );
+  const optionsAvailable = getOptionsAvaliabeBySolverAndByLanguage(solver, language, totalLanguages);
 
-  for (let opt of optionsAvailable) {
+  for (const opt of optionsAvailable) {
     if (opt.value === option.name) return true;
   }
 
@@ -233,9 +218,7 @@ const isClipboardReadSupported = (): boolean => {
 
 const isClipboardWriteSupported = (): boolean => {
   try {
-    return typeof navigator?.clipboard?.writeText === "undefined"
-      ? false
-      : true;
+    return typeof navigator?.clipboard?.writeText === "undefined" ? false : true;
   } catch (error) {
     return false;
   }
@@ -253,7 +236,7 @@ const getTextFromClipboard = (callback: (text: string) => void): void => {
         Utils.generateGeneralToast(
           Toast.ClipboardError.message,
           Toast.ClipboardError.header,
-          "danger"
+          "danger",
         );
         console.error(err);
       });
@@ -261,14 +244,14 @@ const getTextFromClipboard = (callback: (text: string) => void): void => {
     Utils.generateGeneralToast(
       Toast.ClipboardIsNotSupported.message,
       Toast.ClipboardIsNotSupported.header,
-      "danger"
+      "danger",
     );
 };
 
 const copyTextToClipboard = (
   text: string,
   callbackSuccess?: () => void,
-  callbackError?: () => void
+  callbackError?: () => void,
 ) => {
   if (isClipboardWriteSupported()) {
     navigator.clipboard.writeText(text).then(callbackSuccess, callbackError);
@@ -331,7 +314,7 @@ const resetProject = () => {
 };
 
 const createTabsFromArray = (textTabs: string[]) => {
-  let newTabs: EditorTabMap = {};
+  const newTabs: EditorTabMap = {};
   let indexTab = InitalTabCountID;
   textTabs.forEach((text) => {
     newTabs[indexTab] = {
@@ -351,13 +334,13 @@ const createTabsFromArray = (textTabs: string[]) => {
     Utils.generateGeneralToast(
       Toast.MoreFileOpenedSuccessfully.message,
       Toast.MoreFileOpenedSuccessfully.header,
-      "success"
+      "success",
     );
   } else {
     Utils.generateGeneralToast(
       Toast.SingleFileOpenedSuccessfully.message,
       Toast.SingleFileOpenedSuccessfully.header,
-      "success"
+      "success",
     );
   }
 };
@@ -365,14 +348,14 @@ const createTabsFromArray = (textTabs: string[]) => {
 const setProjectFromConfig = (
   config: any,
   languages: ILanguageData[],
-  onFinishCallback?: (done: boolean) => void
+  onFinishCallback?: (done: boolean) => void,
 ) => {
   if (Utils.hasRightProperty(config)) {
-    let project: ILoideProject = config;
+    const project: ILoideProject = config;
 
-    let valuesNotSupported: string[] = [];
-    let optionsSupported: ISolverOption[] = [];
-    let optionsNotSupported: boolean = false;
+    const valuesNotSupported: string[] = [];
+    const optionsSupported: ISolverOption[] = [];
+    let optionsNotSupported = false;
 
     // set the current language
     if (Utils.canSetLanguage(project.language, languages)) {
@@ -383,14 +366,7 @@ const setProjectFromConfig = (
         store.dispatch(setCurrentSolver(project.solver));
 
         // set the current executor
-        if (
-          Utils.canSetExecutor(
-            project.executor,
-            project.solver,
-            project.language,
-            languages
-          )
-        ) {
+        if (Utils.canSetExecutor(project.executor, project.solver, project.language, languages)) {
           store.dispatch(setCurrentExecutor(project.executor));
         } else {
           valuesNotSupported.push(ValuesNotSupported.Executor);
@@ -405,10 +381,8 @@ const setProjectFromConfig = (
       valuesNotSupported.push(ValuesNotSupported.Executor);
     }
 
-    for (let option of project.options) {
-      if (
-        Utils.canSetOption(option, project.solver, project.language, languages)
-      )
+    for (const option of project.options) {
+      if (Utils.canSetOption(option, project.solver, project.language, languages))
         optionsSupported.push(option);
       else optionsNotSupported = true;
     }
@@ -419,7 +393,7 @@ const setProjectFromConfig = (
     store.dispatch(setRunAuto(project.runAuto));
 
     // set the tabs and their IDs
-    let newTabs: EditorTabMap = {};
+    const newTabs: EditorTabMap = {};
 
     project.tabs.forEach((program, index) => {
       newTabs[project.tabsID[index]] = {
@@ -438,14 +412,13 @@ const setProjectFromConfig = (
       setAllOutput({
         model: project.outputModel,
         error: project.outputError,
-      })
+      }),
     );
 
     if (valuesNotSupported.length > 0) {
       Utils.generateGeneralToast(
         `${
-          Toast.ProjectNotOpenedProperly.message
-            .TheFollowingValuesCannotBeSetted
+          Toast.ProjectNotOpenedProperly.message.TheFollowingValuesCannotBeSetted
         }\n<b>${valuesNotSupported.join(",\n")}\n${
           optionsNotSupported
             ? `<br>${Toast.ProjectNotOpenedProperly.message.FoundSolverOptions}`
@@ -453,24 +426,23 @@ const setProjectFromConfig = (
         } <b/>`,
         Toast.ProjectNotOpenedProperly.header,
         "warning",
-        10000
+        10000,
       );
 
       if (onFinishCallback) onFinishCallback(true);
     } else if (optionsNotSupported) {
       Utils.generateGeneralToast(
-        Toast.ProjectNotOpenedProperly.message
-          .FoundSolverOptionsIncompatibilitySolverLoaded,
+        Toast.ProjectNotOpenedProperly.message.FoundSolverOptionsIncompatibilitySolverLoaded,
         Toast.ProjectNotOpenedProperly.header,
         "warning",
-        7000
+        7000,
       );
       if (onFinishCallback) onFinishCallback(true);
     } else {
       Utils.generateGeneralToast(
         Toast.ProjectOpenedSuccessfully.message,
         Toast.ProjectOpenedSuccessfully.header,
-        "success"
+        "success",
       );
       if (onFinishCallback) onFinishCallback(true);
     }
@@ -478,7 +450,7 @@ const setProjectFromConfig = (
     Utils.generateGeneralToast(
       Toast.ConfigProjectNotRecognized.message,
       Toast.ConfigProjectNotRecognized.header,
-      "danger"
+      "danger",
     );
     if (onFinishCallback) onFinishCallback(false);
   }
@@ -487,9 +459,7 @@ const setProjectFromConfig = (
 };
 
 const resetAppearanceOptions = () => {
-  let darkModeMatches = window.matchMedia(
-    "(prefers-color-scheme: dark)"
-  ).matches;
+  const darkModeMatches = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
   store.dispatch(setFontSizeEditor(initialUIStatusState.fontSizeEditor));
   store.dispatch(setFontSizeOutput(initialUIStatusState.fontSizeOutput));
@@ -509,36 +479,36 @@ const addNewOutputBadge = () => {
 };
 
 const restoreAppearanceFromLocalStorage = () => {
-  let darkMode = localStorage.getItem(LocalStorageItems.darkMode);
+  const darkMode = localStorage.getItem(LocalStorageItems.darkMode);
   if (darkMode) {
     store.dispatch(setDarkMode(darkMode === "true"));
   }
 
-  let fontEditor = localStorage.getItem(LocalStorageItems.fontSizeEditor);
+  const fontEditor = localStorage.getItem(LocalStorageItems.fontSizeEditor);
   if (fontEditor) {
     store.dispatch(setFontSizeEditor(Number(fontEditor)));
   }
 
-  let fontOutput = localStorage.getItem(LocalStorageItems.fontSizeOutput);
+  const fontOutput = localStorage.getItem(LocalStorageItems.fontSizeOutput);
   if (fontOutput) {
     store.dispatch(setFontSizeOutput(Number(fontOutput)));
   }
 };
 
 const restoreRunAutoFromLocalStorage = () => {
-  let runAuto = localStorage.getItem(LocalStorageItems.runAuto);
+  const runAuto = localStorage.getItem(LocalStorageItems.runAuto);
   if (runAuto) {
     store.dispatch(setRunAuto(runAuto === "true"));
   }
 };
 
 const getLoideRunData = (): ILoideRunData => {
-  let runSettings = store.getState().runSettings;
+  const runSettings = store.getState().runSettings;
 
-  let editorTabs = store.getState().editor.tabs;
-  let editorTabIndex = store.getState().editor.currentTabIndex;
+  const editorTabs = store.getState().editor.tabs;
+  const editorTabIndex = store.getState().editor.currentTabIndex;
 
-  let data: ILoideRunData = {} as ILoideRunData;
+  const data: ILoideRunData = {} as ILoideRunData;
   data.language = runSettings.currentLanguage;
   data.engine = runSettings.currentSolver;
   data.executor = runSettings.currentExecutor;
@@ -546,7 +516,7 @@ const getLoideRunData = (): ILoideRunData => {
   if (runSettings.currentOptions.length === 0) {
     data.option = [{ name: "", value: [""] }];
   } else {
-    for (let option of runSettings.currentOptions) {
+    for (const option of runSettings.currentOptions) {
       data.option = [];
       if (!option.disabled)
         data.option.push({
@@ -559,13 +529,13 @@ const getLoideRunData = (): ILoideRunData => {
   data.program = [];
 
   if (runSettings.tabsIDToExecute.length === 0) {
-    let program = editorTabs[editorTabIndex + 1].value;
+    const program = editorTabs[editorTabIndex + 1].value;
     if (program !== undefined) {
       data.program.push(program);
     }
   } else {
-    for (let tabID of runSettings.tabsIDToExecute) {
-      let program = editorTabs[tabID].value;
+    for (const tabID of runSettings.tabsIDToExecute) {
+      const program = editorTabs[tabID].value;
       if (program !== undefined) {
         data.program.push(program);
       }
@@ -576,12 +546,12 @@ const getLoideRunData = (): ILoideRunData => {
 };
 
 const getLoideProjectData = (): ILoideProject => {
-  let runSettings = store.getState().runSettings;
+  const runSettings = store.getState().runSettings;
 
-  let editorTabs = store.getState().editor.tabs;
-  let output = store.getState().output;
+  const editorTabs = store.getState().editor.tabs;
+  const output = store.getState().output;
 
-  let data: ILoideProject = {} as ILoideProject;
+  const data: ILoideProject = {} as ILoideProject;
 
   data.language = runSettings.currentLanguage;
   data.solver = runSettings.currentSolver;
@@ -603,7 +573,7 @@ const getLoideProjectData = (): ILoideProject => {
 };
 
 const getProjectFromLocalStorage = (): ILoideProject | undefined => {
-  let projectString = localStorage.getItem(LocalStorageItems.loideProject);
+  const projectString = localStorage.getItem(LocalStorageItems.loideProject);
   let project: ILoideProject | undefined;
   if (projectString) {
     try {
@@ -616,8 +586,7 @@ const getProjectFromLocalStorage = (): ILoideProject | undefined => {
 };
 
 const isValidProjectToLoad = (project: ILoideProject): boolean => {
-  if (project.tabs.length > 1 || project.tabs[0].value.trim().length > 0)
-    return true;
+  if (project.tabs.length > 1 || project.tabs[0].value.trim().length > 0) return true;
   return false;
 };
 

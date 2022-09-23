@@ -4,9 +4,7 @@ import ShortcutsModal from "../../modals/ShortcutsModal";
 describe("<ShortcutsModal />", () => {
   it("renders without crashing", () => {
     const onDismiss = jest.fn();
-    const { baseElement } = render(
-      <ShortcutsModal isOpen={false} onDismiss={onDismiss} />
-    );
+    const { baseElement } = render(<ShortcutsModal isOpen={false} onDismiss={onDismiss} />);
     expect(baseElement).toBeDefined();
   });
 

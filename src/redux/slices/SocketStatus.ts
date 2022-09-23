@@ -20,9 +20,8 @@ const socketStatusSlice = createSlice({
 export const { setConnected } = socketStatusSlice.actions;
 
 // A selector
-export const socketStatusSelector = (state: {
-  socketStatus: ISocketStatusState;
-}) => state.socketStatus;
+export const socketStatusSelector = (state: { socketStatus: ISocketStatusState }) =>
+  state.socketStatus;
 
 // The reducer
 export default socketStatusSlice.reducer;

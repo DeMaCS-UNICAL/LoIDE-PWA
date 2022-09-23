@@ -9,7 +9,7 @@ describe("RunSettingsTab page", () => {
     const { baseElement } = render(
       <Provider store={store}>
         <RunSettingsTab />
-      </Provider>
+      </Provider>,
     );
     expect(baseElement).toBeDefined();
   });
@@ -18,7 +18,7 @@ describe("RunSettingsTab page", () => {
     render(
       <Provider store={store}>
         <RunSettingsTab />
-      </Provider>
+      </Provider>,
     );
     await screen.findByText("Run settings");
   });

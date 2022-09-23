@@ -29,11 +29,7 @@ import {
   shareOutline,
 } from "ionicons/icons";
 import SaveProjectModal from "../modals/SaveProjectModal";
-import {
-  ActionSheet,
-  ButtonText,
-  WindowConfirmMessages,
-} from "../lib/constants";
+import { ActionSheet, ButtonText, WindowConfirmMessages } from "../lib/constants";
 import Utils from "../lib/utils";
 import ShareProjectModal from "../modals/ShareProjectModal";
 import { RouteComponentProps } from "react-router";
@@ -238,49 +234,28 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
         </IonSplitPane>
         <OpenProjectModal isOpen={showOpenModal} onDismiss={setShowOpenModal} />
         <SaveProjectModal isOpen={showSaveModal} onDismiss={setShowSaveModal} />
-        <ShareProjectModal
-          isOpen={showShareModal}
-          onDismiss={setShowShareModal}
-        />
+        <ShareProjectModal isOpen={showShareModal} onDismiss={setShowShareModal} />
         <IonPopover
           data-testid="operations-popover"
           isOpen={buttonsPopover.open}
           event={buttonsPopover.event}
-          onDidDismiss={(e) =>
-            setButtonsPopover({ open: false, event: undefined })
-          }
+          onDidDismiss={(e) => setButtonsPopover({ open: false, event: undefined })}
         >
           <IonList>
-            <IonItem
-              button={true}
-              onClick={() => setShowOpenModal(true)}
-              title="Open"
-            >
+            <IonItem button={true} onClick={() => setShowOpenModal(true)} title="Open">
               <IonLabel>Open</IonLabel>
               <IonIcon color="warning" icon={folderOpenOutline} slot="end" />
             </IonItem>
-            <IonItem
-              button={true}
-              onClick={() => setShowSaveModal(true)}
-              title="Save"
-            >
+            <IonItem button={true} onClick={() => setShowSaveModal(true)} title="Save">
               <IonLabel>Save</IonLabel>
               <IonIcon color="primary" icon={saveOutline} slot="end" />
             </IonItem>
-            <IonItem
-              button={true}
-              title="Share"
-              onClick={() => setShowShareModal(true)}
-            >
+            <IonItem button={true} title="Share" onClick={() => setShowShareModal(true)}>
               <IonLabel>Share</IonLabel>
 
               <IonIcon color="success" slot="end" icon={shareOutline} />
             </IonItem>
-            <IonItem
-              button={true}
-              title="Reset"
-              onClick={() => showResetActionSheet()}
-            >
+            <IonItem button={true} title="Reset" onClick={() => showResetActionSheet()}>
               <IonLabel>Reset</IonLabel>
               <IonIcon color="danger" icon={closeCircleOutline} slot="end" />
             </IonItem>

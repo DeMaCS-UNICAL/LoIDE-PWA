@@ -9,7 +9,7 @@ describe("<OpenProjectModal />", () => {
     const { baseElement } = render(
       <Provider store={store}>
         <OpenProjectModal isOpen={false} onDismiss={onDismiss} />
-      </Provider>
+      </Provider>,
     );
     expect(baseElement).toBeDefined();
   });
@@ -20,7 +20,7 @@ describe("<OpenProjectModal />", () => {
     render(
       <Provider store={store}>
         <OpenProjectModal isOpen={true} onDismiss={onDismiss} />
-      </Provider>
+      </Provider>,
     );
     await screen.findByText("Open project or text files");
   });
@@ -31,7 +31,7 @@ describe("<OpenProjectModal />", () => {
     render(
       <Provider store={store}>
         <OpenProjectModal isOpen={true} onDismiss={onDismiss} />
-      </Provider>
+      </Provider>,
     );
     const button = await screen.findByText("Close");
 

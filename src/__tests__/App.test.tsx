@@ -14,7 +14,7 @@ describe.only("<App />", () => {
     const { baseElement } = render(
       <Provider store={store}>
         <App />
-      </Provider>
+      </Provider>,
     );
     expect(baseElement).toBeDefined();
   });
@@ -23,7 +23,7 @@ describe.only("<App />", () => {
     render(
       <Provider store={store}>
         <App />
-      </Provider>
+      </Provider>,
     );
     screen.getByText("Editor");
   });
@@ -32,7 +32,7 @@ describe.only("<App />", () => {
     render(
       <Provider store={store}>
         <App />
-      </Provider>
+      </Provider>,
     );
     screen.getByText("Run Settings");
   });
@@ -41,7 +41,7 @@ describe.only("<App />", () => {
     render(
       <Provider store={store}>
         <App />
-      </Provider>
+      </Provider>,
     );
     screen.getByText("Output");
   });
@@ -50,7 +50,7 @@ describe.only("<App />", () => {
     render(
       <Provider store={store}>
         <App />
-      </Provider>
+      </Provider>,
     );
     screen.getByText("Appearance");
   });
@@ -59,7 +59,7 @@ describe.only("<App />", () => {
     render(
       <Provider store={store}>
         <App />
-      </Provider>
+      </Provider>,
     );
     screen.getByText("About");
   });

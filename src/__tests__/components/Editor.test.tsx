@@ -15,7 +15,7 @@ describe("<Editor />", () => {
     const { baseElement } = render(
       <Provider store={store}>
         <Editor />
-      </Provider>
+      </Provider>,
     );
     expect(baseElement).toBeDefined();
   });
@@ -24,7 +24,7 @@ describe("<Editor />", () => {
     render(
       <Provider store={store}>
         <Editor />
-      </Provider>
+      </Provider>,
     );
     await screen.findByTitle("Add tab");
   });
@@ -33,7 +33,7 @@ describe("<Editor />", () => {
     render(
       <Provider store={store}>
         <Editor />
-      </Provider>
+      </Provider>,
     );
     const button = await screen.findByTitle("Add tab");
     fireEvent.click(button);

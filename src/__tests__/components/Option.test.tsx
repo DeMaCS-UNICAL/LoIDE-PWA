@@ -33,7 +33,7 @@ describe("<Option />", () => {
         optionData={optionData}
         disabled={false}
         onChangeDisableOption={jest.fn()}
-      />
+      />,
     );
     expect(baseElement).toBeDefined();
   });
@@ -47,7 +47,7 @@ describe("<Option />", () => {
         onDeleteOption={onDeleteOption}
         disabled={false}
         onChangeDisableOption={jest.fn()}
-      />
+      />,
     );
     const button = screen.getByTitle("Delete option");
     fireEvent.click(button);
@@ -61,7 +61,7 @@ describe("<Option />", () => {
         optionData={optionData}
         disabled={false}
         onChangeDisableOption={jest.fn()}
-      />
+      />,
     );
     screen.getByText("Name");
   });
@@ -76,7 +76,7 @@ describe("<Option />", () => {
         onChangeOptionType={onChangeOptionType}
         disabled={false}
         onChangeDisableOption={jest.fn()}
-      />
+      />,
     );
     expect(screen.getByText(optionsAvailable[0].name)).toBeInTheDocument();
 
@@ -101,7 +101,7 @@ describe("<Option />", () => {
         optionData={optionData}
         disabled={false}
         onChangeDisableOption={jest.fn()}
-      />
+      />,
     );
     expect(screen.getByText("Value")).toBeInTheDocument();
   });
@@ -121,7 +121,7 @@ describe("<Option />", () => {
         optionData={optionData}
         disabled={false}
         onChangeDisableOption={jest.fn()}
-      />
+      />,
     );
     expect(screen.queryByText("Value")).not.toBeInTheDocument();
   });
@@ -136,7 +136,7 @@ describe("<Option />", () => {
         disabled={false}
         onChangeDisableOption={onChangeDisableOption}
         onChangeOptionType={onChangeOptionType}
-      />
+      />,
     );
     const badge = await screen.findByText("Option 1");
     fireEvent.click(badge);
@@ -164,7 +164,7 @@ describe("<OptionTextValue />", () => {
         onChangeOptionValues={onChangeOptionValues}
         disabled={false}
         onChangeDisableOption={jest.fn()}
-      />
+      />,
     );
 
     const input = await screen.findByPlaceholderText("Insert a value");
@@ -193,7 +193,7 @@ describe("<OptionTextValue />", () => {
         onChangeOptionValues={onChangeOptionValues}
         disabled={false}
         onChangeDisableOption={jest.fn()}
-      />
+      />,
     );
 
     const button = await screen.findByTitle("Add value");
@@ -220,7 +220,7 @@ describe("<OptionTextValue />", () => {
         onChangeOptionValues={onChangeOptionValues}
         disabled={false}
         onChangeDisableOption={jest.fn()}
-      />
+      />,
     );
 
     const swipeOpt = await screen.findByTestId("swipe-delete");
@@ -257,7 +257,7 @@ describe("<OptionTextValue />", () => {
         onChangeDisableOption={function (id: number, value: boolean): void {
           throw new Error("Function not implemented.");
         }}
-      />
+      />,
     );
 
     const button = await screen.findByTitle("Add value");

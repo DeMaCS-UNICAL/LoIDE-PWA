@@ -4,9 +4,7 @@ import SaveProjectModal from "../../modals/SaveProjectModal";
 describe("<SaveProjectModal />", () => {
   it("renders without crashing", () => {
     const onDismiss = jest.fn();
-    const { baseElement } = render(
-      <SaveProjectModal isOpen={false} onDismiss={onDismiss} />
-    );
+    const { baseElement } = render(<SaveProjectModal isOpen={false} onDismiss={onDismiss} />);
     expect(baseElement).toBeDefined();
   });
 

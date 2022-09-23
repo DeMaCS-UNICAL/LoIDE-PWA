@@ -21,7 +21,7 @@ describe("MainTab page", () => {
     const { baseElement } = render(
       <Provider store={store}>
         <MainTab {...defaultProps} />
-      </Provider>
+      </Provider>,
     );
     expect(baseElement).toBeDefined();
   });
@@ -30,7 +30,7 @@ describe("MainTab page", () => {
     render(
       <Provider store={store}>
         <MainTab {...defaultProps} />
-      </Provider>
+      </Provider>,
     );
     await screen.findByAltText("loide-logo");
   });
@@ -39,7 +39,7 @@ describe("MainTab page", () => {
     render(
       <Provider store={store}>
         <MainTab {...defaultProps} />
-      </Provider>
+      </Provider>,
     );
     await screen.findByText("Run settings");
   });
@@ -48,15 +48,13 @@ describe("MainTab page", () => {
     render(
       <Provider store={store}>
         <MainTab {...defaultProps} />
-      </Provider>
+      </Provider>,
     );
     const button = await screen.findByText("Open");
 
     fireEvent.click(button);
 
-    let modal: HTMLElement | null = await screen.findByText(
-      "Open project or text files"
-    );
+    let modal: HTMLElement | null = await screen.findByText("Open project or text files");
 
     const closeButton = await screen.findByText("Close");
 
@@ -71,7 +69,7 @@ describe("MainTab page", () => {
     render(
       <Provider store={store}>
         <MainTab {...defaultProps} />
-      </Provider>
+      </Provider>,
     );
     const button = await screen.findByText("Save");
 
@@ -92,7 +90,7 @@ describe("MainTab page", () => {
     render(
       <Provider store={store}>
         <MainTab {...defaultProps} />
-      </Provider>
+      </Provider>,
     );
     const button = await screen.findByTitle("Operations");
 

@@ -18,11 +18,7 @@ const NoLanguageAvailable: React.FC = () => {
     <>
       <IonProgressBar
         type="indeterminate"
-        style={
-          connectingToTheServer
-            ? { position: "fixed" }
-            : { opacity: 0, position: "fixed" }
-        }
+        style={connectingToTheServer ? { position: "fixed" } : { opacity: 0, position: "fixed" }}
       ></IonProgressBar>
       <IonRow>
         <IonCol className="ion-text-center ion-padding">
@@ -30,19 +26,12 @@ const NoLanguageAvailable: React.FC = () => {
           <Online>
             {!connected && (
               <>
-                <h5
-                  className="ion-margin-bottom"
-                  style={{ opacity: 0.6, minHeight: "50px" }}
-                >
+                <h5 className="ion-margin-bottom" style={{ opacity: 0.6, minHeight: "50px" }}>
                   {!connectingToTheServer && !connected && (
-                    <span>
-                      You are disconnect from the server, try to reconnect
-                    </span>
+                    <span>You are disconnect from the server, try to reconnect</span>
                   )}
 
-                  {connectingToTheServer && (
-                    <span>Reconnecting to the server...</span>
-                  )}
+                  {connectingToTheServer && <span>Reconnecting to the server...</span>}
                 </h5>
                 <div
                   style={{

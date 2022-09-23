@@ -15,10 +15,7 @@ const runSettingsSlice = createSlice({
   name: "runSettings",
   initialState: initialRunSettingsState,
   reducers: {
-    setAllRunSettings: (
-      state,
-      { payload }: PayloadAction<IRunSettingsState>
-    ) => {
+    setAllRunSettings: (state, { payload }: PayloadAction<IRunSettingsState>) => {
       state = payload;
     },
     setCurrentLanguage: (state, { payload }: PayloadAction<string>) => {
@@ -54,9 +51,7 @@ export const {
 } = runSettingsSlice.actions;
 
 // A selector
-export const runSettingsSelector = (state: {
-  runSettings: IRunSettingsState;
-}) => state.runSettings;
+export const runSettingsSelector = (state: { runSettings: IRunSettingsState }) => state.runSettings;
 
 // The reducer
 export default runSettingsSlice.reducer;

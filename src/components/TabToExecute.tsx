@@ -26,9 +26,7 @@ const TabToExecute: React.FC<TabToExecuteProps> = (props) => {
   useEffect(() => {
     if (props.tabsIDToExecute.length === 0) {
       setTabRadioValue(CurrentTab);
-    } else if (
-      props.tabsIDToExecute.length === Object.keys(props.tabs).length
-    ) {
+    } else if (props.tabsIDToExecute.length === Object.keys(props.tabs).length) {
       setTabRadioValue(AllTabs);
     } else {
       setTabRadioValue("");
@@ -82,11 +80,7 @@ const TabToExecute: React.FC<TabToExecuteProps> = (props) => {
           </IonListHeader>
           <IonItem>
             <IonLabel> Current tab </IonLabel>
-            <IonRadio
-              title="Current tab"
-              slot="start"
-              value={`${CurrentTab}`}
-            />
+            <IonRadio title="Current tab" slot="start" value={`${CurrentTab}`} />
           </IonItem>
           <IonItem lines="none">
             <IonLabel> All tabs </IonLabel>

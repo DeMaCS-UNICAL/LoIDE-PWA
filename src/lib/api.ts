@@ -43,9 +43,7 @@ export const createSocket = () => {
   }
 };
 
-export const setRunProjectListener = (
-  callbackOutput: (output: IOutputData) => void
-) => {
+export const setRunProjectListener = (callbackOutput: (output: IOutputData) => void) => {
   if (socket) {
     socket.off(APIWSEvents.on.problem);
     socket.off(APIWSEvents.on.output);
@@ -74,9 +72,7 @@ export const setRunProjectListener = (
   }
 };
 
-export const setGetLanguagesListener = (
-  callbackLanguages: (output: ILanguageData[]) => void
-) => {
+export const setGetLanguagesListener = (callbackLanguages: (output: ILanguageData[]) => void) => {
   if (socket) {
     socket.off(APIWSEvents.on.languages);
     socket.on(APIWSEvents.on.languages, (response: string) => {

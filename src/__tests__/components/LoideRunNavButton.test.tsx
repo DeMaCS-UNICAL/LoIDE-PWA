@@ -9,7 +9,7 @@ describe("<LoideRunNavButton />", () => {
     const { baseElement } = render(
       <Provider store={store}>
         <LoideRunNavButton />
-      </Provider>
+      </Provider>,
     );
     expect(baseElement).toBeDefined();
   });
@@ -18,7 +18,7 @@ describe("<LoideRunNavButton />", () => {
     render(
       <Provider store={store}>
         <LoideRunNavButton />
-      </Provider>
+      </Provider>,
     );
     await screen.findByText("Run");
   });
@@ -27,7 +27,7 @@ describe("<LoideRunNavButton />", () => {
     render(
       <Provider store={store}>
         <LoideRunNavButton />
-      </Provider>
+      </Provider>,
     );
     const button = await screen.findByTitle("run");
     fireEvent.click(button);

@@ -1,10 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { InitalTabCountID, SuffixNameTab } from "../../lib/constants";
-import {
-  EditorTabMap,
-  IEditorState,
-  ILoideTab,
-} from "../../lib/LoideInterfaces";
+import { EditorTabMap, IEditorState, ILoideTab } from "../../lib/LoideInterfaces";
 
 export const initialTabs: EditorTabMap = {};
 initialTabs[InitalTabCountID] = {
@@ -71,32 +67,21 @@ const editorSlice = createSlice({
       state.tabCountID = nextID;
     },
     deleteTab: (state, { payload }: PayloadAction<number>) => {
-      let shift =
-        Object.keys(state.tabs).length - 1 === state.currentTabIndex
-          ? true
-          : false;
-      state.currentTabIndex = shift
-        ? state.currentTabIndex - 1
-        : state.currentTabIndex;
+      let shift = Object.keys(state.tabs).length - 1 === state.currentTabIndex ? true : false;
+      state.currentTabIndex = shift ? state.currentTabIndex - 1 : state.currentTabIndex;
       delete state.tabs[payload];
       state.prevTabsSize = Object.keys(state.tabs).length;
     },
     selectTab: (state, { payload }: PayloadAction<number>) => {
       state.currentTabIndex = payload;
     },
-    changeTabValue: (
-      state,
-      { payload }: PayloadAction<{ tabKey: number; value: string }>
-    ) => {
+    changeTabValue: (state, { payload }: PayloadAction<{ tabKey: number; value: string }>) => {
       let tab = state.tabs[payload.tabKey];
       if (tab) {
         tab.value = payload.value;
       }
     },
-    changeTabName: (
-      state,
-      { payload }: PayloadAction<{ tabKey: number; name: string }>
-    ) => {
+    changeTabName: (state, { payload }: PayloadAction<{ tabKey: number; name: string }>) => {
       let tab = state.tabs[payload.tabKey];
       if (tab) {
         tab.title = payload.name;
@@ -152,8 +137,7 @@ export const {
 
 // A selector
 export const editorSelector = (state: { editor: IEditorState }) => state.editor;
-export const tabsEditorSelector = (state: { editor: IEditorState }) =>
-  state.editor.tabs;
+export const tabsEditorSelector = (state: { editor: IEditorState }) => state.editor.tabs;
 
 // The reducer
 export default editorSlice.reducer;

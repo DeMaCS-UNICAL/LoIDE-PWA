@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Option from "./Option";
-import {
-  IExecutorData,
-  ILanguageData,
-  IOptionsData,
-  ISolverData,
-} from "../lib/LoideAPIInterfaces";
+import { IExecutorData, ILanguageData, IOptionsData, ISolverData } from "../lib/LoideAPIInterfaces";
 import { ISolverOption } from "../lib/LoideInterfaces";
 import {
   IonButton,
@@ -122,9 +117,7 @@ const RunSettings: React.FC = () => {
 
       dispatch(setCurrentSolver(languageSelected!.solvers[0].value));
 
-      dispatch(
-        setCurrentExecutor(languageSelected!.solvers[0].executors[0].value)
-      );
+      dispatch(setCurrentExecutor(languageSelected!.solvers[0].executors[0].value));
 
       // reset all the options
       dispatch(setCurrentOptions([]));
@@ -158,9 +151,7 @@ const RunSettings: React.FC = () => {
   };
 
   const onDeleteOption = (id: number) => {
-    let nextOptions: ISolverOption[] = JSON.parse(
-      JSON.stringify(currentOptions)
-    ); // clone current options
+    let nextOptions: ISolverOption[] = JSON.parse(JSON.stringify(currentOptions)); // clone current options
 
     nextOptions.splice(id, 1);
     nextOptions.map((opt, index) => (opt.id = index));
@@ -168,9 +159,7 @@ const RunSettings: React.FC = () => {
   };
 
   const onChangeDisableOption = (id: number, value: boolean) => {
-    let nextOptions: ISolverOption[] = JSON.parse(
-      JSON.stringify(currentOptions)
-    ); // clone current options
+    let nextOptions: ISolverOption[] = JSON.parse(JSON.stringify(currentOptions)); // clone current options
     for (let i = 0; i < nextOptions.length; i++) {
       if (nextOptions[i].id === id) {
         nextOptions[i].disabled = value;
@@ -181,9 +170,7 @@ const RunSettings: React.FC = () => {
   };
 
   const onChangeOptionType = (newValue: any, id: number) => {
-    let nextOptions: ISolverOption[] = JSON.parse(
-      JSON.stringify(currentOptions)
-    ); // clone current options
+    let nextOptions: ISolverOption[] = JSON.parse(JSON.stringify(currentOptions)); // clone current options
     for (let option of nextOptions) {
       if (option.id === id) {
         option.name = newValue;
@@ -194,9 +181,7 @@ const RunSettings: React.FC = () => {
   };
 
   const onChangeOptionValues = (newValues: string[], id: number) => {
-    let nextOptions: ISolverOption[] = JSON.parse(
-      JSON.stringify(currentOptions)
-    ); // clone current options
+    let nextOptions: ISolverOption[] = JSON.parse(JSON.stringify(currentOptions)); // clone current options
     for (let option of nextOptions) {
       if (option.id === id) {
         option.values = newValues;

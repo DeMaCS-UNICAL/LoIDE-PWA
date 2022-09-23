@@ -49,8 +49,7 @@ const Option: React.FC<OptionProps> = (props) => {
   }, [optionsAvailable, props, option.id, incompatibleCurrenOptionName]);
 
   const onChangeOptionType = (e: any) => {
-    if (props.onChangeOptionType)
-      props.onChangeOptionType(e.target.value, option.id);
+    if (props.onChangeOptionType) props.onChangeOptionType(e.target.value, option.id);
   };
 
   const onChangeValues = (e: any, index: number) => {
@@ -58,16 +57,14 @@ const Option: React.FC<OptionProps> = (props) => {
     let newValues = [...values];
     newValues[index] = newValue;
     setValues(newValues);
-    if (props.onChangeOptionValues)
-      props.onChangeOptionValues(newValues, option.id);
+    if (props.onChangeOptionValues) props.onChangeOptionValues(newValues, option.id);
   };
 
   const addValue = () => {
     let newValues = [...values];
     newValues.push("");
     setValues(newValues);
-    if (props.onChangeOptionValues)
-      props.onChangeOptionValues(newValues, option.id);
+    if (props.onChangeOptionValues) props.onChangeOptionValues(newValues, option.id);
   };
 
   const deleteValue = (index: number) => {
@@ -75,8 +72,7 @@ const Option: React.FC<OptionProps> = (props) => {
     newValues.splice(index, 1);
     if (newValues.length === 0) newValues.push("");
     setValues(newValues);
-    if (props.onChangeOptionValues)
-      props.onChangeOptionValues(newValues, option.id);
+    if (props.onChangeOptionValues) props.onChangeOptionValues(newValues, option.id);
   };
 
   const deleteOption = () => {
@@ -129,12 +125,7 @@ const Option: React.FC<OptionProps> = (props) => {
           Option {option.id + 1}
         </IonBadge>
 
-        <IonButton
-          slot="end"
-          color="danger"
-          title="Delete option"
-          onClick={deleteOption}
-        >
+        <IonButton slot="end" color="danger" title="Delete option" onClick={deleteOption}>
           <IonIcon icon={trashOutline} />
           Delete option
         </IonButton>

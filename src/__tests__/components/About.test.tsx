@@ -18,19 +18,13 @@ describe("<About />", () => {
       name: "demacs-unical.github.io/LoIDE",
     });
 
-    expect(link).toHaveAttribute(
-      "href",
-      "https://demacs-unical.github.io/LoIDE/"
-    );
+    expect(link).toHaveAttribute("href", "https://demacs-unical.github.io/LoIDE/");
   });
 
   it("has the github repo url", async () => {
     render(<About />);
     const link = screen.getByRole("link", { name: "Github" });
-    expect(link).toHaveAttribute(
-      "href",
-      "https://github.com/DeMaCS-UNICAL/LoIDE-PWA"
-    );
+    expect(link).toHaveAttribute("href", "https://github.com/DeMaCS-UNICAL/LoIDE-PWA");
   });
 
   it("has the license project url", async () => {
@@ -38,7 +32,7 @@ describe("<About />", () => {
     const link = screen.getByRole("link", { name: "MIT License" });
     expect(link).toHaveAttribute(
       "href",
-      "https://github.com/DeMaCS-UNICAL/LoIDE-PWA/blob/main/LICENSE"
+      "https://github.com/DeMaCS-UNICAL/LoIDE-PWA/blob/main/LICENSE",
     );
   });
 

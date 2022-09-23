@@ -12,7 +12,7 @@ describe("<Appearance />", () => {
         <Provider store={store}>
           <Appearance />
         </Provider>
-      </Provider>
+      </Provider>,
     );
     expect(baseElement).toBeDefined();
   });
@@ -21,7 +21,7 @@ describe("<Appearance />", () => {
     render(
       <Provider store={store}>
         <Appearance />
-      </Provider>
+      </Provider>,
     );
     await screen.findByText("General");
     await screen.findByText("Editor");
@@ -32,7 +32,7 @@ describe("<Appearance />", () => {
     render(
       <Provider store={store}>
         <Appearance />
-      </Provider>
+      </Provider>,
     );
     await screen.findByText("Dark mode");
     const toogle = await screen.findByTitle("Toogle dark mode");
@@ -43,7 +43,7 @@ describe("<Appearance />", () => {
     render(
       <Provider store={store}>
         <Appearance />
-      </Provider>
+      </Provider>,
     );
 
     const range = await screen.findByTitle("Font size editor range");
@@ -57,7 +57,7 @@ describe("<Appearance />", () => {
     render(
       <Provider store={store}>
         <Appearance />
-      </Provider>
+      </Provider>,
     );
     await screen.findAllByText("Font size");
 
@@ -86,7 +86,7 @@ describe("<Appearance />", () => {
     render(
       <Provider store={store}>
         <Appearance />
-      </Provider>
+      </Provider>,
     );
 
     const button = await screen.findByTitle("Reset appearance options");

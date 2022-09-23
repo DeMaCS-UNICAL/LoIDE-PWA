@@ -47,8 +47,7 @@ export const {
 } = UIStatusSlice.actions;
 
 // A selector
-export const UIStatusSelector = (state: { UIStatus: IUIStatusState }) =>
-  state.UIStatus;
+export const UIStatusSelector = (state: { UIStatus: IUIStatusState }) => state.UIStatus;
 
 // The reducer
 export default UIStatusSlice.reducer;

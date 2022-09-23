@@ -1,5 +1,4 @@
 import { setupIonicReact } from "@ionic/react";
-import React from "react";
 import App from "./App";
 import { DarkModeProvider } from "./providers/DarkModeProvider";
 import { ViewportProvider } from "./providers/ViewportProvider";
@@ -24,7 +23,7 @@ root.render(
         <App />
       </ViewportProvider>
     </DarkModeProvider>
-  </Provider>
+  </Provider>,
 );
 
 // If you want your app to work offline and load faster, you can change

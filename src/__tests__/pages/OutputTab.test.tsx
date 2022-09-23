@@ -9,7 +9,7 @@ describe("OutputTab page", () => {
     const { baseElement } = render(
       <Provider store={store}>
         <OutputTab />
-      </Provider>
+      </Provider>,
     );
     expect(baseElement).toBeDefined();
   });
@@ -18,7 +18,7 @@ describe("OutputTab page", () => {
     render(
       <Provider store={store}>
         <OutputTab />
-      </Provider>
+      </Provider>,
     );
     await screen.findByText("Output");
   });
@@ -28,7 +28,7 @@ describe("OutputTab page", () => {
     render(
       <Provider store={store}>
         <OutputTab />
-      </Provider>
+      </Provider>,
     );
     const buttons = await screen.findAllByTitle("Download");
 
@@ -41,7 +41,7 @@ describe("OutputTab page", () => {
     render(
       <Provider store={store}>
         <OutputTab />
-      </Provider>
+      </Provider>,
     );
     const button = await screen.findByTitle("Clear");
 

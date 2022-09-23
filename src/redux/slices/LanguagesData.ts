@@ -21,9 +21,8 @@ const languagesDataSlice = createSlice({
 export const { setLanguages } = languagesDataSlice.actions;
 
 // A selector
-export const languagesDataSelector = (state: {
-  languagesData: ILanguagesState;
-}) => state.languagesData;
+export const languagesDataSelector = (state: { languagesData: ILanguagesState }) =>
+  state.languagesData;
 
 // The reducer
 export default languagesDataSlice.reducer;

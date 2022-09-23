@@ -86,11 +86,8 @@ const App: React.FC = () => {
     });
 
     window.onbeforeunload = function () {
-      let loideProject = Utils.getLoideProjectData();
-      localStorage.setItem(
-        LocalStorageItems.loideProject,
-        JSON.stringify(loideProject)
-      );
+      const loideProject = Utils.getLoideProjectData();
+      localStorage.setItem(LocalStorageItems.loideProject, JSON.stringify(loideProject));
     };
   }, []);
 
@@ -100,7 +97,7 @@ const App: React.FC = () => {
       return false;
     });
     Mousetrap.bind(["ctrl+enter", "command+enter"], () => {
-      let dataToRun = Utils.getLoideRunData();
+      const dataToRun = Utils.getLoideRunData();
       API.emitRunProject(dataToRun);
       return false;
     });
@@ -120,27 +117,12 @@ const App: React.FC = () => {
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-            <Route
-              path={`/${LoidePath.Editor}/:data`}
-              component={MainTab}
-              exact={true}
-            />
-            <Route
-              path={`/${LoidePath.RunSettings}`}
-              component={RunSettingsTab}
-              exact={true}
-            />
+            <Route path={`/${LoidePath.Editor}/:data`} component={MainTab} exact={true} />
+            <Route path={`/${LoidePath.RunSettings}`} component={RunSettingsTab} exact={true} />
             <Route path={`/${LoidePath.Output}`} component={OutputTab} />
-            <Route
-              path={`/${LoidePath.Appearance}`}
-              component={AppearanceTab}
-            />
+            <Route path={`/${LoidePath.Appearance}`} component={AppearanceTab} />
             <Route path={`/${LoidePath.About}`} component={AboutTab} />
-            <Route
-              path="/"
-              render={() => <Redirect to={`/${LoidePath.Editor}`} />}
-              exact={true}
-            />
+            <Route path="/" render={() => <Redirect to={`/${LoidePath.Editor}`} />} exact={true} />
             <Route component={MainTab} />
           </IonRouterOutlet>
 
@@ -169,10 +151,7 @@ const App: React.FC = () => {
               {newOutput && <IonBadge color="danger">!</IonBadge>}
             </IonTabButton>
 
-            <IonTabButton
-              tab={LoidePath.Appearance}
-              href={`/${LoidePath.Appearance}`}
-            >
+            <IonTabButton tab={LoidePath.Appearance} href={`/${LoidePath.Appearance}`}>
               <IonIcon icon={colorPaletteOutline} />
               <IonLabel>Appearance</IonLabel>
             </IonTabButton>
@@ -183,10 +162,7 @@ const App: React.FC = () => {
             </IonTabButton>
           </IonTabBar>
         </IonTabs>
-        <ShortcutsModal
-          isOpen={showShortcutsModal}
-          onDismiss={setShowShortcutsModal}
-        />
+        <ShortcutsModal isOpen={showShortcutsModal} onDismiss={setShowShortcutsModal} />
       </IonReactRouter>
     </IonApp>
   );

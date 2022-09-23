@@ -17,7 +17,7 @@ describe("<LoideToolbarEditor />", () => {
         onCopy={jest.fn()}
         onCut={jest.fn()}
         onDownloadTab={jest.fn()}
-      />
+      />,
     );
     expect(baseElement).toBeDefined();
   });
@@ -33,7 +33,7 @@ describe("<LoideToolbarEditor />", () => {
         onCopy={jest.fn()}
         onCut={jest.fn()}
         onDownloadTab={jest.fn()}
-      />
+      />,
     );
 
     const button = await screen.findByTitle("Undo");
@@ -53,7 +53,7 @@ describe("<LoideToolbarEditor />", () => {
         onCopy={jest.fn()}
         onCut={jest.fn()}
         onDownloadTab={jest.fn()}
-      />
+      />,
     );
 
     const button = await screen.findByTitle("Redo");
@@ -73,7 +73,7 @@ describe("<LoideToolbarEditor />", () => {
         onCopy={jest.fn()}
         onCut={jest.fn()}
         onDownloadTab={jest.fn()}
-      />
+      />,
     );
 
     const button = await screen.findByTitle("Search");
@@ -94,7 +94,7 @@ describe("<LoideToolbarEditor />", () => {
         onCopy={jest.fn()}
         onCut={jest.fn()}
         onDownloadTab={jest.fn()}
-      />
+      />,
     );
 
     const button = await screen.findByTitle("Paste");
@@ -115,7 +115,7 @@ describe("<LoideToolbarEditor />", () => {
         onCopy={onCopy}
         onCut={jest.fn()}
         onDownloadTab={jest.fn()}
-      />
+      />,
     );
 
     const button = await screen.findByTitle("Copy");
@@ -136,7 +136,7 @@ describe("<LoideToolbarEditor />", () => {
         onCopy={jest.fn()}
         onCut={onCut}
         onDownloadTab={jest.fn()}
-      />
+      />,
     );
 
     const button = await screen.findByTitle("Cut");
@@ -157,7 +157,7 @@ describe("<LoideToolbarEditor />", () => {
         onCopy={jest.fn()}
         onCut={jest.fn()}
         onDownloadTab={onDownloadTab}
-      />
+      />,
     );
 
     const button = await screen.findByTitle("Download content");

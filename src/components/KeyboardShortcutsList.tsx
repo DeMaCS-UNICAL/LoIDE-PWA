@@ -1,11 +1,4 @@
-import {
-  IonBadge,
-  IonCol,
-  IonItem,
-  IonLabel,
-  IonList,
-  IonRow,
-} from "@ionic/react";
+import { IonBadge, IonCol, IonItem, IonLabel, IonList, IonRow } from "@ionic/react";
 import React from "react";
 
 const KeyboardShortcutsList: React.FC = () => {
@@ -16,11 +9,7 @@ const KeyboardShortcutsList: React.FC = () => {
           <IonList lines="full">
             <IonItem>
               <IonLabel slot="start">Open Project/Files</IonLabel>
-              <IonBadge
-                color="medium"
-                style={{ marginRight: "5px" }}
-                slot="end"
-              >
+              <IonBadge color="medium" style={{ marginRight: "5px" }} slot="end">
                 Ctrl/⌘
               </IonBadge>
               <IonBadge color="medium" className="ion-no-margin" slot="end">
@@ -29,11 +18,7 @@ const KeyboardShortcutsList: React.FC = () => {
             </IonItem>
             <IonItem>
               <IonLabel slot="start">Save Project</IonLabel>
-              <IonBadge
-                color="medium"
-                style={{ marginRight: "5px" }}
-                slot="end"
-              >
+              <IonBadge color="medium" style={{ marginRight: "5px" }} slot="end">
                 Ctrl/⌘
               </IonBadge>
               <IonBadge color="medium" className="ion-no-margin" slot="end">
@@ -42,11 +27,7 @@ const KeyboardShortcutsList: React.FC = () => {
             </IonItem>
             <IonItem>
               <IonLabel slot="start">Share</IonLabel>
-              <IonBadge
-                color="medium"
-                style={{ marginRight: "5px" }}
-                slot="end"
-              >
+              <IonBadge color="medium" style={{ marginRight: "5px" }} slot="end">
                 Ctrl/⌘
               </IonBadge>
               <IonBadge
@@ -63,11 +44,7 @@ const KeyboardShortcutsList: React.FC = () => {
             </IonItem>
             <IonItem>
               <IonLabel slot="start">Run Project</IonLabel>
-              <IonBadge
-                color="medium"
-                style={{ marginRight: "5px" }}
-                slot="end"
-              >
+              <IonBadge color="medium" style={{ marginRight: "5px" }} slot="end">
                 Ctrl/⌘
               </IonBadge>
               <IonBadge color="medium" className="ion-no-margin" slot="end">

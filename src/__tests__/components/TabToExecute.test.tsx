@@ -1,9 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import TabToExecute from "../../components/TabToExecute";
-import {
-  ionFireEvent as fireEvent,
-  ionFireEvent,
-} from "@ionic/react-test-utils";
+import { ionFireEvent as fireEvent, ionFireEvent } from "@ionic/react-test-utils";
 
 import { EditorTabMap } from "../../lib/LoideInterfaces";
 
@@ -33,7 +30,7 @@ describe("<TabToExecute />", () => {
         onCheckCurrentTab={jest.fn()}
         onCheckTab={jest.fn()}
         onCheckAllTabs={jest.fn()}
-      />
+      />,
     );
     expect(baseElement).toBeDefined();
   });
@@ -46,7 +43,7 @@ describe("<TabToExecute />", () => {
         onCheckCurrentTab={jest.fn()}
         onCheckTab={jest.fn()}
         onCheckAllTabs={jest.fn()}
-      />
+      />,
     );
 
     await screen.findByText("Choose tab to execute");
@@ -60,7 +57,7 @@ describe("<TabToExecute />", () => {
         onCheckCurrentTab={jest.fn()}
         onCheckTab={jest.fn()}
         onCheckAllTabs={jest.fn()}
-      />
+      />,
     );
 
     await screen.findByText("Current tab");
@@ -74,7 +71,7 @@ describe("<TabToExecute />", () => {
         onCheckCurrentTab={jest.fn()}
         onCheckTab={jest.fn()}
         onCheckAllTabs={jest.fn()}
-      />
+      />,
     );
 
     await screen.findByText(tabs[1].title);
@@ -95,15 +92,12 @@ describe("<TabToExecute />", () => {
         onCheckCurrentTab={onCheckCurrentTab}
         onCheckTab={jest.fn()}
         onCheckAllTabs={jest.fn()}
-      />
+      />,
     );
 
     const radioGroup = await screen.findByTestId("group-radio-tab");
 
-    fireEvent(
-      radioGroup,
-      new CustomEvent("ionChange", { detail: { value: CurrentTab } })
-    );
+    fireEvent(radioGroup, new CustomEvent("ionChange", { detail: { value: CurrentTab } }));
 
     expect(onCheckCurrentTab).toBeCalled();
     expect(tabsIDToExecute.length).toBe(0);
@@ -123,15 +117,12 @@ describe("<TabToExecute />", () => {
         onCheckCurrentTab={jest.fn()}
         onCheckTab={jest.fn()}
         onCheckAllTabs={onCheckAllTabs}
-      />
+      />,
     );
 
     const radioGroup = await screen.findByTestId("group-radio-tab");
 
-    fireEvent(
-      radioGroup,
-      new CustomEvent("ionChange", { detail: { value: AllTabs } })
-    );
+    fireEvent(radioGroup, new CustomEvent("ionChange", { detail: { value: AllTabs } }));
 
     expect(onCheckAllTabs).toBeCalled();
     expect(tabsIDToExecute.length).toBe(Object.keys(tabs).length);
@@ -149,7 +140,7 @@ describe("<TabToExecute />", () => {
         onCheckCurrentTab={jest.fn()}
         onCheckTab={onCheckTab}
         onCheckAllTabs={jest.fn()}
-      />
+      />,
     );
 
     const item = await screen.findByTestId(`item-tab-1`);

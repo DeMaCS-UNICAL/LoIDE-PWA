@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  IonCol,
-  IonContent,
-  IonHeader,
-  IonPage,
-  IonRow,
-  IonTitle,
-  IonToolbar,
-} from "@ionic/react";
+import { IonCol, IonContent, IonHeader, IonPage, IonRow, IonTitle, IonToolbar } from "@ionic/react";
 import About from "../components/About";
 
 const AboutTab: React.FC = () => {
@@ -20,13 +12,7 @@ const AboutTab: React.FC = () => {
       </IonHeader>
       <IonContent className="ion-padding">
         <IonRow>
-          <IonCol
-            size-md="8"
-            offset-md="2"
-            size-xl="6"
-            offset-xl="3"
-            className="ion-no-padding"
-          >
+          <IonCol size-md="8" offset-md="2" size-xl="6" offset-xl="3" className="ion-no-padding">
             <About />
           </IonCol>
         </IonRow>

@@ -52,9 +52,7 @@ const OpenProjectModal: React.FC<OpenFileModalModalProps> = (props) => {
             <IonSpinner style={{ width: "50px", height: "50px" }} />
           </div>
         )}
-        {!loadingFiles && (
-          <LoideFileDropzone onFinishLoad={onFinishLoad} darkMode={darkMode} />
-        )}
+        {!loadingFiles && <LoideFileDropzone onFinishLoad={onFinishLoad} darkMode={darkMode} />}
       </IonContent>
     </IonModal>
   );

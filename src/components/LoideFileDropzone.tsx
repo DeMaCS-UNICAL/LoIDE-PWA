@@ -55,7 +55,7 @@ const LoideFileDropzone: React.FC<LoideFileDropzoneProps> = (props) => {
       let languages = store.getState().languagesData.languages;
       Utils.setProjectFromConfig(config, languages, props.onFinishLoad);
     },
-    [props]
+    [props],
   );
 
   const setTabsFromFiles = useCallback(
@@ -63,17 +63,11 @@ const LoideFileDropzone: React.FC<LoideFileDropzoneProps> = (props) => {
       Utils.createTabsFromArray(textsTabs);
       if (props.onFinishLoad) props.onFinishLoad(true);
     },
-    [props]
+    [props],
   );
 
-  const {
-    acceptedFiles,
-    getRootProps,
-    getInputProps,
-    isDragActive,
-    isDragAccept,
-    isDragReject,
-  } = useDropzone({});
+  const { acceptedFiles, getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } =
+    useDropzone({});
 
   useEffect(() => {
     if (acceptedFiles.length > 0) {
@@ -89,14 +83,14 @@ const LoideFileDropzone: React.FC<LoideFileDropzoneProps> = (props) => {
             Utils.generateGeneralToast(
               `${Toast.ErrorOpenFile.message.FileReadingWasAborted}`,
               `${Toast.ErrorOpenFile.header}`,
-              "danger"
+              "danger",
             );
           };
           reader.onerror = () => {
             Utils.generateGeneralToast(
               `${Toast.ErrorOpenFile.message.FileReadingHasFailed}`,
               `${Toast.ErrorOpenFile.header}`,
-              "danger"
+              "danger",
             );
           };
           reader.onload = () => {
@@ -117,14 +111,14 @@ const LoideFileDropzone: React.FC<LoideFileDropzoneProps> = (props) => {
           Utils.generateGeneralToast(
             `${Toast.ErrorOpenFile.message.FileReadingWasAborted}`,
             `${Toast.ErrorOpenFile.header}`,
-            "danger"
+            "danger",
           );
         };
         reader.onerror = () => {
           Utils.generateGeneralToast(
             `${Toast.ErrorOpenFile.message.FileReadingHasFailed}`,
             `${Toast.ErrorOpenFile.header}`,
-            "danger"
+            "danger",
           );
         };
         reader.onload = () => {
@@ -151,7 +145,7 @@ const LoideFileDropzone: React.FC<LoideFileDropzoneProps> = (props) => {
       ...(isDragAccept ? acceptStyle : {}),
       ...(isDragReject ? rejectStyle : {}),
     }),
-    [isDragActive, isDragReject, isDragAccept, props.darkMode]
+    [isDragActive, isDragReject, isDragAccept, props.darkMode],
   );
 
   return (
@@ -159,14 +153,8 @@ const LoideFileDropzone: React.FC<LoideFileDropzoneProps> = (props) => {
       <input {...getInputProps()} />
       {isDragActive ? (
         <>
-          {isDragReject && (
-            <p className="dropzone-text unselectable">File not supported</p>
-          )}
-          {isDragAccept && (
-            <p className="dropzone-text unselectable">
-              Drop the files here ...
-            </p>
-          )}
+          {isDragReject && <p className="dropzone-text unselectable">File not supported</p>}
+          {isDragAccept && <p className="dropzone-text unselectable">Drop the files here ...</p>}
         </>
       ) : (
         <>
@@ -174,8 +162,8 @@ const LoideFileDropzone: React.FC<LoideFileDropzoneProps> = (props) => {
             Drag 'n' drop some files here, or click to select files.
           </span>
           <span className="ion-text-center">
-            If the file is a <i>.json</i> configuration file it will set the
-            configuration, otherwise it will show on text editor.
+            If the file is a <i>.json</i> configuration file it will set the configuration,
+            otherwise it will show on text editor.
           </span>
         </>
       )}

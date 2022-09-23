@@ -9,7 +9,7 @@ describe("AppearanceTab page", () => {
     const { baseElement } = render(
       <Provider store={store}>
         <AppearanceTab />
-      </Provider>
+      </Provider>,
     );
     expect(baseElement).toBeDefined();
   });
@@ -18,7 +18,7 @@ describe("AppearanceTab page", () => {
     render(
       <Provider store={store}>
         <AppearanceTab />
-      </Provider>
+      </Provider>,
     );
     await screen.findByText("Appearance");
   });

@@ -6,9 +6,7 @@ const outputError = "logic program error";
 
 describe("<Output />", () => {
   it("renders without crashing", () => {
-    const { baseElement } = render(
-      <Output model={outputModel} error={outputError} />
-    );
+    const { baseElement } = render(<Output model={outputModel} error={outputError} />);
     expect(baseElement).toBeDefined();
   });
 

@@ -1,12 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import LoideAceEditor from "./LoideAceEditor";
 import { Tabs, TabList, TabPanel } from "react-tabs";
-import {
-  ActionSheet,
-  ButtonText,
-  Inputs,
-  WindowConfirmMessages,
-} from "../lib/constants";
+import { ActionSheet, ButtonText, Inputs, WindowConfirmMessages } from "../lib/constants";
 import { IonIcon } from "@ionic/react";
 import { addOutline } from "ionicons/icons";
 import LoideTab from "./LoideTab";
@@ -24,16 +19,10 @@ import * as API from "../lib/api";
 const Editor: React.FC = () => {
   const dispatch = useDispatch();
 
-  const {
-    tabCountID,
-    currentTabIndex,
-    tabs,
-    prevTabsSize,
-    tabsEditorSessions,
-  } = useSelector(editorSelector);
+  const { tabCountID, currentTabIndex, tabs, prevTabsSize, tabsEditorSessions } =
+    useSelector(editorSelector);
 
-  const { currentLanguage, currentSolver, runAuto } =
-    useSelector(runSettingsSelector);
+  const { currentLanguage, currentSolver, runAuto } = useSelector(runSettingsSelector);
 
   const [currentTabKey, setCurrentTabKey] = useState<number>(tabCountID);
 
@@ -45,13 +34,13 @@ const Editor: React.FC = () => {
 
   // set the current tab ID depending on selected tab
   useEffect(() => {
-    let keysTab = [...Object.keys(tabs).map((item) => Number(item))];
+    const keysTab = [...Object.keys(tabs).map((item) => Number(item))];
     setCurrentTabKey(keysTab[currentTabIndex]);
   }, [currentTabIndex, tabs]);
 
   useEffect(() => {
     if (Object.keys(tabs).length > prevTabsSize) {
-      var arr = document.getElementsByClassName("react-tabs__tab");
+      const arr = document.getElementsByClassName("react-tabs__tab");
       arr[arr.length - 1].scrollIntoView({
         behavior: "smooth",
       });
@@ -76,7 +65,7 @@ const Editor: React.FC = () => {
       return;
     }
     // delete tab session
-    let newSessions = [...tabsEditorSessions];
+    const newSessions = [...tabsEditorSessions];
     delete newSessions[tabKey];
     dispatch(setTabsEditorSessions(newSessions));
 
@@ -106,13 +95,19 @@ const Editor: React.FC = () => {
   };
 
   const undo = () => {
-    let undoManager = editorsRef.current?.editor.session.getUndoManager();
-    undoManager?.undo(editorsRef.current?.editor.session!);
+    const editorSession = editorsRef.current?.editor.session
+    if(editorSession){
+    const undoManager = editorSession.getUndoManager();
+    undoManager?.undo(editorSession);
+    }
   };
 
   const redo = () => {
-    let undoManager = editorsRef.current?.editor.session.getUndoManager();
-    undoManager?.redo(editorsRef.current?.editor.session!);
+    const editorSession = editorsRef.current?.editor.session
+    if(editorSession){
+    const undoManager = editorSession.getUndoManager();
+    undoManager?.redo(editorSession);
+    }
   };
 
   const search = () => {
@@ -120,7 +115,7 @@ const Editor: React.FC = () => {
   };
 
   const cut = () => {
-    let stringToCopy = editorsRef.current?.editor.getCopyText();
+    const stringToCopy = editorsRef.current?.editor.getCopyText();
     if (stringToCopy) {
       Utils.copyTextToClipboard(stringToCopy);
       editorsRef.current?.editor.execCommand("cut");
@@ -128,7 +123,7 @@ const Editor: React.FC = () => {
   };
 
   const copy = () => {
-    let stringToCopy = editorsRef.current?.editor.getCopyText();
+    const stringToCopy = editorsRef.current?.editor.getCopyText();
     if (stringToCopy) Utils.copyTextToClipboard(stringToCopy);
   };
 
@@ -139,22 +134,22 @@ const Editor: React.FC = () => {
   };
 
   const downloadTab = () => {
-    let currentTab = tabs[currentTabKey];
+    const currentTab = tabs[currentTabKey];
     if (currentTab) {
-      let tabContent = currentTab.value;
-      let tabTitle = currentTab.title;
+      const tabContent = currentTab.value;
+      const tabTitle = currentTab.title;
       Utils.downloadTextFile(tabTitle, tabContent);
     }
   };
 
   const onSaveSession = (tabKey: number, session: any) => {
-    let newSessions = [...tabsEditorSessions];
+    const newSessions = [...tabsEditorSessions];
     newSessions[tabKey] = session;
     dispatch(setTabsEditorSessions(newSessions));
   };
 
   const onRunAuto = () => {
-    let dataToRun = Utils.getLoideRunData();
+    const dataToRun = Utils.getLoideRunData();
     API.emitRunProject(dataToRun);
   };
 
@@ -202,7 +197,7 @@ const Editor: React.FC = () => {
           {
             text: ButtonText.SaveContent,
             handler: () => {
-              let tab = tabs[tabKey];
+              const tab = tabs[tabKey];
               if (tab) Utils.Editor.saveTabContent(tab);
             },
           },
@@ -224,47 +219,39 @@ const Editor: React.FC = () => {
       });
   };
 
-  const loideTabs = [...Object.keys(tabs).map((item) => Number(item))].map(
-    (key) => (
-      <LoideTab
-        key={`tab-${key}`}
-        tabkey={key}
-        onDeleteTab={showDeleteTabAlert}
-        onLongPress={showTabActionSheet}
-        onContextMenu={showTabActionSheet}
-      >
-        {tabs[key].title}
-      </LoideTab>
-    )
-  );
+  const loideTabs = [...Object.keys(tabs).map((item) => Number(item))].map((key) => (
+    <LoideTab
+      key={`tab-${key}`}
+      tabkey={key}
+      onDeleteTab={showDeleteTabAlert}
+      onLongPress={showTabActionSheet}
+      onContextMenu={showTabActionSheet}
+    >
+      {tabs[key].title}
+    </LoideTab>
+  ));
 
-  const tabPanels = [...Object.keys(tabs).map((item) => Number(item))].map(
-    (key) => (
-      <TabPanel key={`tabpanel-${key}`}>
-        <LoideAceEditor
-          ref={editorsRef}
-          tabKey={key}
-          session={tabsEditorSessions[key]}
-          mode={currentLanguage}
-          solver={currentSolver}
-          value={tabs[key].value}
-          runAuto={runAuto}
-          darkTheme={darkMode}
-          fontSize={fontSizeEditor}
-          onChange={onChange}
-          onSaveSession={onSaveSession}
-        />
-      </TabPanel>
-    )
-  );
+  const tabPanels = [...Object.keys(tabs).map((item) => Number(item))].map((key) => (
+    <TabPanel key={`tabpanel-${key}`}>
+      <LoideAceEditor
+        ref={editorsRef}
+        tabKey={key}
+        session={tabsEditorSessions[key]}
+        mode={currentLanguage}
+        solver={currentSolver}
+        value={tabs[key].value}
+        runAuto={runAuto}
+        darkTheme={darkMode}
+        fontSize={fontSizeEditor}
+        onChange={onChange}
+        onSaveSession={onSaveSession}
+      />
+    </TabPanel>
+  ));
 
   return (
     <div className="loide-editor">
-      <Tabs
-        className="loide-tabs"
-        selectedIndex={currentTabIndex}
-        onSelect={onSelectTab}
-      >
+      <Tabs className="loide-tabs" selectedIndex={currentTabIndex} onSelect={onSelectTab}>
         <div className="loide-tab-list">
           <div className="loide-tab-list-container">
             <TabList>{loideTabs}</TabList>
@@ -276,11 +263,7 @@ const Editor: React.FC = () => {
               style={{ marginLeft: "1px" }}
               onClick={addTab}
             >
-              <IonIcon
-                style={{ fontSize: "20px" }}
-                color="dark"
-                icon={addOutline}
-              />
+              <IonIcon style={{ fontSize: "20px" }} color="dark" icon={addOutline} />
             </button>
             <div className="ion-hide-sm-down" style={{ marginLeft: "5px" }}>
               <LoideToolbarEditor

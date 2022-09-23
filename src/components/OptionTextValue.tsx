@@ -61,11 +61,7 @@ const OptionTextValue: React.FC<OptionTextValueProp> = (props) => {
         )}
       </IonItem>
 
-      <IonItemOptions
-        data-testid="swipe-delete"
-        side="end"
-        onIonSwipe={onSwipe}
-      >
+      <IonItemOptions data-testid="swipe-delete" side="end" onIonSwipe={onSwipe}>
         <IonItemOption
           title="Delete option value"
           expandable={true}

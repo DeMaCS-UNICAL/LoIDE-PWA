@@ -10,7 +10,7 @@ describe("<LoideTab />", () => {
     const { baseElement } = render(
       <LoideTab tabkey={key} onDeleteTab={deleteMock}>
         <span> {title}</span>
-      </LoideTab>
+      </LoideTab>,
     );
     expect(baseElement).toBeDefined();
   });
@@ -22,7 +22,7 @@ describe("<LoideTab />", () => {
     render(
       <LoideTab tabkey={key} onDeleteTab={deleteMock}>
         <span> {title}</span>
-      </LoideTab>
+      </LoideTab>,
     );
     await screen.findByText(title);
   });
@@ -35,7 +35,7 @@ describe("<LoideTab />", () => {
     render(
       <LoideTab tabkey={key} onDeleteTab={deleteMock}>
         <span> {title}</span>
-      </LoideTab>
+      </LoideTab>,
     );
 
     const button = await screen.findByTitle("Delete tab");

@@ -10,9 +10,7 @@ type ViewportProviderProps = {
   children?: React.ReactNode;
 };
 
-export const ViewportProvider: React.FC<ViewportProviderProps> = ({
-  children,
-}) => {
+export const ViewportProvider: React.FC<ViewportProviderProps> = ({ children }) => {
   const [width, setWidth] = React.useState<number>(window.innerWidth);
   const [height, setHeight] = React.useState<number>(window.innerHeight);
   const handleWindowResize = () => {
@@ -25,9 +23,5 @@ export const ViewportProvider: React.FC<ViewportProviderProps> = ({
     return () => window.removeEventListener("resize", handleWindowResize);
   }, []);
 
-  return (
-    <viewportContext.Provider value={{ width, height }}>
-      {children}
-    </viewportContext.Provider>
-  );
+  return <viewportContext.Provider value={{ width, height }}>{children}</viewportContext.Provider>;
 };

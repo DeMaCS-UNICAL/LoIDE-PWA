@@ -29,8 +29,7 @@ const outputSlice = createSlice({
 });
 
 // Three actions generated from the slice
-export const { setModel, setError, setEmpty, setAllOutput } =
-  outputSlice.actions;
+export const { setModel, setError, setEmpty, setAllOutput } = outputSlice.actions;
 
 // A selector
 export const outputSelector = (state: { output: IOutputState }) => state.output;

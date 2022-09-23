@@ -1,12 +1,4 @@
-import {
-  IonButton,
-  IonCol,
-  IonInput,
-  IonItem,
-  IonLabel,
-  IonList,
-  IonRow,
-} from "@ionic/react";
+import { IonButton, IonCol, IonInput, IonItem, IonLabel, IonList, IonRow } from "@ionic/react";
 import React, { useState } from "react";
 import { defaultProjectName } from "../lib/constants";
 import Utils from "../lib/utils";

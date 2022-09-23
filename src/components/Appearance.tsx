@@ -20,13 +20,10 @@ import {
   UIStatusSelector,
 } from "../redux/slices/UIStatus";
 
-interface AppearanceProps {}
-
-const Appearance: React.FC<AppearanceProps> = (props) => {
+const Appearance: React.FC = () => {
   const dispatch = useDispatch();
 
-  const { darkMode, fontSizeEditor, fontSizeOutput } =
-    useSelector(UIStatusSelector);
+  const { darkMode, fontSizeEditor, fontSizeOutput } = useSelector(UIStatusSelector);
 
   const onDarkModeChange = () => {
     dispatch(setDarkMode(!darkMode));
@@ -34,7 +31,7 @@ const Appearance: React.FC<AppearanceProps> = (props) => {
   };
 
   const onFontEditorChange = (e: any) => {
-    let value = e?.detail?.value;
+    const value = e?.detail?.value;
     if (value) {
       dispatch(setFontSizeEditor(value));
       localStorage.setItem(LocalStorageItems.fontSizeEditor, value.toString());
@@ -42,7 +39,7 @@ const Appearance: React.FC<AppearanceProps> = (props) => {
   };
 
   const onFontOutputChange = (e: any) => {
-    let value = e?.detail?.value;
+    const value = e?.detail?.value;
 
     if (value) {
       dispatch(setFontSizeOutput(value.toString()));

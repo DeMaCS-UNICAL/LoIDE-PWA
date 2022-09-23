@@ -8,7 +8,7 @@ describe("<RunSettings />", () => {
     const { baseElement } = render(
       <Provider store={store}>
         <RunSettings />
-      </Provider>
+      </Provider>,
     );
     expect(baseElement).toBeDefined();
   });
@@ -17,7 +17,7 @@ describe("<RunSettings />", () => {
     render(
       <Provider store={store}>
         <RunSettings />
-      </Provider>
+      </Provider>,
     );
     await screen.findByText("Language, Solver and Executor");
     await screen.findByText("Language");

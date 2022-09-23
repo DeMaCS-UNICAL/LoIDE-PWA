@@ -4,9 +4,7 @@ import ShareProjectModal from "../../modals/ShareProjectModal";
 describe("<ShareProjectModal />", () => {
   it("renders without crashing", () => {
     const onDismiss = jest.fn();
-    const { baseElement } = render(
-      <ShareProjectModal isOpen={false} onDismiss={onDismiss} />
-    );
+    const { baseElement } = render(<ShareProjectModal isOpen={false} onDismiss={onDismiss} />);
     expect(baseElement).toBeDefined();
   });
 

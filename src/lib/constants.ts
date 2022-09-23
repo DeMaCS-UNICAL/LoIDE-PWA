@@ -31,8 +31,7 @@ export const ValuesNotSupported = {
 export const Errors = {
   ConnectionError:
     "Unable to connect to the server, maybe you or the server are offline.\nTry it later.",
-  RunConnectError:
-    "Falied to run the project. Maybe the server or you are offline.\nTry it later.",
+  RunConnectError: "Falied to run the project. Maybe the server or you are offline.\nTry it later.",
   GetLanguagesError:
     "Falied to get the languages. Maybe the server or you are offline.\nTry it later.",
 };
@@ -99,8 +98,7 @@ export const Toast = {
   },
   ClipboardError: {
     header: "Clipboard error",
-    message:
-      "Clipboard read error, maybe you didn't grant the access to read from the clipboard",
+    message: "Clipboard read error, maybe you didn't grant the access to read from the clipboard",
   },
 };
 
@@ -155,8 +153,7 @@ export const WindowConfirmMessages = {
   },
   RestoreProject: {
     header: "Restore project",
-    message:
-      "Project found. Maybe you were working on a project.\nDo you wish to restore it? ",
+    message: "Project found. Maybe you were working on a project.\nDo you wish to restore it? ",
   },
 };
 
@@ -180,7 +177,7 @@ export const LoideSolvers = {
   IDLV: "idlv",
 };
 
-export const InitalTabCountID: number = 1;
+export const InitalTabCountID = 1;
 
 export const OutputPositions = {
   right: "right",

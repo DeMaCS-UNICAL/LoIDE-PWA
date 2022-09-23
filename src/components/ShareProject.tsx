@@ -18,8 +18,7 @@ interface ShareProjectProps {
 }
 
 const ShareProject: React.FC<ShareProjectProps> = (props) => {
-  const [clipboardWriteSupported, setClipboardWriteSupported] =
-    useState<boolean>(false);
+  const [clipboardWriteSupported, setClipboardWriteSupported] = useState<boolean>(false);
 
   useEffect(() => {
     let supp = Utils.isClipboardWriteSupported();
@@ -53,7 +52,7 @@ const ShareProject: React.FC<ShareProjectProps> = (props) => {
                 Utils.generateGeneralToast(
                   `${Toast.ErrorLinkGeneration.message.TheProjectIsTooLong}`,
                   `${Toast.ErrorLinkGeneration.header}`,
-                  "danger"
+                  "danger",
                 );
               }
               setUrl(URL);
@@ -66,16 +65,16 @@ const ShareProject: React.FC<ShareProjectProps> = (props) => {
               Utils.generateGeneralToast(
                 `${Toast.ErrorLinkGeneration.message.TheProjectIsTooLong}`,
                 `${Toast.ErrorLinkGeneration.header}`,
-                "danger"
+                "danger",
               );
             } else {
               Utils.generateGeneralToast(
                 `${Toast.ErrorLinkGeneration.message.TryItLater}`,
                 `${Toast.ErrorLinkGeneration.header}`,
-                "danger"
+                "danger",
               );
             }
-          }
+          },
         );
     }
   }, []);
@@ -91,7 +90,7 @@ const ShareProject: React.FC<ShareProjectProps> = (props) => {
         Utils.generateGeneralToast(
           Toast.LinkCopiedSuccessfully.message,
           Toast.LinkCopiedSuccessfully.header,
-          "success"
+          "success",
         );
 
         if (props.onCopyLink) props.onCopyLink(true);
@@ -100,10 +99,10 @@ const ShareProject: React.FC<ShareProjectProps> = (props) => {
         Utils.generateGeneralToast(
           Toast.CannotCopyTheLink.message,
           Toast.CannotCopyTheLink.header,
-          "danger"
+          "danger",
         );
         if (props.onCopyLink) props.onCopyLink(false);
-      }
+      },
     );
   };
 
@@ -120,9 +119,7 @@ const ShareProject: React.FC<ShareProjectProps> = (props) => {
                 readonly={true}
                 onFocus={selectAll}
               />
-              {urlLoading && (
-                <IonSpinner slot="end" color="primary" name="dots" />
-              )}
+              {urlLoading && <IonSpinner slot="end" color="primary" name="dots" />}
             </IonItem>
           </IonList>
           {clipboardWriteSupported && (

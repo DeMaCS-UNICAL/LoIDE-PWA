@@ -14,12 +14,7 @@ const LoideRunNavButton: React.FC = () => {
   };
 
   return (
-    <IonButton
-      disabled={!languageAvailable}
-      title="run"
-      color="success"
-      onClick={onRun}
-    >
+    <IonButton disabled={!languageAvailable} title="run" color="success" onClick={onRun}>
       <IonIcon icon={play} />
       <span className="margin-button-left">Run</span>
     </IonButton>

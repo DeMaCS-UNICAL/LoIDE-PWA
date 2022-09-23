@@ -9,9 +9,7 @@ type DarkModeProviderProps = {
   children?: React.ReactNode;
 };
 
-export const DarkModeProvider: React.FC<DarkModeProviderProps> = ({
-  children,
-}) => {
+export const DarkModeProvider: React.FC<DarkModeProviderProps> = ({ children }) => {
   const dispatch = useDispatch();
 
   const { darkMode } = useSelector(UIStatusSelector);
@@ -25,7 +23,7 @@ export const DarkModeProvider: React.FC<DarkModeProviderProps> = ({
     (e: MediaQueryListEvent) => {
       dispatch(setDarkMode(e.matches));
     },
-    [dispatch]
+    [dispatch],
   );
 
   React.useEffect(() => {
@@ -33,9 +31,7 @@ export const DarkModeProvider: React.FC<DarkModeProviderProps> = ({
     if (darkModeString) {
       dispatch(setDarkMode(darkModeString === "true"));
     } else {
-      dispatch(
-        setDarkMode(window.matchMedia("(prefers-color-scheme: dark)").matches)
-      );
+      dispatch(setDarkMode(window.matchMedia("(prefers-color-scheme: dark)").matches));
     }
 
     window
@@ -47,9 +43,5 @@ export const DarkModeProvider: React.FC<DarkModeProviderProps> = ({
         .removeEventListener("change", handleDarkModeChange);
   }, [dispatch, handleDarkModeChange]);
 
-  return (
-    <darkModeContext.Provider value={darkMode}>
-      {children}
-    </darkModeContext.Provider>
-  );
+  return <darkModeContext.Provider value={darkMode}>{children}</darkModeContext.Provider>;
 };

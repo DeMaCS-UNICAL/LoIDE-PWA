@@ -8,7 +8,7 @@ describe("<LoideFileDropzone />", () => {
     const { baseElement } = render(
       <Provider store={store}>
         <LoideFileDropzone />
-      </Provider>
+      </Provider>,
     );
     expect(baseElement).toBeDefined();
   });
@@ -17,10 +17,8 @@ describe("<LoideFileDropzone />", () => {
     render(
       <Provider store={store}>
         <LoideFileDropzone />
-      </Provider>
+      </Provider>,
     );
-    await screen.findByText(
-      "Drag 'n' drop some files here, or click to select files."
-    );
+    await screen.findByText("Drag 'n' drop some files here, or click to select files.");
   });
 });
