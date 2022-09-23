@@ -34,7 +34,7 @@ const TabToExecute: React.FC<TabToExecuteProps> = (props) => {
   }, [props]);
 
   const onRadioTabChange = (e: any) => {
-    let value = e.detail.value;
+    const value = e.detail.value;
     setTabRadioValue(value);
     if (value === CurrentTab) {
       props.onCheckCurrentTab(true);
@@ -44,11 +44,11 @@ const TabToExecute: React.FC<TabToExecuteProps> = (props) => {
   };
   const onChange = (name: string, value: boolean) => {
     if (!name) return;
-    let idTab = Number(name);
+    const idTab = Number(name);
     if (isNaN(idTab)) throw new Error("Can't cast name into a number!");
 
     if (value) {
-      let finded = props.tabsIDToExecute.find(function (id) {
+      const finded = props.tabsIDToExecute.find(function (id) {
         return id === idTab;
       });
       if (finded) {
@@ -61,7 +61,7 @@ const TabToExecute: React.FC<TabToExecuteProps> = (props) => {
   };
 
   const getIfChecked = (key: number): boolean => {
-    let finded = props.tabsIDToExecute.find(function (id) {
+    const finded = props.tabsIDToExecute.find(function (id) {
       return id === key;
     });
     return finded ? true : false;

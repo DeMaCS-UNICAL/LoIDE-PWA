@@ -16,7 +16,7 @@ export const useSetRunSettings = () => {
 
   useEffect(() => {
     if (languages.length > 0) {
-      let firstLanguage = languages[0];
+      const firstLanguage = languages[0];
 
       if (currentLanguage.length === 0) dispatch(setCurrentLanguage(firstLanguage.value));
 

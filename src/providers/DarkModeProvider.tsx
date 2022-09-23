@@ -27,7 +27,7 @@ export const DarkModeProvider: React.FC<DarkModeProviderProps> = ({ children }) 
   );
 
   React.useEffect(() => {
-    let darkModeString = localStorage.getItem(LocalStorageItems.darkMode);
+    const darkModeString = localStorage.getItem(LocalStorageItems.darkMode);
     if (darkModeString) {
       dispatch(setDarkMode(darkModeString === "true"));
     } else {

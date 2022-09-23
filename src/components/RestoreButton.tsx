@@ -8,7 +8,7 @@ import { ButtonText, WindowConfirmMessages } from "../lib/constants";
 const RestoreButton: React.FC = () => {
   const [show, setShow] = useState<boolean>(false);
   useEffect(() => {
-    let project = Utils.getProjectFromLocalStorage();
+    const project = Utils.getProjectFromLocalStorage();
     if (project && Utils.isValidProjectToLoad(project)) {
       setShow(true);
     } else {
@@ -17,8 +17,8 @@ const RestoreButton: React.FC = () => {
   }, []);
 
   const restoreProject = () => {
-    let project = Utils.getProjectFromLocalStorage();
-    let languagesData = store.getState().languagesData.languages;
+    const project = Utils.getProjectFromLocalStorage();
+    const languagesData = store.getState().languagesData.languages;
 
     Utils.setProjectFromConfig(project, languagesData, () => {
       setShow(false);
@@ -41,7 +41,7 @@ const RestoreButton: React.FC = () => {
       .then((alert) => alert.present());
   };
 
-  if (!show) return <></>;
+  if (!show) return null;
   return (
     <>
       <IonButtons slot="end">

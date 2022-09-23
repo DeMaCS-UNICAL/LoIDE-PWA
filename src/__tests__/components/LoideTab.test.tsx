@@ -3,9 +3,10 @@ import LoideTab from "../../components/LoideTab";
 import { SuffixNameTab } from "../../lib/constants";
 
 describe("<LoideTab />", () => {
+  const key = 1;
+  const title = `${SuffixNameTab}1`;
+
   it("tab renders without crashing", () => {
-    const key: number = 1;
-    const title = `${SuffixNameTab}1`;
     const deleteMock = jest.fn();
     const { baseElement } = render(
       <LoideTab tabkey={key} onDeleteTab={deleteMock}>
@@ -16,8 +17,6 @@ describe("<LoideTab />", () => {
   });
 
   it("renders tab title", async () => {
-    const key: number = 1;
-    const title = `${SuffixNameTab}1`;
     const deleteMock = jest.fn();
     render(
       <LoideTab tabkey={key} onDeleteTab={deleteMock}>
@@ -28,10 +27,7 @@ describe("<LoideTab />", () => {
   });
 
   it("clicks delete tab button", async () => {
-    const key: number = 1;
-    const title = `${SuffixNameTab}1`;
     const deleteMock = jest.fn();
-
     render(
       <LoideTab tabkey={key} onDeleteTab={deleteMock}>
         <span> {title}</span>

@@ -1,14 +1,13 @@
 import { render, screen } from "@testing-library/react";
 import TabToExecute from "../../components/TabToExecute";
-import { ionFireEvent as fireEvent, ionFireEvent } from "@ionic/react-test-utils";
+import { ionFireEvent as fireEvent, ionFireEvent, mockIonicReact } from "@ionic/react-test-utils";
 
 import { EditorTabMap } from "../../lib/LoideInterfaces";
 
-import { mockIonicReact } from "@ionic/react-test-utils";
 import { AllTabs, CurrentTab, SuffixNameTab } from "../../lib/constants";
 mockIonicReact();
 
-var tabs: EditorTabMap = {};
+const tabs: EditorTabMap = {};
 tabs[1] = {
   title: `${SuffixNameTab}1`,
   type: "",
@@ -129,7 +128,7 @@ describe("<TabToExecute />", () => {
   });
 
   it("test click the tab items", async () => {
-    let tabsIDToExecute: number[] = [];
+    const tabsIDToExecute: number[] = [];
     const onCheckTab = jest.fn((id: number, value: boolean) => {
       if (value) tabsIDToExecute.push(id);
     });
@@ -145,7 +144,7 @@ describe("<TabToExecute />", () => {
 
     const item = await screen.findByTestId(`item-tab-1`);
 
-    ionFireEvent.click(item!);
+    ionFireEvent.click(item);
 
     expect(onCheckTab).toBeCalled();
     expect(tabsIDToExecute.length).toBe(1);

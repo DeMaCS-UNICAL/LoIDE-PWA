@@ -8,7 +8,7 @@ const SaveProject: React.FC = () => {
 
   const donwloadFile = () => {
     const loideProjectData = Utils.getLoideProjectData();
-    let fileContent = JSON.stringify(loideProjectData);
+    const fileContent = JSON.stringify(loideProjectData);
 
     const element = document.createElement("a");
     const file = new Blob([fileContent], {
@@ -32,7 +32,7 @@ const SaveProject: React.FC = () => {
                 value={nameProject}
                 clearInput={true}
                 onIonChange={(e) => {
-                  let text = e.detail.value;
+                  const text = e.detail.value;
                   if (typeof text === "string") setNameProject(text);
                 }}
               />

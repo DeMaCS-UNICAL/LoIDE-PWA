@@ -1,6 +1,6 @@
 import { ILanguageData } from "./LoideAPIInterfaces";
 
-export interface EditorTabMap extends Record<number, ILoideTab> {}
+export type EditorTabMap = Record<number, ILoideTab>;
 
 export interface ISolverOption {
   id: number;

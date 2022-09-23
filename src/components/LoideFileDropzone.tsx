@@ -52,7 +52,7 @@ const LoideFileDropzone: React.FC<LoideFileDropzoneProps> = (props) => {
 
   const setJSONInput = useCallback(
     (config: any) => {
-      let languages = store.getState().languagesData.languages;
+      const languages = store.getState().languagesData.languages;
       Utils.setProjectFromConfig(config, languages, props.onFinishLoad);
     },
     [props],
@@ -74,7 +74,7 @@ const LoideFileDropzone: React.FC<LoideFileDropzoneProps> = (props) => {
       dispatch(setLoadingFiles(true));
 
       let count = acceptedFiles.length;
-      let textsTabs: string[] = [];
+      const textsTabs: string[] = [];
       if (acceptedFiles.length > 1) {
         acceptedFiles.forEach((file: any) => {
           const reader = new FileReader();
@@ -103,7 +103,7 @@ const LoideFileDropzone: React.FC<LoideFileDropzoneProps> = (props) => {
           reader.readAsText(file);
         });
       } else {
-        let file = acceptedFiles[0];
+        const file = acceptedFiles[0];
 
         const reader = new FileReader();
 
@@ -125,7 +125,7 @@ const LoideFileDropzone: React.FC<LoideFileDropzoneProps> = (props) => {
           const text = reader.result;
           if (text && typeof text === "string") {
             if (Utils.isJSON(text)) {
-              var jsontext = JSON.parse(text);
+              const jsontext = JSON.parse(text);
               setJSONInput(jsontext);
             } else {
               setTabsFromFiles([text]);
@@ -159,7 +159,7 @@ const LoideFileDropzone: React.FC<LoideFileDropzoneProps> = (props) => {
       ) : (
         <>
           <span className="dropzone-text unselectable ion-text-center ion-margin-bottom">
-            Drag 'n' drop some files here, or click to select files.
+            Drag &apos;n&apos; drop some files here, or click to select files.
           </span>
           <span className="ion-text-center">
             If the file is a <i>.json</i> configuration file it will set the configuration,

@@ -1,11 +1,15 @@
-import { useCallback, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 
-const useLongPress = (onLongPress, onClick, { shouldPreventDefault = true, delay = 300 } = {}) => {
+const useLongPress = (
+  onLongPress: (e: React.MouseEvent | React.TouchEvent) => void,
+  onClick?: () => void,
+  { shouldPreventDefault = true, delay = 300 } = {},
+) => {
   const [longPressTriggered, setLongPressTriggered] = useState(false);
-  const timeout = useRef();
-  const target = useRef();
+  const timeout = useRef<ReturnType<typeof setTimeout>>();
+  const target = useRef<EventTarget>();
   const start = useCallback(
-    (event) => {
+    (event: React.MouseEvent | React.TouchEvent) => {
       if (shouldPreventDefault && event.target) {
         event.target.addEventListener("touchend", preventDefault, {
           passive: false,
@@ -21,9 +25,9 @@ const useLongPress = (onLongPress, onClick, { shouldPreventDefault = true, delay
   );
 
   const clear = useCallback(
-    (event, shouldTriggerClick = true) => {
+    (_event: React.MouseEvent | React.TouchEvent, shouldTriggerClick = true) => {
       timeout.current && clearTimeout(timeout.current);
-      shouldTriggerClick && !longPressTriggered && onClick();
+      shouldTriggerClick && !longPressTriggered && onClick && onClick();
       setLongPressTriggered(false);
       if (shouldPreventDefault && target.current) {
         target.current.removeEventListener("touchend", preventDefault);
@@ -33,26 +37,27 @@ const useLongPress = (onLongPress, onClick, { shouldPreventDefault = true, delay
   );
 
   return {
-    onMouseDown: (e) => {
+    onMouseDown: (e: React.MouseEvent) => {
       if (e.button !== 2)
         // if the button is different from the right button
         start(e);
     },
-    onTouchStart: (e) => start(e),
-    onMouseUp: (e) => clear(e),
-    onMouseLeave: (e) => clear(e, false),
-    onTouchEnd: (e) => clear(e),
+    onTouchStart: (e: React.TouchEvent) => start(e),
+    onMouseUp: (e: React.MouseEvent) => clear(e),
+    onMouseLeave: (e: React.MouseEvent) => clear(e, false),
+    onTouchEnd: (e: React.TouchEvent) => clear(e),
   };
 };
 
-const isTouchEvent = (event) => {
+const isTouchEvent = (event: TouchEvent | Event) => {
   return "touches" in event;
 };
 
-const preventDefault = (event) => {
+const preventDefault = (event: TouchEvent | Event) => {
   if (!isTouchEvent(event)) return;
 
-  if (event.touches.length < 2 && event.preventDefault) {
+  const eventTouch = event as TouchEvent;
+  if (eventTouch.touches.length < 2 && event.preventDefault) {
     event.preventDefault();
   }
 };

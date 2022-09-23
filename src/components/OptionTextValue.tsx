@@ -24,7 +24,7 @@ interface OptionTextValueProp {
 const OptionTextValue: React.FC<OptionTextValueProp> = (props) => {
   const slideOptions = useRef<HTMLIonItemSlidingElement>(null);
 
-  const onSwipe = (e: any) => {
+  const onSwipe = () => {
     props.onDeleteValue(props.indexItemOnArray);
   };
 
@@ -66,8 +66,8 @@ const OptionTextValue: React.FC<OptionTextValueProp> = (props) => {
           title="Delete option value"
           expandable={true}
           color="danger"
-          onClick={(e) => {
-            let opt = slideOptions.current;
+          onClick={() => {
+            const opt = slideOptions.current;
             if (opt) opt.close();
             props.onDeleteValue(props.indexItemOnArray);
           }}

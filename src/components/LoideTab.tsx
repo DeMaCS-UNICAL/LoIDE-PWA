@@ -1,16 +1,14 @@
 import { IonButton, IonIcon } from "@ionic/react";
 import { closeOutline } from "ionicons/icons";
-import React from "react";
-import { ReactNode } from "react";
 import { Tab } from "react-tabs";
 import useLongPress from "../hooks/useLongPress";
 
 interface LoideTabProps {
-  children: ReactNode;
+  children: React.ReactNode;
   tabkey: number;
   onLongPress?: (key: number) => void;
   onContextMenu?: (key: number) => void;
-  onDeleteTab: (key: number, e: any) => void;
+  onDeleteTab: (key: number, e: React.MouseEvent<HTMLIonButtonElement, MouseEvent>) => void;
 }
 const LoideTab = ({
   children,
@@ -29,24 +27,26 @@ const LoideTab = ({
     delay: 500,
   };
 
-  const longPressEvent = useLongPress(onTabLongPress, () => {}, defaultOptions);
+  const longPressEvent = useLongPress(onTabLongPress, undefined, defaultOptions);
 
-  const onClick = (e: any) => {
+  const handleTabRightClick = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
     e.preventDefault();
     if (onContextMenu) onContextMenu(tabkey);
   };
 
+  const handleDeleteTabClick = (e: React.MouseEvent<HTMLIonButtonElement, MouseEvent>) => {
+    if (onDeleteTab) onDeleteTab(tabkey, e);
+  };
+
   return (
-    <Tab {...otherProps} onContextMenu={onClick} {...longPressEvent}>
+    <Tab {...otherProps} onContextMenu={handleTabRightClick} {...longPressEvent}>
       <span className="unselectable">{children}</span>
       <IonButton
         title="Delete tab"
         size="small"
         color="danger"
         fill="clear"
-        onClick={(e) => {
-          if (onDeleteTab) onDeleteTab(tabkey, e);
-        }}
+        onClick={handleDeleteTabClick}
       >
         <IonIcon icon={closeOutline} />
       </IonButton>

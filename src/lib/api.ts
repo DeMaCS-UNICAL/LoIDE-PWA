@@ -1,4 +1,4 @@
-import { APIWSEvents, ButtonText, Errors } from "./constants";
+import { APIWSEvents, ButtonText, Errors, Toast } from "./constants";
 import io from "socket.io-client";
 import { toastController } from "@ionic/core";
 import {
@@ -7,7 +7,6 @@ import {
   IOutputData,
   IOutputProblemData,
 } from "./LoideAPIInterfaces";
-import { Toast } from "./constants";
 import { store } from "../redux";
 import { setConnectingToTheServer } from "../redux/slices/UIStatus";
 import { setConnected } from "../redux/slices/SocketStatus";
@@ -15,12 +14,12 @@ import { setConnected } from "../redux/slices/SocketStatus";
 // LoIDE Web Server API URL
 const APIUrl = "localhost:8084";
 
-var socket: SocketIOClient.Socket | undefined = undefined;
+let socket: SocketIOClient.Socket;
 
 export const createSocket = () => {
   if (!socket) {
     socket = io(APIUrl, { reconnection: false });
-    socket.io.on("error", async (error: any) => {
+    socket.io.on("error", async () => {
       await toastController
         .create({
           position: "top",
@@ -76,7 +75,7 @@ export const setGetLanguagesListener = (callbackLanguages: (output: ILanguageDat
   if (socket) {
     socket.off(APIWSEvents.on.languages);
     socket.on(APIWSEvents.on.languages, (response: string) => {
-      let data: ILanguageData[] = Array.from(JSON.parse(response));
+      const data: ILanguageData[] = Array.from(JSON.parse(response));
       store.dispatch(setConnected(true));
 
       store.dispatch(setConnectingToTheServer(false));

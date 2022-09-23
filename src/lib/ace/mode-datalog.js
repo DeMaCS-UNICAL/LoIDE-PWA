@@ -1,6 +1,7 @@
-const ace = require("ace-builds/src-noconflict/ace");
+import { define } from "ace-builds/src-noconflict/ace";
 
-ace.define("ace/mode/datalog", [], function (require, exports, module) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+define("ace/mode/datalog", [], function (require, exports, module) {
   var oop = require("ace/lib/oop");
   var TextMode = require("ace/mode/text").Mode;
   var datalogHighlightRules = require("ace/mode/datalog_highlight_rules").datalogHighlightRules;
@@ -17,7 +18,8 @@ ace.define("ace/mode/datalog", [], function (require, exports, module) {
   exports.Mode = Mode;
 });
 
-ace.define("ace/mode/datalog_highlight_rules", [], function (require, exports, module) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+define("ace/mode/datalog_highlight_rules", [], function (require, exports, module) {
   var oop = require("ace/lib/oop");
   var TextHighlightRules = require("ace/mode/text_highlight_rules").TextHighlightRules;
 

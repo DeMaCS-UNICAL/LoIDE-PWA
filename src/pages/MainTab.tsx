@@ -38,10 +38,9 @@ import { languagesDataSelector } from "../redux/slices/LanguagesData";
 import RestoreButton from "../components/RestoreButton";
 import Mousetrap from "mousetrap";
 
-interface MainTabPageProps
-  extends RouteComponentProps<{
-    data: string;
-  }> {}
+type MainTabPageProps = RouteComponentProps<{
+  data: string;
+}>;
 
 const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
   const [showOpenModal, setShowOpenModal] = useState<boolean>(false);
@@ -56,9 +55,9 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
 
   useEffect(() => {
     if (languages.length > 0) {
-      let dataToLoad = decodeURIComponent(match.params.data);
+      const dataToLoad = decodeURIComponent(match.params.data);
       if (Utils.isJSON(dataToLoad)) {
-        let config = JSON.parse(dataToLoad);
+        const config = JSON.parse(dataToLoad);
         Utils.setProjectFromConfig(config, languages);
       }
     }
@@ -239,7 +238,7 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
           data-testid="operations-popover"
           isOpen={buttonsPopover.open}
           event={buttonsPopover.event}
-          onDidDismiss={(e) => setButtonsPopover({ open: false, event: undefined })}
+          onDidDismiss={() => setButtonsPopover({ open: false, event: undefined })}
         >
           <IonList>
             <IonItem button={true} onClick={() => setShowOpenModal(true)} title="Open">

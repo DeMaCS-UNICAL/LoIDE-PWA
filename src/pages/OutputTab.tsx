@@ -30,9 +30,9 @@ const OutputTab: React.FC = () => {
   };
 
   const downloadOutput = () => {
-    let fileContent = `${model} ${model.length > 0 ? "\n\n" : ""} ${error}`;
+    const fileContent = `${model} ${model.length > 0 ? "\n\n" : ""} ${error}`;
 
-    let fileTitle = "LoIDE_Output";
+    const fileTitle = "LoIDE_Output";
 
     Utils.downloadTextFile(fileTitle, fileContent);
   };

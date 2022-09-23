@@ -9,7 +9,7 @@ const LoideRunNavButton: React.FC = () => {
   const languageAvailable = useLanguageAvailable();
 
   const onRun = () => {
-    let dataToRun = Utils.getLoideRunData();
+    const dataToRun = Utils.getLoideRunData();
     API.emitRunProject(dataToRun);
   };
 

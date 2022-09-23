@@ -47,7 +47,7 @@ const editorSlice = createSlice({
     addTab: (state, { payload }: PayloadAction<ILoideTab>) => {
       state.prevTabsSize = Object.keys(state.tabs).length;
 
-      let nextID = state.tabCountID + 1;
+      const nextID = state.tabCountID + 1;
       state.tabs[nextID] = payload;
 
       state.currentTabIndex = Object.keys(state.tabs).length - 1;
@@ -56,7 +56,7 @@ const editorSlice = createSlice({
     addNewTab: (state) => {
       state.prevTabsSize = Object.keys(state.tabs).length;
 
-      let nextID = state.tabCountID + 1;
+      const nextID = state.tabCountID + 1;
       state.tabs[nextID] = {
         title: `${SuffixNameTab}${nextID}`,
         type: "",
@@ -67,7 +67,7 @@ const editorSlice = createSlice({
       state.tabCountID = nextID;
     },
     deleteTab: (state, { payload }: PayloadAction<number>) => {
-      let shift = Object.keys(state.tabs).length - 1 === state.currentTabIndex ? true : false;
+      const shift = Object.keys(state.tabs).length - 1 === state.currentTabIndex ? true : false;
       state.currentTabIndex = shift ? state.currentTabIndex - 1 : state.currentTabIndex;
       delete state.tabs[payload];
       state.prevTabsSize = Object.keys(state.tabs).length;
@@ -76,21 +76,21 @@ const editorSlice = createSlice({
       state.currentTabIndex = payload;
     },
     changeTabValue: (state, { payload }: PayloadAction<{ tabKey: number; value: string }>) => {
-      let tab = state.tabs[payload.tabKey];
+      const tab = state.tabs[payload.tabKey];
       if (tab) {
         tab.value = payload.value;
       }
     },
     changeTabName: (state, { payload }: PayloadAction<{ tabKey: number; name: string }>) => {
-      let tab = state.tabs[payload.tabKey];
+      const tab = state.tabs[payload.tabKey];
       if (tab) {
         tab.title = payload.name;
       }
     },
     duplicateTab: (state, { payload }: PayloadAction<number>) => {
-      let tab = state.tabs[payload];
+      const tab = state.tabs[payload];
       if (tab) {
-        let nextID = state.tabCountID + 1;
+        const nextID = state.tabCountID + 1;
 
         state.prevTabsSize = Object.keys(state.tabs).length;
 
@@ -105,7 +105,7 @@ const editorSlice = createSlice({
       }
     },
     clearTabValue: (state, { payload }: PayloadAction<number>) => {
-      let tab = state.tabs[payload];
+      const tab = state.tabs[payload];
       if (tab) {
         tab.value = "";
       }

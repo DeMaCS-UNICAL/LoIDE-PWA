@@ -87,7 +87,7 @@ describe("<Option />", () => {
   });
 
   it("test word argument true", async () => {
-    let newOptionsAvailable: IOptionsData[] = [
+    const newOptionsAvailable: IOptionsData[] = [
       {
         name: "Free choice",
         value: "free choice",
@@ -107,7 +107,7 @@ describe("<Option />", () => {
   });
 
   it("test word argument false", async () => {
-    let newOptionsAvailable: IOptionsData[] = [
+    const newOptionsAvailable: IOptionsData[] = [
       {
         name: "Free choice",
         value: "free choice",
@@ -146,7 +146,7 @@ describe("<Option />", () => {
 
 describe("<OptionTextValue />", () => {
   it("test change input text", async () => {
-    let newOptionsAvailable: IOptionsData[] = [
+    const newOptionsAvailable: IOptionsData[] = [
       {
         name: "Free choice",
         value: "free choice",
@@ -175,7 +175,7 @@ describe("<OptionTextValue />", () => {
   });
 
   it("test add input text", async () => {
-    let newOptionsAvailable: IOptionsData[] = [
+    const newOptionsAvailable: IOptionsData[] = [
       {
         name: "Free choice",
         value: "free choice",
@@ -231,7 +231,7 @@ describe("<OptionTextValue />", () => {
   });
 
   it.skip("test add and delete input text", async () => {
-    let newOptionsAvailable: IOptionsData[] = [
+    const newOptionsAvailable: IOptionsData[] = [
       {
         name: "Free choice",
         value: "free choice",
@@ -241,6 +241,7 @@ describe("<OptionTextValue />", () => {
     ];
 
     const onChangeOptionValues = jest.fn();
+    const onChangeDisableOption = jest.fn();
 
     // const ref = {
     //     current: {
@@ -254,9 +255,7 @@ describe("<OptionTextValue />", () => {
         optionData={optionData}
         onChangeOptionValues={onChangeOptionValues}
         disabled={false}
-        onChangeDisableOption={function (id: number, value: boolean): void {
-          throw new Error("Function not implemented.");
-        }}
+        onChangeDisableOption={onChangeDisableOption}
       />,
     );
 

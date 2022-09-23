@@ -58,7 +58,7 @@ const RunSettings: React.FC = () => {
 
   // check if the current language supports the auto run
   useEffect(() => {
-    let runAutoSupported = Object.values(LoideLanguages).some((lang) => {
+    const runAutoSupported = Object.values(LoideLanguages).some((lang) => {
       return lang.name === currentLanguage && lang.runAutoSupported;
     });
     if (!runAutoSupported) {
@@ -71,7 +71,7 @@ const RunSettings: React.FC = () => {
   }, [currentLanguage, dispatch]);
 
   const getSolvers = (): ISolverData[] => {
-    for (let lang of languages) {
+    for (const lang of languages) {
       if (lang.value === currentLanguage) {
         return lang.solvers;
       }
@@ -80,9 +80,9 @@ const RunSettings: React.FC = () => {
   };
 
   const getExecutors = (): IExecutorData[] => {
-    let solvers = getSolvers();
+    const solvers = getSolvers();
     if (solvers) {
-      for (let solver of solvers) {
+      for (const solver of solvers) {
         if (solver.value === currentSolver) {
           return solver.executors;
         }
@@ -92,9 +92,9 @@ const RunSettings: React.FC = () => {
   };
 
   const getOptions = (): IOptionsData[] => {
-    let solvers = getSolvers();
+    const solvers = getSolvers();
     if (solvers) {
-      for (let solver of solvers) {
+      for (const solver of solvers) {
         if (solver.value === currentSolver) {
           return solver.options ? solver.options : new Array<IOptionsData>();
         }
@@ -104,20 +104,20 @@ const RunSettings: React.FC = () => {
   };
 
   const selectLanguage = (e: any) => {
-    let value = e.target.value;
+    const value = e.target.value;
     let languageSelected: ILanguageData | undefined = undefined;
-    for (let lang of languages) {
+    for (const lang of languages) {
       if (lang.value === value) {
         languageSelected = lang;
         break;
       }
     }
     if (languageSelected) {
-      dispatch(setCurrentLanguage(languageSelected!.value));
+      dispatch(setCurrentLanguage(languageSelected.value));
 
-      dispatch(setCurrentSolver(languageSelected!.solvers[0].value));
+      dispatch(setCurrentSolver(languageSelected.solvers[0].value));
 
-      dispatch(setCurrentExecutor(languageSelected!.solvers[0].executors[0].value));
+      dispatch(setCurrentExecutor(languageSelected.solvers[0].executors[0].value));
 
       // reset all the options
       dispatch(setCurrentOptions([]));
@@ -125,19 +125,19 @@ const RunSettings: React.FC = () => {
   };
 
   const selectSolver = (e: any) => {
-    let value = e.target.value;
+    const value = e.target.value;
     dispatch(setCurrentSolver(value));
   };
 
   const selectExecutor = (e: any) => {
-    let value = e.target.value;
+    const value = e.target.value;
     setCurrentExecutor(value);
   };
 
   const addOption = () => {
-    let optionsAvailable = getOptions();
+    const optionsAvailable = getOptions();
     if (optionsAvailable.length > 0) {
-      let nextOptions: ISolverOption[] = [
+      const nextOptions: ISolverOption[] = [
         ...currentOptions,
         {
           id: currentOptions.length,
@@ -151,7 +151,7 @@ const RunSettings: React.FC = () => {
   };
 
   const onDeleteOption = (id: number) => {
-    let nextOptions: ISolverOption[] = JSON.parse(JSON.stringify(currentOptions)); // clone current options
+    const nextOptions: ISolverOption[] = JSON.parse(JSON.stringify(currentOptions)); // clone current options
 
     nextOptions.splice(id, 1);
     nextOptions.map((opt, index) => (opt.id = index));
@@ -159,7 +159,7 @@ const RunSettings: React.FC = () => {
   };
 
   const onChangeDisableOption = (id: number, value: boolean) => {
-    let nextOptions: ISolverOption[] = JSON.parse(JSON.stringify(currentOptions)); // clone current options
+    const nextOptions: ISolverOption[] = JSON.parse(JSON.stringify(currentOptions)); // clone current options
     for (let i = 0; i < nextOptions.length; i++) {
       if (nextOptions[i].id === id) {
         nextOptions[i].disabled = value;
@@ -170,8 +170,8 @@ const RunSettings: React.FC = () => {
   };
 
   const onChangeOptionType = (newValue: any, id: number) => {
-    let nextOptions: ISolverOption[] = JSON.parse(JSON.stringify(currentOptions)); // clone current options
-    for (let option of nextOptions) {
+    const nextOptions: ISolverOption[] = JSON.parse(JSON.stringify(currentOptions)); // clone current options
+    for (const option of nextOptions) {
       if (option.id === id) {
         option.name = newValue;
         break;
@@ -181,8 +181,8 @@ const RunSettings: React.FC = () => {
   };
 
   const onChangeOptionValues = (newValues: string[], id: number) => {
-    let nextOptions: ISolverOption[] = JSON.parse(JSON.stringify(currentOptions)); // clone current options
-    for (let option of nextOptions) {
+    const nextOptions: ISolverOption[] = JSON.parse(JSON.stringify(currentOptions)); // clone current options
+    for (const option of nextOptions) {
       if (option.id === id) {
         option.values = newValues;
         break;
@@ -197,8 +197,8 @@ const RunSettings: React.FC = () => {
   };
 
   const onCheckTab = (idTab: number, value: boolean) => {
-    let index = tabsIDToExecute.indexOf(idTab);
-    let nextTabIDs = [...tabsIDToExecute];
+    const index = tabsIDToExecute.indexOf(idTab);
+    const nextTabIDs = [...tabsIDToExecute];
     if (index === -1) {
       if (value) nextTabIDs.push(idTab);
     } else {
@@ -214,7 +214,7 @@ const RunSettings: React.FC = () => {
 
   const onCheckAllTabs = (value: boolean) => {
     if (value) {
-      let nextTabIDs: number[] = Object.keys(tabs).map((item) => Number(item));
+      const nextTabIDs: number[] = Object.keys(tabs).map((item) => Number(item));
       dispatch(setTabsIDToExecute(nextTabIDs));
     }
   };

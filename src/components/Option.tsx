@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ISolverOption } from "../lib/LoideInterfaces";
 import { IOptionsData } from "../lib/LoideAPIInterfaces";
 import {
@@ -13,7 +13,6 @@ import {
 } from "@ionic/react";
 import { trashOutline } from "ionicons/icons";
 import OptionTextValue from "./OptionTextValue";
-import { useCallback } from "react";
 
 interface OptionProps {
   optionsAvailable: IOptionsData[];
@@ -26,8 +25,8 @@ interface OptionProps {
 }
 
 const Option: React.FC<OptionProps> = (props) => {
-  var option = props.optionData;
-  var optionsAvailable = props.optionsAvailable;
+  const option = props.optionData;
+  const optionsAvailable = props.optionsAvailable;
 
   const [values, setValues] = useState<string[]>([""]);
 
@@ -53,22 +52,22 @@ const Option: React.FC<OptionProps> = (props) => {
   };
 
   const onChangeValues = (e: any, index: number) => {
-    let newValue = e.target.value;
-    let newValues = [...values];
+    const newValue = e.target.value;
+    const newValues = [...values];
     newValues[index] = newValue;
     setValues(newValues);
     if (props.onChangeOptionValues) props.onChangeOptionValues(newValues, option.id);
   };
 
   const addValue = () => {
-    let newValues = [...values];
+    const newValues = [...values];
     newValues.push("");
     setValues(newValues);
     if (props.onChangeOptionValues) props.onChangeOptionValues(newValues, option.id);
   };
 
   const deleteValue = (index: number) => {
-    let newValues = [...values];
+    const newValues = [...values];
     newValues.splice(index, 1);
     if (newValues.length === 0) newValues.push("");
     setValues(newValues);
@@ -80,7 +79,7 @@ const Option: React.FC<OptionProps> = (props) => {
   };
 
   const wordArgument = (): boolean => {
-    for (let opt of optionsAvailable) {
+    for (const opt of optionsAvailable) {
       if (opt.value === option.name && !opt.word_argument) {
         return false;
       }

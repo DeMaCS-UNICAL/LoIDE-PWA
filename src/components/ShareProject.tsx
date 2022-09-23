@@ -8,8 +8,7 @@ import {
   IonSpinner,
   IonText,
 } from "@ionic/react";
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { APIURLShortening, LoidePath, Toast, URLInput } from "../lib/constants";
 import Utils from "../lib/utils";
 
@@ -21,7 +20,7 @@ const ShareProject: React.FC<ShareProjectProps> = (props) => {
   const [clipboardWriteSupported, setClipboardWriteSupported] = useState<boolean>(false);
 
   useEffect(() => {
-    let supp = Utils.isClipboardWriteSupported();
+    const supp = Utils.isClipboardWriteSupported();
     setClipboardWriteSupported(supp);
   }, []);
 
@@ -35,7 +34,7 @@ const ShareProject: React.FC<ShareProjectProps> = (props) => {
     if (Object.keys(loideProjectData).length > 0) {
       let URL = window.location.host;
 
-      let params = encodeURIComponent(JSON.stringify(loideProjectData));
+      const params = encodeURIComponent(JSON.stringify(loideProjectData));
       URL += `/${LoidePath.Editor}/` + params;
 
       fetch(APIURLShortening + encodeURIComponent(URL), {
@@ -58,7 +57,7 @@ const ShareProject: React.FC<ShareProjectProps> = (props) => {
               setUrl(URL);
             } else setUrl(result.shorturl);
           },
-          (error) => {
+          () => {
             setUrl(URLInput.Error);
             setUrlLoading(false);
             if (URL.length >= 5000) {
