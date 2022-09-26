@@ -1,43 +1,66 @@
-import React from "react";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import App from "../App";
-import { LoidePath } from "../lib/constants";
+import { Provider } from "react-redux";
+import { store } from "../redux";
 
-test("renders without crashing", () => {
-    const { baseElement } = render(<App />);
+jest.mock("../lib/api");
+
+describe.only("<App />", () => {
+  beforeAll(() => {
+    window.HTMLElement.prototype.scrollIntoView = jest.fn();
+  });
+
+  it("renders without crashing", () => {
+    const { baseElement } = render(
+      <Provider store={store}>
+        <App />
+      </Provider>,
+    );
     expect(baseElement).toBeDefined();
-});
+  });
 
-test("renders the Editor tab button", async () => {
-    const { container } = render(<App />);
-    const tabButton = container.querySelector(`[href="/${LoidePath.Editor}"]`);
-    expect(tabButton).toBeTruthy();
-});
-
-test("renders the Run Settings tab button", async () => {
-    const { container } = render(<App />);
-    const tabButton = container.querySelector(
-        `[href="/${LoidePath.RunSettings}"]`
+  it("renders the Editor tab button", async () => {
+    render(
+      <Provider store={store}>
+        <App />
+      </Provider>,
     );
-    expect(tabButton).toBeTruthy();
-});
+    screen.getByText("Editor");
+  });
 
-test("renders the Output tab button", async () => {
-    const { container } = render(<App />);
-    const tabButton = container.querySelector(`[href="/${LoidePath.Output}"]`);
-    expect(tabButton).toBeTruthy();
-});
-
-test("renders the Appearance tab button", async () => {
-    const { container } = render(<App />);
-    const tabButton = container.querySelector(
-        `[href="/${LoidePath.Appearance}"]`
+  it("renders the Run Settings tab button", async () => {
+    render(
+      <Provider store={store}>
+        <App />
+      </Provider>,
     );
-    expect(tabButton).toBeTruthy();
-});
+    screen.getByText("Run Settings");
+  });
 
-test("renders the About tab button", async () => {
-    const { container } = render(<App />);
-    const tabButton = container.querySelector(`[href="/${LoidePath.About}"]`);
-    expect(tabButton).toBeTruthy();
+  it("renders the Output tab button", async () => {
+    render(
+      <Provider store={store}>
+        <App />
+      </Provider>,
+    );
+    screen.getByText("Output");
+  });
+
+  it("renders the Appearance tab button", async () => {
+    render(
+      <Provider store={store}>
+        <App />
+      </Provider>,
+    );
+    screen.getByText("Appearance");
+  });
+
+  it("renders the About tab button", async () => {
+    render(
+      <Provider store={store}>
+        <App />
+      </Provider>,
+    );
+    screen.getByText("About");
+  });
 });

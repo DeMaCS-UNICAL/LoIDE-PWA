@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
-import { LanguagesDataStore } from "../lib/store";
+import { useSelector } from "react-redux";
+import { languagesDataSelector } from "../redux/slices/LanguagesData";
 
 export const useLanguageAvailable = (): boolean => {
-    const languages = LanguagesDataStore.useState((l) => l.languages);
-    const [available, setAvailable] = useState(false);
+  const { languages } = useSelector(languagesDataSelector);
 
-    useEffect(() => {
-        setAvailable(languages.length > 0 ? true : false);
-    }, [languages]);
+  const [available, setAvailable] = useState<boolean>(false);
 
-    return available;
+  useEffect(() => {
+    setAvailable(languages.length > 0 ? true : false);
+  }, [languages]);
+
+  return available;
 };

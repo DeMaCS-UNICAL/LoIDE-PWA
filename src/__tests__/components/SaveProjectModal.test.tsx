@@ -1,23 +1,21 @@
-import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import SaveProjectModal from "../../modals/SaveProjectModal";
 
-test("renders without crashing", () => {
+describe("<SaveProjectModal />", () => {
+  it("renders without crashing", () => {
     const onDismiss = jest.fn();
-    const { baseElement } = render(
-        <SaveProjectModal isOpen={false} onDismiss={onDismiss} />
-    );
+    const { baseElement } = render(<SaveProjectModal isOpen={false} onDismiss={onDismiss} />);
     expect(baseElement).toBeDefined();
-});
+  });
 
-test("displays the title", async () => {
+  it("displays the title", async () => {
     const onDismiss = jest.fn();
 
     render(<SaveProjectModal isOpen={true} onDismiss={onDismiss} />);
     await screen.findByText("Save project");
-});
+  });
 
-test("test close button", async () => {
+  it("test close button", async () => {
     const onDismiss = jest.fn();
 
     render(<SaveProjectModal isOpen={true} onDismiss={onDismiss} />);
@@ -26,4 +24,5 @@ test("test close button", async () => {
     fireEvent.click(button);
 
     expect(onDismiss).toBeCalledTimes(1);
+  });
 });

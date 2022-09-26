@@ -1,41 +1,47 @@
-import React, { useEffect } from "react";
-import { UIStatusStore } from "../lib/store";
+import React, { useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { LocalStorageItems } from "../lib/constants";
+import { setDarkMode, UIStatusSelector } from "../redux/slices/UIStatus";
 
 export const darkModeContext = React.createContext(false);
 
-export const DarkModeProvider: React.FC = ({ children }) => {
-    const darkMode = UIStatusStore.useState((u) => u.darkMode);
+type DarkModeProviderProps = {
+  children?: React.ReactNode;
+};
 
-    useEffect(() => {
-        if (darkMode) document.body.classList.add("dark");
-        else document.body.classList.remove("dark");
-    }, [darkMode]);
+export const DarkModeProvider: React.FC<DarkModeProviderProps> = ({ children }) => {
+  const dispatch = useDispatch();
 
-    const handleDarkModeChange = (e: MediaQueryListEvent) => {
-        UIStatusStore.update((u) => {
-            u.darkMode = e.matches;
-        });
-    };
+  const { darkMode } = useSelector(UIStatusSelector);
 
-    React.useEffect(() => {
-        UIStatusStore.update((u) => {
-            u.darkMode = window.matchMedia(
-                "(prefers-color-scheme: dark)"
-            ).matches;
-        });
+  useEffect(() => {
+    if (darkMode) document.body.classList.add("dark");
+    else document.body.classList.remove("dark");
+  }, [darkMode]);
 
-        window
-            .matchMedia("(prefers-color-scheme: dark)")
-            .addEventListener("change", handleDarkModeChange);
-        return () =>
-            window
-                .matchMedia("(prefers-color-scheme: dark)")
-                .removeEventListener("change", handleDarkModeChange);
-    }, []);
+  const handleDarkModeChange = useCallback(
+    (e: MediaQueryListEvent) => {
+      dispatch(setDarkMode(e.matches));
+    },
+    [dispatch],
+  );
 
-    return (
-        <darkModeContext.Provider value={darkMode}>
-            {children}
-        </darkModeContext.Provider>
-    );
+  React.useEffect(() => {
+    const darkModeString = localStorage.getItem(LocalStorageItems.darkMode);
+    if (darkModeString) {
+      dispatch(setDarkMode(darkModeString === "true"));
+    } else {
+      dispatch(setDarkMode(window.matchMedia("(prefers-color-scheme: dark)").matches));
+    }
+
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", handleDarkModeChange);
+    return () =>
+      window
+        .matchMedia("(prefers-color-scheme: dark)")
+        .removeEventListener("change", handleDarkModeChange);
+  }, [dispatch, handleDarkModeChange]);
+
+  return <darkModeContext.Provider value={darkMode}>{children}</darkModeContext.Provider>;
 };

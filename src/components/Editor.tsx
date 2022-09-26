@@ -1,13 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import LoideAceEditor from "./LoideAceEditor";
 import { Tabs, TabList, TabPanel } from "react-tabs";
-import { EditorStore, RunSettingsStore, UIStatusStore } from "../lib/store";
-import {
-    ActionSheet,
-    ButtonText,
-    Inputs,
-    WindowConfirmMessages,
-} from "../lib/constants";
+import { ActionSheet, ButtonText, Inputs, WindowConfirmMessages } from "../lib/constants";
 import { IonIcon } from "@ionic/react";
 import { addOutline } from "ionicons/icons";
 import LoideTab from "./LoideTab";
@@ -16,283 +10,289 @@ import AceEditor from "react-ace";
 import Utils from "../lib/utils";
 import { useIsDarkMode } from "../hooks/useIsDarkMode";
 import { alertController, actionSheetController } from "@ionic/core";
+import { useDispatch, useSelector } from "react-redux";
+import { UIStatusSelector } from "../redux/slices/UIStatus";
+import { runSettingsSelector } from "../redux/slices/RunSettings";
+import { editorSelector, setTabsEditorSessions } from "../redux/slices/Editor";
+import * as API from "../lib/api";
 
 const Editor: React.FC = () => {
-    const tabCountID = EditorStore.useState((e) => e.tabCountID);
-    const tabIndex = EditorStore.useState((e) => e.currentTab);
-    const tabs = EditorStore.useState((e) => e.tabs);
-    const prevTabsSize = EditorStore.useState((l) => l.prevTabsSize);
-    const currentLanguage = RunSettingsStore.useState((s) => s.currentLanguage);
-    const currentSolver = RunSettingsStore.useState((s) => s.currentSolver);
+  const dispatch = useDispatch();
 
-    const [currentTabKey, setCurrentTabKey] = useState<number>(tabCountID);
+  const { tabCountID, currentTabIndex, tabs, prevTabsSize, tabsEditorSessions } =
+    useSelector(editorSelector);
 
-    const editorsRef = useRef<AceEditor>(null);
+  const { currentLanguage, currentSolver, runAuto } = useSelector(runSettingsSelector);
 
-    const [editorSessions, setEditorSessions] = useState<any[]>([]);
+  const [currentTabKey, setCurrentTabKey] = useState<number>(tabCountID);
 
-    const darkMode = useIsDarkMode();
+  const editorsRef = useRef<AceEditor>(null);
 
-    const fontEditorSize = UIStatusStore.useState((u) => u.fontSizeEditor);
+  const darkMode = useIsDarkMode();
 
-    // set the current tab ID depending on selected tab
-    useEffect(() => {
-        let keysTab = [...tabs.keys()];
-        setCurrentTabKey(keysTab[tabIndex]);
-    }, [tabIndex, tabs]);
+  const { fontSizeEditor } = useSelector(UIStatusSelector);
 
-    useEffect(() => {
-        if (tabs.size > prevTabsSize) {
-            var arr = document.getElementsByClassName("react-tabs__tab");
-            arr[arr.length - 1].scrollIntoView({
-                behavior: "smooth",
-            });
-        }
-    }, [prevTabsSize, tabs.size]);
+  // set the current tab ID depending on selected tab
+  useEffect(() => {
+    const keysTab = [...Object.keys(tabs).map((item) => Number(item))];
+    setCurrentTabKey(keysTab[currentTabIndex]);
+  }, [currentTabIndex, tabs]);
 
-    const onChange = (tabKey: number, value: string) => {
-        Utils.Editor.changeTabValue(tabKey, value);
-    };
+  useEffect(() => {
+    if (Object.keys(tabs).length > prevTabsSize) {
+      const arr = document.getElementsByClassName("react-tabs__tab");
+      arr[arr.length - 1].scrollIntoView({
+        behavior: "smooth",
+      });
+    }
+  }, [prevTabsSize, tabs]);
 
-    const onSelectTab = (index: number) => {
-        Utils.Editor.selectTab(index);
-    };
+  const onChange = (tabKey: number, value: string, runAuto: boolean) => {
+    Utils.Editor.changeTabValue(tabKey, value);
+    if (runAuto) {
+      onRunAuto();
+    }
+  };
 
-    const deleteTab = (tabKey: number) => {
-        if (tabs.size === 1) {
-            setEditorSessions([]);
-            Utils.Editor.resetInput();
-            return;
-        }
-        // delete tab session
-        let newSessions = [...editorSessions];
-        delete newSessions[tabKey];
-        setEditorSessions(newSessions);
+  const onSelectTab = (index: number) => {
+    Utils.Editor.selectTab(index);
+  };
 
-        Utils.Editor.deleteTab(tabKey);
-    };
+  const deleteTab = (tabKey: number) => {
+    if (Object.keys(tabs).length === 1) {
+      dispatch(setTabsEditorSessions([]));
+      Utils.Editor.resetInput();
+      return;
+    }
+    // delete tab session
+    const newSessions = [...tabsEditorSessions];
+    delete newSessions[tabKey];
+    dispatch(setTabsEditorSessions(newSessions));
 
-    const showDeleteTabAlert = (tabKey: number, e: any) => {
-        e.stopPropagation();
+    Utils.Editor.deleteTab(tabKey);
+  };
 
-        alertController
-            .create({
-                message: WindowConfirmMessages.DeleteTab.message,
-                header: WindowConfirmMessages.DeleteTab.header,
-                buttons: [
-                    { text: "Cancel" },
-                    {
-                        text: "Delete",
-                        handler: () => deleteTab(tabKey),
-                    },
-                ],
-            })
-            .then((alert) => alert.present());
-    };
+  const showDeleteTabAlert = (tabKey: number, e: any) => {
+    e.stopPropagation();
 
-    const addTab = () => {
-        Utils.Editor.addTab();
-    };
+    alertController
+      .create({
+        message: WindowConfirmMessages.DeleteTab.message,
+        header: WindowConfirmMessages.DeleteTab.header,
+        buttons: [
+          { text: "Cancel" },
+          {
+            text: "Delete",
+            handler: () => deleteTab(tabKey),
+          },
+        ],
+      })
+      .then((alert) => alert.present());
+  };
 
-    const undo = () => {
-        let undoManager = editorsRef.current?.editor.session.getUndoManager();
-        undoManager?.undo(editorsRef.current?.editor.session!);
-    };
+  const addTab = () => {
+    Utils.Editor.addTab();
+  };
 
-    const redo = () => {
-        let undoManager = editorsRef.current?.editor.session.getUndoManager();
-        undoManager?.redo(editorsRef.current?.editor.session!);
-    };
+  const undo = () => {
+    const editorSession = editorsRef.current?.editor.session
+    if(editorSession){
+    const undoManager = editorSession.getUndoManager();
+    undoManager?.undo(editorSession);
+    }
+  };
 
-    const search = () => {
-        editorsRef.current?.editor.execCommand("find");
-    };
+  const redo = () => {
+    const editorSession = editorsRef.current?.editor.session
+    if(editorSession){
+    const undoManager = editorSession.getUndoManager();
+    undoManager?.redo(editorSession);
+    }
+  };
 
-    const cut = () => {
-        let stringToCopy = editorsRef.current?.editor.getCopyText();
-        if (stringToCopy) {
-            Utils.copyTextToClipboard(stringToCopy);
-            editorsRef.current?.editor.execCommand("cut");
-        }
-    };
+  const search = () => {
+    editorsRef.current?.editor.execCommand("find");
+  };
 
-    const copy = () => {
-        let stringToCopy = editorsRef.current?.editor.getCopyText();
-        if (stringToCopy) Utils.copyTextToClipboard(stringToCopy);
-    };
+  const cut = () => {
+    const stringToCopy = editorsRef.current?.editor.getCopyText();
+    if (stringToCopy) {
+      Utils.copyTextToClipboard(stringToCopy);
+      editorsRef.current?.editor.execCommand("cut");
+    }
+  };
 
-    const paste = () => {
-        Utils.getTextFromClipboard((textFromClipboard) => {
-            editorsRef.current?.editor.insert(textFromClipboard);
-        });
-    };
+  const copy = () => {
+    const stringToCopy = editorsRef.current?.editor.getCopyText();
+    if (stringToCopy) Utils.copyTextToClipboard(stringToCopy);
+  };
 
-    const downloadTab = () => {
-        let currentTab = tabs.get(currentTabKey);
-        if (currentTab) {
-            let tabContent = currentTab.value;
-            let tabTitle = currentTab.title;
-            Utils.downloadTextFile(tabTitle, tabContent);
-        }
-    };
+  const paste = () => {
+    Utils.getTextFromClipboard((textFromClipboard) => {
+      editorsRef.current?.editor.insert(textFromClipboard);
+    });
+  };
 
-    const onSaveSession = (tabKey: number, session: any) => {
-        let newSessions = [...editorSessions];
-        newSessions[tabKey] = session;
-        setEditorSessions(newSessions);
-    };
+  const downloadTab = () => {
+    const currentTab = tabs[currentTabKey];
+    if (currentTab) {
+      const tabContent = currentTab.value;
+      const tabTitle = currentTab.title;
+      Utils.downloadTextFile(tabTitle, tabContent);
+    }
+  };
 
-    const showRenameAlert = (tabKey: number) => {
-        alertController
-            .create({
-                message: WindowConfirmMessages.RenameTab.message,
-                header: WindowConfirmMessages.RenameTab.header,
+  const onSaveSession = (tabKey: number, session: any) => {
+    const newSessions = [...tabsEditorSessions];
+    newSessions[tabKey] = session;
+    dispatch(setTabsEditorSessions(newSessions));
+  };
 
-                inputs: [
-                    {
-                        name: Inputs.RenameTab.name,
-                        type: "text",
-                        placeholder: Inputs.RenameTab.placeholder,
-                    },
-                ],
-                buttons: [
-                    { text: ButtonText.Cancel },
-                    {
-                        text: ButtonText.Rename,
-                        handler: (data) =>
-                            Utils.Editor.changeTabName(tabKey, data.rename),
-                    },
-                ],
-            })
-            .then((alert) => alert.present());
-    };
+  const onRunAuto = () => {
+    const dataToRun = Utils.getLoideRunData();
+    API.emitRunProject(dataToRun);
+  };
 
-    const showTabActionSheet = (tabKey: number) => {
-        actionSheetController
-            .create({
-                header: ActionSheet.Tab,
-                buttons: [
-                    {
-                        text: ButtonText.Rename,
-                        handler: () => showRenameAlert(tabKey),
-                    },
-                    {
-                        text: ButtonText.Duplicate,
-                        handler: () => Utils.Editor.duplicateTab(tabKey),
-                    },
-                    {
-                        text: ButtonText.ClearContent,
-                        handler: () => Utils.Editor.clearTabValue(tabKey),
-                    },
-                    {
-                        text: ButtonText.SaveContent,
-                        handler: () => {
-                            let tab = tabs.get(tabKey);
-                            if (tab) Utils.Editor.saveTabContent(tab);
-                        },
-                    },
-                    {
-                        text: ButtonText.Delete,
-                        role: "destructive",
-                        handler: () => {
-                            showDeleteTabAlert(tabKey, new Event("click"));
-                        },
-                    },
-                    {
-                        text: ButtonText.Cancel,
-                        role: "cancel",
-                    },
-                ],
-            })
-            .then((alert) => {
-                alert.present();
-            });
-    };
+  const showRenameAlert = (tabKey: number) => {
+    alertController
+      .create({
+        message: WindowConfirmMessages.RenameTab.message,
+        header: WindowConfirmMessages.RenameTab.header,
 
-    const loideTabs = [...tabs.keys()].map((key) => (
-        <LoideTab
-            key={`tab-${key}`}
-            tabkey={key}
-            onDeleteTab={showDeleteTabAlert}
-            onLongPress={showTabActionSheet}
-            onContextMenu={showTabActionSheet}
-        >
-            {tabs.get(key)!.title}
-        </LoideTab>
-    ));
+        inputs: [
+          {
+            name: Inputs.RenameTab.name,
+            type: "text",
+            placeholder: Inputs.RenameTab.placeholder,
+          },
+        ],
+        buttons: [
+          { text: ButtonText.Cancel },
+          {
+            text: ButtonText.Rename,
+            handler: (data) => Utils.Editor.changeTabName(tabKey, data.rename),
+          },
+        ],
+      })
+      .then((alert) => alert.present());
+  };
 
-    const tabPanels = [...tabs.keys()].map((key) => (
-        <TabPanel key={`tabpanel-${key}`}>
-            <LoideAceEditor
-                ref={editorsRef}
-                tabKey={key}
-                session={editorSessions[key]}
-                mode={currentLanguage}
-                solver={currentSolver}
-                value={tabs.get(key)!.value}
-                darkTheme={darkMode}
-                fontSize={fontEditorSize}
-                onChange={onChange}
-                onSaveSession={onSaveSession}
-            />
-        </TabPanel>
-    ));
+  const showTabActionSheet = (tabKey: number) => {
+    actionSheetController
+      .create({
+        header: ActionSheet.Tab,
+        buttons: [
+          {
+            text: ButtonText.Rename,
+            handler: () => showRenameAlert(tabKey),
+          },
+          {
+            text: ButtonText.Duplicate,
+            handler: () => Utils.Editor.duplicateTab(tabKey),
+          },
+          {
+            text: ButtonText.ClearContent,
+            handler: () => Utils.Editor.clearTabValue(tabKey),
+          },
+          {
+            text: ButtonText.SaveContent,
+            handler: () => {
+              const tab = tabs[tabKey];
+              if (tab) Utils.Editor.saveTabContent(tab);
+            },
+          },
+          {
+            text: ButtonText.Delete,
+            role: "destructive",
+            handler: () => {
+              showDeleteTabAlert(tabKey, new Event("click"));
+            },
+          },
+          {
+            text: ButtonText.Cancel,
+            role: "cancel",
+          },
+        ],
+      })
+      .then((alert) => {
+        alert.present();
+      });
+  };
 
-    return (
-        <div className="loide-editor">
-            <Tabs
-                className="loide-tabs"
-                selectedIndex={tabIndex}
-                onSelect={onSelectTab}
+  const loideTabs = [...Object.keys(tabs).map((item) => Number(item))].map((key) => (
+    <LoideTab
+      key={`tab-${key}`}
+      tabkey={key}
+      onDeleteTab={showDeleteTabAlert}
+      onLongPress={showTabActionSheet}
+      onContextMenu={showTabActionSheet}
+    >
+      {tabs[key].title}
+    </LoideTab>
+  ));
+
+  const tabPanels = [...Object.keys(tabs).map((item) => Number(item))].map((key) => (
+    <TabPanel key={`tabpanel-${key}`}>
+      <LoideAceEditor
+        ref={editorsRef}
+        tabKey={key}
+        session={tabsEditorSessions[key]}
+        mode={currentLanguage}
+        solver={currentSolver}
+        value={tabs[key].value}
+        runAuto={runAuto}
+        darkTheme={darkMode}
+        fontSize={fontSizeEditor}
+        onChange={onChange}
+        onSaveSession={onSaveSession}
+      />
+    </TabPanel>
+  ));
+
+  return (
+    <div className="loide-editor">
+      <Tabs className="loide-tabs" selectedIndex={currentTabIndex} onSelect={onSelectTab}>
+        <div className="loide-tab-list">
+          <div className="loide-tab-list-container">
+            <TabList>{loideTabs}</TabList>
+          </div>
+          <div className="loide-tab-list-operation">
+            <button
+              title="Add tab"
+              className="tab-button"
+              style={{ marginLeft: "1px" }}
+              onClick={addTab}
             >
-                <div className="loide-tab-list">
-                    <div className="loide-tab-list-container">
-                        <TabList>{loideTabs}</TabList>
-                    </div>
-                    <div className="loide-tab-list-operation">
-                        <button
-                            title="Add tab"
-                            className="tab-button"
-                            style={{ marginLeft: "1px" }}
-                            onClick={addTab}
-                        >
-                            <IonIcon
-                                style={{ fontSize: "20px" }}
-                                color="dark"
-                                icon={addOutline}
-                            />
-                        </button>
-                        <div
-                            className="ion-hide-sm-down"
-                            style={{ marginLeft: "5px" }}
-                        >
-                            <LoideToolbarEditor
-                                onUndo={undo}
-                                onRedo={redo}
-                                onSearch={search}
-                                onCut={cut}
-                                onCopy={copy}
-                                onPaste={paste}
-                                onDownloadTab={downloadTab}
-                            />
-                        </div>
-                    </div>
-                </div>
-                <div className="loide-tab-list only-toolbar ion-hide-sm-up">
-                    <LoideToolbarEditor
-                        onUndo={undo}
-                        onRedo={redo}
-                        onSearch={search}
-                        onCut={cut}
-                        onCopy={copy}
-                        onPaste={paste}
-                        onDownloadTab={downloadTab}
-                    />
-                </div>
-                {tabPanels}
-            </Tabs>
+              <IonIcon style={{ fontSize: "20px" }} color="dark" icon={addOutline} />
+            </button>
+            <div className="ion-hide-sm-down" style={{ marginLeft: "5px" }}>
+              <LoideToolbarEditor
+                onUndo={undo}
+                onRedo={redo}
+                onSearch={search}
+                onCut={cut}
+                onCopy={copy}
+                onPaste={paste}
+                onDownloadTab={downloadTab}
+              />
+            </div>
+          </div>
         </div>
-    );
+        <div className="loide-tab-list only-toolbar ion-hide-sm-up">
+          <LoideToolbarEditor
+            onUndo={undo}
+            onRedo={redo}
+            onSearch={search}
+            onCut={cut}
+            onCopy={copy}
+            onPaste={paste}
+            onDownloadTab={downloadTab}
+          />
+        </div>
+        {tabPanels}
+      </Tabs>
+    </div>
+  );
 };
 
 export default Editor;

@@ -1,78 +1,141 @@
 {
-    "name": "loide-ionic",
-    "description": "Progressive Web App IDE for Logic Programming built with Ionic",
-    "version": "0.0.1",
-    "private": true,
-    "scripts": {
-        "start": "react-scripts start",
-        "start:prod": "npm run build && node server.js",
-        "build": "react-scripts build",
-        "test": "react-scripts test",
-        "test:coverage": "CI=true npm test -- --env=jsdom --coverage --colors",
-        "eject": "react-scripts eject"
+  "name": "loide-pwa",
+  "description": "Progressive Web App IDE for Logic Programming",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DeMaCS-UNICAL/LoIDE-PWA.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DeMaCS-UNICAL/LoIDE-PWA/issues"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "start:prod": "npm run build && node server.js",
+    "build": "react-scripts build",
+    "test": "react-scripts test --transformIgnorePatterns 'node_modules/(?!(@ionic/react|@ionic/react-router|@ionic/core|@stencil/core|ionicons)/)' --watchAll=false",
+    "test:ci": "CI=true run-p types lint prettier:check 'test -- --coverage' --silent",
+    "test:coverage": "CI=true npm test -- --env=jsdom --coverage --colors",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint --fix ./src",
+    "types": "tsc --noEmit",
+    "eject": "react-scripts eject",
+    "format:staged": "pretty-quick --staged",
+    "prettier:check": "prettier --check ./src",
+    "prettier:write": "prettier --write ./src",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "@ionic/react": "^6.2.8",
+    "@ionic/react-router": "^6.2.8",
+    "@ionic/react-test-utils": "^0.3.1",
+    "@reduxjs/toolkit": "^1.8.5",
+    "ace-builds": "^1.11.0",
+    "compression": "^1.7.4",
+    "express": "^4.18.1",
+    "express-force-ssl": "^0.3.2",
+    "helmet": "^4.6.0",
+    "ionicons": "^6.0.3",
+    "mousetrap": "^1.6.5",
+    "react": "^18.2.0",
+    "react-ace": "^10.1.0",
+    "react-detect-offline": "^2.4.5",
+    "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.2",
+    "react-redux": "^8.0.2",
+    "react-router": "^5.3.3",
+    "react-router-dom": "^5.3.3",
+    "react-scripts": "5.0.1",
+    "react-tabs": "^5.1.0",
+    "sass": "^1.55.0",
+    "socket.io-client": "^3.1.3",
+    "web-vitals": "^2.1.4",
+    "workbox-background-sync": "^6.5.4",
+    "workbox-broadcast-update": "^6.5.4",
+    "workbox-cacheable-response": "^6.5.4",
+    "workbox-core": "^6.5.4",
+    "workbox-expiration": "^6.5.4",
+    "workbox-google-analytics": "^6.5.4",
+    "workbox-navigation-preload": "^6.5.4",
+    "workbox-precaching": "^6.5.4",
+    "workbox-range-requests": "^6.5.4",
+    "workbox-routing": "^6.5.4",
+    "workbox-strategies": "^6.5.4",
+    "workbox-streams": "^6.5.4"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^14.4.3",
+    "@types/ace": "0.0.48",
+    "@types/jest": "^27.5.2",
+    "@types/mousetrap": "^1.6.8",
+    "@types/node": "^14.18.29",
+    "@types/react": "^18.0.21",
+    "@types/react-dom": "^18.0.6",
+    "@types/react-router": "^5.1.19",
+    "@types/react-router-dom": "^5.1.7",
+    "@types/socket.io-client": "^1.4.36",
+    "@typescript-eslint/eslint-plugin": "^5.38.0",
+    "@typescript-eslint/parser": "^5.38.0",
+    "eslint": "^8.23.1",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-import-resolver-typescript": "^3.5.1",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.31.8",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^8.0.0",
+    "jest-watch-typeahead": "^0.6.5",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.7.1",
+    "pretty-quick": "^3.1.3",
+    "typescript": "^4.8.3"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "contributors": [
+    {
+      "name": "Stefano Germano",
+      "email": "germano@mat.unical.it"
     },
-    "dependencies": {
-        "@ionic/react": "^5.5.2",
-        "@ionic/react-router": "^5.5.2",
-        "@ionic/react-test-utils": "0.0.3",
-        "@testing-library/jest-dom": "^5.11.6",
-        "@testing-library/react": "^11.2.2",
-        "@testing-library/user-event": "^12.5.0",
-        "@types/ace": "0.0.44",
-        "@types/jest": "^26.0.19",
-        "@types/node": "^14.14.12",
-        "@types/react": "^17.0.0",
-        "@types/react-dom": "^17.0.0",
-        "@types/react-router": "^5.1.8",
-        "@types/react-router-dom": "^5.1.6",
-        "@types/react-tabs": "^2.3.2",
-        "@types/socket.io-client": "^1.4.34",
-        "ace-builds": "^1.4.12",
-        "compression": "^1.7.4",
-        "express": "^4.17.1",
-        "express-force-ssl": "^0.3.2",
-        "helmet": "^4.2.0",
-        "ionicons": "^5.2.3",
-        "node-sass": "^4.14.1",
-        "pullstate": "^1.20.4",
-        "react": "^17.0.1",
-        "react-ace": "^9.2.1",
-        "react-detect-offline": "^2.4.0",
-        "react-dom": "^17.0.1",
-        "react-dropzone": "^11.2.3",
-        "react-router": "^5.2.0",
-        "react-router-dom": "^5.2.0",
-        "react-scripts": "4.0.1",
-        "react-tabs": "^3.1.1",
-        "socket.io-client": "^3.0.4",
-        "typescript": "^4.1.2",
-        "web-vitals": "^0.2.4",
-        "workbox-background-sync": "^5.1.4",
-        "workbox-broadcast-update": "^5.1.4",
-        "workbox-cacheable-response": "^5.1.4",
-        "workbox-core": "^5.1.4",
-        "workbox-expiration": "^5.1.4",
-        "workbox-google-analytics": "^5.1.4",
-        "workbox-navigation-preload": "^5.1.4",
-        "workbox-precaching": "^5.1.4",
-        "workbox-range-requests": "^5.1.4",
-        "workbox-routing": "^5.1.4",
-        "workbox-strategies": "^5.1.4",
-        "workbox-streams": "^5.1.4"
+    {
+      "name": "Eliana Palermiti",
+      "email": "eliana_palermiti@libero.it"
     },
-    "eslintConfig": {
-        "extends": "react-app"
+    {
+      "name": "Rocco Palermiti",
+      "email": "roccopalermiti@virgilio.it"
     },
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
+    {
+      "name": "Alexander Karaulshchikov",
+      "email": "alexander.karaulshchikov@gmail.com"
+    },
+    {
+      "name": "Giorgio Andronico",
+      "email": "bytecodex2@gmail.com"
+    },
+    {
+      "name": "Francesco Calimeri",
+      "email": "calimeri@mat.unical.it"
     }
+  ]
 }

@@ -1,24 +1,33 @@
-import { setupConfig } from "@ionic/core";
-import React from "react";
-import ReactDOM from "react-dom";
+import { setupIonicReact } from "@ionic/react";
 import App from "./App";
 import { DarkModeProvider } from "./providers/DarkModeProvider";
 import { ViewportProvider } from "./providers/ViewportProvider";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
+import { Provider } from "react-redux";
+import { store } from "./redux";
 
-setupConfig({
-    // mode: "ios",
+import { createRoot } from "react-dom/client";
+
+setupIonicReact({
+  // mode: "ios",
 });
 
-ReactDOM.render(
-    <DarkModeProvider>
+const container = document.getElementById("root");
+
+if (container) {
+  const root = createRoot(container);
+
+  root.render(
+    <Provider store={store}>
+      <DarkModeProvider>
         <ViewportProvider>
-            <App />
+          <App />
         </ViewportProvider>
-    </DarkModeProvider>,
-    document.getElementById("root")
-);
+      </DarkModeProvider>
+    </Provider>,
+  );
+}
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

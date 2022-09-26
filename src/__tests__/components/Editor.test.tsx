@@ -1,26 +1,41 @@
-import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import Editor from "../../components/Editor";
+import { Provider } from "react-redux";
+import { store } from "../../redux";
 
 Object.defineProperty(navigator, "clipboard", {
-    value: {
-        readText: jest.fn(),
-    },
+  value: {
+    readText: jest.fn(),
+  },
 });
 
-test("Editor renders without crashing", () => {
+describe("<Editor />", () => {
+  it("Editor renders without crashing", () => {
     window.HTMLElement.prototype.scrollIntoView = jest.fn();
-    const { baseElement } = render(<Editor />);
+    const { baseElement } = render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>,
+    );
     expect(baseElement).toBeDefined();
-});
+  });
 
-test("renders the add tab button", async () => {
-    render(<Editor />);
+  it("renders the add tab button", async () => {
+    render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>,
+    );
     await screen.findByTitle("Add tab");
-});
+  });
 
-test("clicks the add tab button", async () => {
-    render(<Editor />);
+  it("clicks the add tab button", async () => {
+    render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>,
+    );
     const button = await screen.findByTitle("Add tab");
     fireEvent.click(button);
+  });
 });

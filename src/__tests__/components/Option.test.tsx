@@ -1,4 +1,3 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import { ionFireEvent as fireEvent } from "@ionic/react-test-utils";
 import Option from "../../components/Option";
@@ -6,274 +5,277 @@ import { IOptionsData } from "../../lib/LoideAPIInterfaces";
 import { ISolverOption } from "../../lib/LoideInterfaces";
 
 const optionsAvailable: IOptionsData[] = [
-    {
+  {
+    name: "Free choice",
+    value: "free choice",
+    word_argument: true,
+    description: "Missing description",
+  },
+  {
+    name: "Silent",
+    value: "silent",
+    word_argument: false,
+    description: "Missing description",
+  },
+];
+const optionData: ISolverOption = {
+  id: 0,
+  name: "free choice",
+  values: [""],
+  disabled: false,
+};
+
+describe("<Option />", () => {
+  it("renders without crashing", () => {
+    const { baseElement } = render(
+      <Option
+        optionsAvailable={optionsAvailable}
+        optionData={optionData}
+        disabled={false}
+        onChangeDisableOption={jest.fn()}
+      />,
+    );
+    expect(baseElement).toBeDefined();
+  });
+
+  it("tests delete option button", () => {
+    const onDeleteOption = jest.fn();
+    render(
+      <Option
+        optionsAvailable={optionsAvailable}
+        optionData={optionData}
+        onDeleteOption={onDeleteOption}
+        disabled={false}
+        onChangeDisableOption={jest.fn()}
+      />,
+    );
+    const button = screen.getByTitle("Delete option");
+    fireEvent.click(button);
+    expect(onDeleteOption).toHaveBeenCalledTimes(1);
+  });
+
+  it("render Name label", () => {
+    render(
+      <Option
+        optionsAvailable={optionsAvailable}
+        optionData={optionData}
+        disabled={false}
+        onChangeDisableOption={jest.fn()}
+      />,
+    );
+    screen.getByText("Name");
+  });
+
+  it("test select", async () => {
+    const onChangeOptionType = jest.fn();
+
+    render(
+      <Option
+        optionsAvailable={optionsAvailable}
+        optionData={optionData}
+        onChangeOptionType={onChangeOptionType}
+        disabled={false}
+        onChangeDisableOption={jest.fn()}
+      />,
+    );
+    expect(screen.getByText(optionsAvailable[0].name)).toBeInTheDocument();
+
+    const select = await screen.findByTestId("select-name-options");
+    expect(select.getAttribute("value")).toBe("free choice");
+    fireEvent.ionChange(select, "silent");
+    expect(onChangeOptionType).toBeCalledTimes(1);
+  });
+
+  it("test word argument true", async () => {
+    const newOptionsAvailable: IOptionsData[] = [
+      {
         name: "Free choice",
         value: "free choice",
         word_argument: true,
         description: "Missing description",
-    },
-    {
-        name: "Silent",
-        value: "silent",
+      },
+    ];
+    render(
+      <Option
+        optionsAvailable={newOptionsAvailable}
+        optionData={optionData}
+        disabled={false}
+        onChangeDisableOption={jest.fn()}
+      />,
+    );
+    expect(screen.getByText("Value")).toBeInTheDocument();
+  });
+
+  it("test word argument false", async () => {
+    const newOptionsAvailable: IOptionsData[] = [
+      {
+        name: "Free choice",
+        value: "free choice",
         word_argument: false,
         description: "Missing description",
-    },
-];
-const optionData: ISolverOption = {
-    id: 0,
-    name: "free choice",
-    values: [""],
-    disabled: false,
-};
+      },
+    ];
+    render(
+      <Option
+        optionsAvailable={newOptionsAvailable}
+        optionData={optionData}
+        disabled={false}
+        onChangeDisableOption={jest.fn()}
+      />,
+    );
+    expect(screen.queryByText("Value")).not.toBeInTheDocument();
+  });
 
-describe("Option component tests", () => {
-    test("renders without crashing", () => {
-        const { baseElement } = render(
-            <Option
-                optionsAvailable={optionsAvailable}
-                optionData={optionData}
-                disabled={false}
-                onChangeDisableOption={jest.fn()}
-            />
-        );
-        expect(baseElement).toBeDefined();
-    });
-
-    test("tests delete option button", () => {
-        const onDeleteOption = jest.fn();
-        render(
-            <Option
-                optionsAvailable={optionsAvailable}
-                optionData={optionData}
-                onDeleteOption={onDeleteOption}
-                disabled={false}
-                onChangeDisableOption={jest.fn()}
-            />
-        );
-        const button = screen.getByTitle("Delete option");
-        fireEvent.click(button);
-        expect(onDeleteOption).toHaveBeenCalledTimes(1);
-    });
-
-    test("render Name label", () => {
-        render(
-            <Option
-                optionsAvailable={optionsAvailable}
-                optionData={optionData}
-                disabled={false}
-                onChangeDisableOption={jest.fn()}
-            />
-        );
-        screen.getByText("Name");
-    });
-
-    test("test select", async () => {
-        const onChangeOptionType = jest.fn();
-
-        render(
-            <Option
-                optionsAvailable={optionsAvailable}
-                optionData={optionData}
-                onChangeOptionType={onChangeOptionType}
-                disabled={false}
-                onChangeDisableOption={jest.fn()}
-            />
-        );
-        expect(screen.getByText(optionsAvailable[0].name)).toBeInTheDocument();
-
-        const select = await screen.findByTestId("select-name-options");
-        expect(select.getAttribute("value")).toBe("free choice");
-        fireEvent.ionChange(select, "silent");
-        expect(onChangeOptionType).toBeCalledTimes(1);
-    });
-
-    test("test word argument true", async () => {
-        let newOptionsAvailable: IOptionsData[] = [
-            {
-                name: "Free choice",
-                value: "free choice",
-                word_argument: true,
-                description: "Missing description",
-            },
-        ];
-        const { queryByText } = render(
-            <Option
-                optionsAvailable={newOptionsAvailable}
-                optionData={optionData}
-                disabled={false}
-                onChangeDisableOption={jest.fn()}
-            />
-        );
-        expect(queryByText("Value")).toBeInTheDocument();
-    });
-
-    test("test word argument false", async () => {
-        let newOptionsAvailable: IOptionsData[] = [
-            {
-                name: "Free choice",
-                value: "free choice",
-                word_argument: false,
-                description: "Missing description",
-            },
-        ];
-        const { queryByText } = render(
-            <Option
-                optionsAvailable={newOptionsAvailable}
-                optionData={optionData}
-                disabled={false}
-                onChangeDisableOption={jest.fn()}
-            />
-        );
-        expect(queryByText("Value")).not.toBeInTheDocument();
-    });
-
-    test("test disable option", async () => {
-        const onChangeDisableOption = jest.fn();
-        const onChangeOptionType = jest.fn();
-        render(
-            <Option
-                optionsAvailable={optionsAvailable}
-                optionData={optionData}
-                disabled={false}
-                onChangeDisableOption={onChangeDisableOption}
-                onChangeOptionType={onChangeOptionType}
-            />
-        );
-        const badge = await screen.findByText("Option 1");
-        fireEvent.click(badge);
-        expect(onChangeDisableOption).toBeCalledTimes(1);
-    });
+  it("test disable option", async () => {
+    const onChangeDisableOption = jest.fn();
+    const onChangeOptionType = jest.fn();
+    render(
+      <Option
+        optionsAvailable={optionsAvailable}
+        optionData={optionData}
+        disabled={false}
+        onChangeDisableOption={onChangeDisableOption}
+        onChangeOptionType={onChangeOptionType}
+      />,
+    );
+    const badge = await screen.findByText("Option 1");
+    fireEvent.click(badge);
+    expect(onChangeDisableOption).toBeCalledTimes(1);
+  });
 });
 
-describe("OptionTextValue component tests", () => {
-    test("test change input text", async () => {
-        let newOptionsAvailable: IOptionsData[] = [
-            {
-                name: "Free choice",
-                value: "free choice",
-                word_argument: true,
-                description: "Missing description",
-            },
-        ];
+describe("<OptionTextValue />", () => {
+  it("test change input text", async () => {
+    const newOptionsAvailable: IOptionsData[] = [
+      {
+        name: "Free choice",
+        value: "free choice",
+        word_argument: true,
+        description: "Missing description",
+      },
+    ];
 
-        const onChangeOptionValues = jest.fn();
+    const onChangeOptionValues = jest.fn();
 
-        render(
-            <Option
-                optionsAvailable={newOptionsAvailable}
-                optionData={optionData}
-                onChangeOptionValues={onChangeOptionValues}
-                disabled={false}
-                onChangeDisableOption={jest.fn()}
-            />
-        );
+    render(
+      <Option
+        optionsAvailable={newOptionsAvailable}
+        optionData={optionData}
+        onChangeOptionValues={onChangeOptionValues}
+        disabled={false}
+        onChangeDisableOption={jest.fn()}
+      />,
+    );
 
-        const input = await screen.findByPlaceholderText("Insert a value");
+    const input = await screen.findByPlaceholderText("Insert a value");
 
-        fireEvent.ionChange(input, "--filter");
+    fireEvent.ionChange(input, "--filter");
 
-        expect(onChangeOptionValues).toBeCalledTimes(1);
-    });
+    expect(onChangeOptionValues).toBeCalledTimes(1);
+  });
 
-    test("test add input text", async () => {
-        let newOptionsAvailable: IOptionsData[] = [
-            {
-                name: "Free choice",
-                value: "free choice",
-                word_argument: true,
-                description: "Missing description",
-            },
-        ];
+  it("test add input text", async () => {
+    const newOptionsAvailable: IOptionsData[] = [
+      {
+        name: "Free choice",
+        value: "free choice",
+        word_argument: true,
+        description: "Missing description",
+      },
+    ];
 
-        const onChangeOptionValues = jest.fn();
+    const onChangeOptionValues = jest.fn();
 
-        render(
-            <Option
-                optionsAvailable={newOptionsAvailable}
-                optionData={optionData}
-                onChangeOptionValues={onChangeOptionValues}
-                disabled={false}
-                onChangeDisableOption={jest.fn()}
-            />
-        );
+    render(
+      <Option
+        optionsAvailable={newOptionsAvailable}
+        optionData={optionData}
+        onChangeOptionValues={onChangeOptionValues}
+        disabled={false}
+        onChangeDisableOption={jest.fn()}
+      />,
+    );
 
-        const button = await screen.findByTitle("Add value");
+    const button = await screen.findByTitle("Add value");
 
-        let inputs = await screen.findAllByPlaceholderText("Insert a value");
-        expect(inputs.length).toBe(1);
+    let inputs = await screen.findAllByTestId("option-text-value-item");
 
-        fireEvent.click(button);
+    expect(inputs.length).toBe(1);
 
-        expect(onChangeOptionValues).toBeCalledTimes(1);
+    fireEvent.click(button);
 
-        inputs = await screen.findAllByPlaceholderText("Insert a value");
-        expect(inputs.length).toBe(2);
-    });
+    expect(onChangeOptionValues).toBeCalledTimes(1);
 
-    test("test delete swipe", async () => {
-        const onChangeOptionValues = jest.fn();
-        render(
-            <Option
-                optionsAvailable={optionsAvailable}
-                optionData={optionData}
-                onChangeOptionValues={onChangeOptionValues}
-                disabled={false}
-                onChangeDisableOption={jest.fn()}
-            />
-        );
+    inputs = await screen.findAllByTestId("option-text-value-item");
 
-        const swipeOpt = await screen.findByTestId("swipe-delete");
+    expect(inputs.length).toBe(2);
+  });
 
-        fireEvent.ionSwipe(swipeOpt, "right");
+  it("test delete swipe", async () => {
+    const onChangeOptionValues = jest.fn();
+    render(
+      <Option
+        optionsAvailable={optionsAvailable}
+        optionData={optionData}
+        onChangeOptionValues={onChangeOptionValues}
+        disabled={false}
+        onChangeDisableOption={jest.fn()}
+      />,
+    );
 
-        expect(onChangeOptionValues).toBeCalledTimes(1);
-    });
+    const swipeOpt = await screen.findByTestId("swipe-delete");
 
-    // test("test add and delete input text", async () => {
-    //     let newOptionsAvailable: IOptionsData[] = [
-    //         {
-    //             name: "Free choice",
-    //             value: "free choice",
-    //             word_argument: true,
-    //             description: "Missing description",
-    //         },
-    //     ];
+    fireEvent.ionSwipe(swipeOpt, "right");
 
-    //     const onChangeOptionValues = jest.fn();
+    expect(onChangeOptionValues).toBeCalledTimes(1);
+  });
 
-    //     const ref = {
-    //         current: {
-    //             close: jest.fn(),
-    //         },
-    //     };
+  it.skip("test add and delete input text", async () => {
+    const newOptionsAvailable: IOptionsData[] = [
+      {
+        name: "Free choice",
+        value: "free choice",
+        word_argument: true,
+        description: "Missing description",
+      },
+    ];
 
-    //     render(
-    //         <Option
-    //             optionsAvailable={newOptionsAvailable}
-    //             optionData={optionData}
-    //             onChangeOptionValues={onChangeOptionValues}
-    //         />
-    //     );
+    const onChangeOptionValues = jest.fn();
+    const onChangeDisableOption = jest.fn();
 
-    //     const button = await screen.findByTitle("Add value");
+    // const ref = {
+    //     current: {
+    //         close: jest.fn(),
+    //     },
+    // };
 
-    //     let inputs = await screen.findAllByPlaceholderText("Insert a value");
-    //     expect(inputs.length).toBe(1);
+    render(
+      <Option
+        optionsAvailable={newOptionsAvailable}
+        optionData={optionData}
+        onChangeOptionValues={onChangeOptionValues}
+        disabled={false}
+        onChangeDisableOption={onChangeDisableOption}
+      />,
+    );
 
-    //     fireEvent.click(button);
+    const button = await screen.findByTitle("Add value");
 
-    //     expect(onChangeOptionValues).toBeCalledTimes(1);
+    let inputs = await screen.findAllByPlaceholderText("Insert a value");
+    expect(inputs.length).toBe(1);
 
-    //     inputs = await screen.findAllByPlaceholderText("Insert a value");
+    fireEvent.click(button);
 
-    //     const buttonsDelete = await screen.findAllByTitle(
-    //         "Delete option value"
-    //     );
-    //     fireEvent.click(buttonsDelete[0]);
+    expect(onChangeOptionValues).toBeCalledTimes(1);
 
-    //     expect(onChangeOptionValues).toBeCalledTimes(2);
+    inputs = await screen.findAllByPlaceholderText("Insert a value");
 
-    //     inputs = await screen.findAllByPlaceholderText("Insert a value");
-    //     expect(inputs.length).toBe(1);
-    // });
+    const buttonsDelete = await screen.findAllByTitle("Delete option value");
+    fireEvent.click(buttonsDelete[0]);
+
+    expect(onChangeOptionValues).toBeCalledTimes(2);
+
+    inputs = await screen.findAllByPlaceholderText("Insert a value");
+    expect(inputs.length).toBe(1);
+  });
 });
