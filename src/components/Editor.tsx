@@ -95,18 +95,18 @@ const Editor: React.FC = () => {
   };
 
   const undo = () => {
-    const editorSession = editorsRef.current?.editor.session
-    if(editorSession){
-    const undoManager = editorSession.getUndoManager();
-    undoManager?.undo(editorSession);
+    const editorSession = editorsRef.current?.editor.session;
+    if (editorSession) {
+      const undoManager = editorSession.getUndoManager();
+      undoManager?.undo(editorSession);
     }
   };
 
   const redo = () => {
-    const editorSession = editorsRef.current?.editor.session
-    if(editorSession){
-    const undoManager = editorSession.getUndoManager();
-    undoManager?.redo(editorSession);
+    const editorSession = editorsRef.current?.editor.session;
+    if (editorSession) {
+      const undoManager = editorSession.getUndoManager();
+      undoManager?.redo(editorSession);
     }
   };
 

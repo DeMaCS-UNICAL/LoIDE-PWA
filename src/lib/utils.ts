@@ -192,7 +192,11 @@ const canSetOption = (
   language: string,
   totalLanguages: ILanguageData[],
 ): boolean => {
-  const optionsAvailable = getOptionsAvaliabeBySolverAndByLanguage(solver, language, totalLanguages);
+  const optionsAvailable = getOptionsAvaliabeBySolverAndByLanguage(
+    solver,
+    language,
+    totalLanguages,
+  );
 
   for (const opt of optionsAvailable) {
     if (opt.value === option.name) return true;
