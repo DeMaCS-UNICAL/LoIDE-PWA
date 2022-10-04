@@ -9,6 +9,11 @@ export interface HighlightAtomProps {
 const HighlightAtom: React.FC<HighlightAtomProps> = ({ text, highlight }) => {
   const [selectedColor, setSelectedColor] = useState(Utils.getRandomColor());
 
+  const highlightAtomStyle: React.CSSProperties = useMemo(
+    () => ({ color: `#${selectedColor}`, fontWeight: "bold" }),
+    [selectedColor],
+  );
+
   if (!highlight.trim()) {
     return <span>{text}</span>;
   }
@@ -16,11 +21,6 @@ const HighlightAtom: React.FC<HighlightAtomProps> = ({ text, highlight }) => {
   const atom = new RegExp(`(${highlight})([(]|[.])`);
   const atomNameRegex = /^([a-zA-Z]\w*)/;
   const parts = text.split(atom);
-
-  const highlightAtomStyle: React.CSSProperties = useMemo(
-    () => ({ color: `#${selectedColor}`, fontWeight: "bold" }),
-    [selectedColor],
-  );
 
   const changeSelectedColor = () => setSelectedColor(Utils.getRandomColor());
 
