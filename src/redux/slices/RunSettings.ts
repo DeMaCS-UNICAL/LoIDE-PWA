@@ -50,8 +50,11 @@ export const {
   setTabsIDToExecute,
 } = runSettingsSlice.actions;
 
-// A selector
+// Selectors
 export const runSettingsSelector = (state: { runSettings: IRunSettingsState }) => state.runSettings;
+
+export const currentLanguageSelector = (state: { runSettings: IRunSettingsState }) =>
+  state.runSettings.currentLanguage;
 
 // The reducer
 export default runSettingsSlice.reducer;
