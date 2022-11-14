@@ -3,7 +3,7 @@ import LoideAceEditor from "./LoideAceEditor";
 import { Tabs, TabList, TabPanel } from "react-tabs";
 import { ActionSheet, ButtonText, Inputs, WindowConfirmMessages } from "../lib/constants";
 import { IonIcon } from "@ionic/react";
-import { addOutline } from "ionicons/icons";
+import { addOutline, downloadOutline, } from "ionicons/icons";
 import LoideTab from "./LoideTab";
 import LoideToolbarEditor from "./LoideToolbarEditor";
 import AceEditor from "react-ace";
@@ -17,6 +17,7 @@ import { editorSelector, setTabsEditorSessions } from "../redux/slices/Editor";
 import * as API from "../lib/api";
 
 const Editor: React.FC = () => {
+ 
   const dispatch = useDispatch();
 
   const { tabCountID, currentTabIndex, tabs, prevTabsSize, tabsEditorSessions } =
@@ -31,6 +32,7 @@ const Editor: React.FC = () => {
   const darkMode = useIsDarkMode();
 
   const { fontSizeEditor } = useSelector(UIStatusSelector);
+
 
   // set the current tab ID depending on selected tab
   useEffect(() => {
@@ -95,18 +97,18 @@ const Editor: React.FC = () => {
   };
 
   const undo = () => {
-    const editorSession = editorsRef.current?.editor.session;
-    if (editorSession) {
-      const undoManager = editorSession.getUndoManager();
-      undoManager?.undo(editorSession);
+    const editorSession = editorsRef.current?.editor.session
+    if(editorSession){
+    const undoManager = editorSession.getUndoManager();
+    undoManager?.undo(editorSession);
     }
   };
 
   const redo = () => {
-    const editorSession = editorsRef.current?.editor.session;
-    if (editorSession) {
-      const undoManager = editorSession.getUndoManager();
-      undoManager?.redo(editorSession);
+    const editorSession = editorsRef.current?.editor.session
+    if(editorSession){
+    const undoManager = editorSession.getUndoManager();
+    undoManager?.redo(editorSession);
     }
   };
 
@@ -129,6 +131,14 @@ const Editor: React.FC = () => {
 
   const paste = () => {
     Utils.getTextFromClipboard((textFromClipboard) => {
+      editorsRef.current?.editor.insert(textFromClipboard);
+    });
+  };
+  
+  const loadExample = () =>
+  {
+	undo();
+	Utils.getTextFromClipboard((textFromClipboard) => {
       editorsRef.current?.editor.insert(textFromClipboard);
     });
   };
@@ -256,7 +266,16 @@ const Editor: React.FC = () => {
           <div className="loide-tab-list-container">
             <TabList>{loideTabs}</TabList>
           </div>
-          <div className="loide-tab-list-operation">
+          <div className="loide-tab-list-operation" id="operationsTab">
+		  	<button
+				id = "exampleButtonId"
+				title="Load Example"
+				color="white"
+				onClick={loadExample}
+            >
+				<IonIcon icon={downloadOutline} />
+				<span className="margin-button-left">Load Example</span>
+			</button>
             <button
               title="Add tab"
               className="tab-button"
