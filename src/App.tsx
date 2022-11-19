@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import { Redirect, Route } from "react-router-dom";
 import {
   IonApp,
@@ -17,6 +18,7 @@ import {
   cog,
   informationCircleOutline,
   colorPaletteOutline,
+  list,
 } from "ionicons/icons";
 import MainTab from "./pages/MainTab";
 import RunSettingsTab from "./pages/RunSettingsTab";
@@ -43,6 +45,7 @@ import "./theme/variables.scss";
 
 import "./global.scss";
 import AboutTab from "./pages/AboutTab";
+import ExamplesTab from "./pages/ExamplesTab";
 import * as API from "./lib/api";
 import { IOutputData } from "./lib/LoideAPIInterfaces";
 import { LocalStorageItems, LoidePath } from "./lib/constants";
@@ -115,21 +118,27 @@ const App: React.FC = () => {
   return (
     <IonApp>
       <IonReactRouter>
-        <IonTabs>
+	 <IonTabs>
           <IonRouterOutlet>
             <Route path={`/${LoidePath.Editor}/:data`} component={MainTab} exact={true} />
-            <Route path={`/${LoidePath.RunSettings}`} component={RunSettingsTab} exact={true} />
+	    <Route path={`/${LoidePath.RunSettings}`} component={RunSettingsTab} exact={true} />
             <Route path={`/${LoidePath.Output}`} component={OutputTab} />
             <Route path={`/${LoidePath.Appearance}`} component={AppearanceTab} />
             <Route path={`/${LoidePath.About}`} component={AboutTab} />
-            <Route path="/" render={() => <Redirect to={`/${LoidePath.Editor}`} />} exact={true} />
+			<Route path={`/${LoidePath.Examples}`} component={ExamplesTab} />
+			<Route path="/" render={() => <Redirect to={`/${LoidePath.Editor}`} />} exact={true} />
             <Route component={MainTab} />
           </IonRouterOutlet>
 
           <IonTabBar slot="bottom">
             <IonTabButton tab={LoidePath.Editor} href={`/${LoidePath.Editor}`}>
-              <IonIcon icon={codeSlashOutline} />
+		  <IonIcon icon={codeSlashOutline} />
               <IonLabel>Editor</IonLabel>
+            </IonTabButton>
+
+            <IonTabButton tab={LoidePath.Examples} href={`/${LoidePath.Examples}`}>
+              <IonIcon icon={list} />
+              <IonLabel>Examples</IonLabel>
             </IonTabButton>
 
             <IonTabButton
@@ -139,7 +148,7 @@ const App: React.FC = () => {
             >
               <IonIcon icon={cog} />
               <IonLabel>Run Settings</IonLabel>
-            </IonTabButton>
+	      </IonTabButton>
 
             <IonTabButton
               tab={LoidePath.Output}
@@ -160,12 +169,13 @@ const App: React.FC = () => {
               <IonIcon icon={informationCircleOutline} />
               <IonLabel>About</IonLabel>
             </IonTabButton>
+			
           </IonTabBar>
         </IonTabs>
         <ShortcutsModal isOpen={showShortcutsModal} onDismiss={setShowShortcutsModal} />
       </IonReactRouter>
     </IonApp>
-  );
+   );
 };
 
 export default App;
