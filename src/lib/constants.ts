@@ -4,6 +4,7 @@ export const LoidePath = {
   Output: "output",
   About: "about",
   Appearance: "appearance",
+  Examples : "example",
 };
 
 export const APIWSEvents = {
