@@ -38,11 +38,15 @@ import { languagesDataSelector } from "../redux/slices/LanguagesData";
 import RestoreButton from "../components/RestoreButton";
 import Mousetrap from "mousetrap";
 
+import { Steps } from "intro.js-react";
+import "intro.js/introjs.css";
+
 type MainTabPageProps = RouteComponentProps<{
   data: string;
 }>;
 
 const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
+	
   const [showOpenModal, setShowOpenModal] = useState<boolean>(false);
   const [showSaveModal, setShowSaveModal] = useState<boolean>(false);
   const [showShareModal, setShowShareModal] = useState<boolean>(false);
@@ -141,6 +145,53 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
       .then((alert) => alert.present());
   };
 
+   const steps = [
+    {
+      title: 'Welcome',
+      intro: 'Lets see together LoIDE application',
+      tooltipClass: 'myTooltipClass',
+      highlightClass: 'myHighlightClass',
+    },
+    {
+      element: '#runButton',
+      title: 'Run Button',
+      intro: 'Allows you to run your project, just click on it and you will see the output in the corresponding tab',
+    },
+    {
+      element: '#openButtonId',
+      title: 'Open Button',
+      intro: 'Clicking on this button you can choose files and drop in the corresponding area',
+    },
+    {
+      element: '#saveButton',
+      title: 'Save Button',
+      intro: 'Here you can save your project and download it',
+    },
+    {
+      element: '#shareButton',
+      title: 'Share Button',
+      intro: 'Gives you the possibility of sharing your project through the link',
+    },
+    {
+      element: '#resetButton',
+      title: 'Reset Button',
+      intro: 'Very useful button with different tools: Reset actions, input and project',
+    },
+    {
+      element: '#operationsTab',
+      title: 'Operations Tab',
+      intro: 'Here you can interact with your project editor',
+    },
+    ];
+  
+  const onExit = () => {}
+
+   const options = {
+      doneLabel: 'Fatto',
+      dontShowAgain: true,
+   };
+
+
   return (
     <IonPage>
       <IonHeader>
@@ -159,8 +210,13 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
             alt="loide-logo"
           />
           <RestoreButton />
-          <IonButtons slot="end">
+
+	   <IonButtons slot="end">
+
+         <Steps enabled={true} steps={steps} initialStep={0} onExit={onExit} options={options} />
+
             <IonButton
+	      id = "openButtonId"
               title="Open"
               color="warning"
               className="ion-hide-sm-down"
@@ -168,8 +224,9 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
             >
               <IonIcon icon={folderOpenOutline} />
               <span className="margin-button-left">Open</span>
-            </IonButton>
+	     </IonButton>
             <IonButton
+	      id = "saveButton"
               title="Save"
               color="primary"
               className="ion-hide-sm-down"
@@ -179,6 +236,7 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
               <span className="margin-button-left">Save</span>
             </IonButton>
             <IonButton
+	      id = "shareButton"
               title="Share"
               color="success"
               className="ion-hide-sm-down"
@@ -186,8 +244,9 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
             >
               <IonIcon icon={shareOutline} />
               <span className="margin-button-left">Share</span>
-            </IonButton>
+  	     </IonButton>
             <IonButton
+	      id = "resetButton"
               title="Reset"
               color="danger"
               className="ion-hide-sm-down"
