@@ -256,7 +256,7 @@ const Editor: React.FC = () => {
           <div className="loide-tab-list-container">
             <TabList>{loideTabs}</TabList>
           </div>
-          <div className="loide-tab-list-operation">
+          <div className="loide-tab-list-operation" id="operationsTab">
             <button
               title="Add tab"
               className="tab-button"
