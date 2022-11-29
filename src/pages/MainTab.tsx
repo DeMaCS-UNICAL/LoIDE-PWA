@@ -149,7 +149,7 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
   const onExit = () => {}
 
    const options = {
-      doneLabel: 'Fatto',
+      doneLabel: 'Done',
       dontShowAgain: true,
    };
 
