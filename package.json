@@ -78,7 +78,7 @@
     "@types/react-router": "^5.1.19",
     "@types/react-router-dom": "^5.1.7",
     "@types/socket.io-client": "^1.4.36",
-    "@typescript-eslint/eslint-plugin": "^5.38.0",
+    "@typescript-eslint/eslint-plugin": "^5.46.0",
     "@typescript-eslint/parser": "^5.38.0",
     "eslint": "^8.23.1",
     "eslint-config-prettier": "^8.5.0",
