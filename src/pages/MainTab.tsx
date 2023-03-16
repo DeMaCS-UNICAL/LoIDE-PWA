@@ -27,6 +27,7 @@ import {
   folderOpenOutline,
   saveOutline,
   shareOutline,
+  listCircleOutline,
 } from "ionicons/icons";
 import SaveProjectModal from "../modals/SaveProjectModal";
 import { ActionSheet, ButtonText, WindowConfirmMessages } from "../lib/constants";
@@ -38,11 +39,16 @@ import { languagesDataSelector } from "../redux/slices/LanguagesData";
 import RestoreButton from "../components/RestoreButton";
 import Mousetrap from "mousetrap";
 
+import ExamplesListModal from "../modals/ExampleListModal";
+import saddlebagsExample from '../assets/examples/saddlebagsExample.json';
+import battleshipExample from '../assets/examples/battleshipExample.json';
+
 type MainTabPageProps = RouteComponentProps<{
   data: string;
 }>;
 
 const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
+  const [showExamplesListModal, setShowExamplesListModal] = useState<boolean>(false);	
   const [showOpenModal, setShowOpenModal] = useState<boolean>(false);
   const [showSaveModal, setShowSaveModal] = useState<boolean>(false);
   const [showShareModal, setShowShareModal] = useState<boolean>(false);
@@ -52,6 +58,18 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
   }>({ open: false, event: undefined });
 
   const { languages } = useSelector(languagesDataSelector);
+  const example = (window as any).example;
+
+  useEffect(() => {
+    if(example == "Battleship")
+    {
+      Utils.Editor.changeTabValue(1,battleshipExample.tabs[0].value);
+    }
+    if(example == "Saddlebags")
+    {
+      Utils.Editor.changeTabValue(1,saddlebagsExample.tabs[1].value);
+    }
+  }, [example]);
 
   useEffect(() => {
     if (languages.length > 0) {
@@ -65,6 +83,10 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
   }, [languages]);
 
   useEffect(() => {
+    Mousetrap.bind(["ctrl+e", "command+e"], () => {
+      setShowExamplesListModal(!showExamplesListModal);
+      return false;
+    });
     Mousetrap.bind(["ctrl+o", "command+o"], () => {
       setShowOpenModal(!showOpenModal);
       return false;
@@ -160,6 +182,18 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
           />
           <RestoreButton />
           <IonButtons slot="end">
+
+            <IonButton
+              id = "examplesButton"
+              title="Examples"
+              color="white"
+              className="ion-hide-sm-down"
+              onClick={() => setShowExamplesListModal(true)}
+                  >
+              <IonIcon icon={listCircleOutline} />
+              <span className="margin-button-left">Examples</span>
+            </IonButton>
+
             <IonButton
               title="Open"
               color="warning"
@@ -231,6 +265,7 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
             <Editor />
           </div>
         </IonSplitPane>
+        <ExamplesListModal isOpen={showExamplesListModal} onDismiss={setShowExamplesListModal}/>
         <OpenProjectModal isOpen={showOpenModal} onDismiss={setShowOpenModal} />
         <SaveProjectModal isOpen={showSaveModal} onDismiss={setShowSaveModal} />
         <ShareProjectModal isOpen={showShareModal} onDismiss={setShowShareModal} />
@@ -241,6 +276,10 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
           onDidDismiss={() => setButtonsPopover({ open: false, event: undefined })}
         >
           <IonList>
+          <IonItem button={true} onClick={() => setShowExamplesListModal(true)} title="Examples">
+              <IonLabel>Examples</IonLabel>
+              <IonIcon color="white" icon={listCircleOutline} slot="end" />
+            </IonItem>
             <IonItem button={true} onClick={() => setShowOpenModal(true)} title="Open">
               <IonLabel>Open</IonLabel>
               <IonIcon color="warning" icon={folderOpenOutline} slot="end" />
@@ -266,3 +305,4 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
 };
 
 export default MainTab;
+
