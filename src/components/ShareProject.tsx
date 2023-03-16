@@ -25,11 +25,14 @@ const ShareProject: React.FC<ShareProjectProps> = (props) => {
   }, []);
 
   const [url, setUrl] = useState<string>(URLInput.Loading);
+  const [urlCollaboration, setUrlCollaboration] = useState<string>("");
 
   const [urlLoading, setUrlLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const loideProjectData = Utils.getLoideProjectData();
+
+    setUrlCollaboration(window.location.href);
 
     if (Object.keys(loideProjectData).length > 0) {
       let URL = window.location.host;
@@ -105,6 +108,29 @@ const ShareProject: React.FC<ShareProjectProps> = (props) => {
     );
   };
 
+  const copyLinkCollaboration = () => {
+    Utils.copyTextToClipboard(
+      urlCollaboration,
+      () => {
+        Utils.generateGeneralToast(
+          Toast.LinkCopiedSuccessfully.message,
+          Toast.LinkCopiedSuccessfully.header,
+          "success",
+        );
+
+        if (props.onCopyLink) props.onCopyLink(true);
+      },
+      () => {
+        Utils.generateGeneralToast(
+          Toast.CannotCopyTheLink.message,
+          Toast.CannotCopyTheLink.header,
+          "danger",
+        );
+        if (props.onCopyLink) props.onCopyLink(false);
+      },
+    );
+  };
+
   return (
     <>
       <IonRow>
@@ -140,6 +166,37 @@ const ShareProject: React.FC<ShareProjectProps> = (props) => {
               </IonText>
             </div>
           )}
+          <IonList>
+            <IonItem>
+              <IonInput
+                data-testid="url-input"
+                inputmode="url"
+                value={urlCollaboration}
+                readonly={true}
+                onFocus={selectAll}
+              />
+              {urlLoading && <IonSpinner slot="end" color="primary" name="dots" />}
+            </IonItem>
+          </IonList>
+          {clipboardWriteSupported && (
+            <IonButton
+              expand="block"
+              className="ion-margin-top"
+              title="Copy link"
+              onClick={copyLinkCollaboration}
+            >
+              Copy link for Collaboration
+            </IonButton>
+          )}
+
+          {!clipboardWriteSupported && (
+            <div className="ion-padding-top">
+              <p className="ion-text-center"></p>
+              <IonText color="dark" className="ion-text-center">
+                <h5>Copy the link and share it</h5>
+              </IonText>
+            </div>
+          )}
         </IonCol>
       </IonRow>
     </>
@@ -147,3 +204,4 @@ const ShareProject: React.FC<ShareProjectProps> = (props) => {
 };
 
 export default ShareProject;
+
