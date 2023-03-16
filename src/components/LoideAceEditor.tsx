@@ -12,6 +12,9 @@ import ace from "ace-builds/src-noconflict/ace";
 import { LoideLanguages, LoideSolvers } from "../lib/constants";
 import { EditSession } from "ace-builds";
 
+import { TinyliciousClient } from "@fluidframework/tinylicious-client";
+import { SharedMap } from "fluid-framework";
+
 EditSession.prototype.toJSON = function () {
   return {
     annotations: this.getAnnotations(),
@@ -44,6 +47,27 @@ const createEditSession = (session: any) => {
   return editSession;
 };
 
+const getFluidData = async () => {
+
+  // TODO 1: Configure the container.
+  const client = new TinyliciousClient();
+  const containerSchema = {
+      initialObjects: { sharedText: SharedMap }
+  };
+  // TODO 2: Get the container from the Fluid service.
+  let container;
+  const containerId = window.location.hash.substring(1);
+  if (!containerId) {
+      ({ container } = await client.createContainer(containerSchema));
+       const id = await container.attach();
+      window.location.hash = id;
+  } else {
+      ({ container } = await client.getContainer(containerId, containerSchema));
+  }
+  // TODO 3: Return the Fluid timestamp object.
+  return container.initialObjects;
+}
+
 interface LoideAceEditorProps {
   mode: string;
   darkTheme: boolean;
@@ -65,6 +89,35 @@ const LoideAceEditor = React.forwardRef<AceEditor, LoideAceEditorProps>((props, 
   const reactAce = useRef<AceEditor>(null);
 
   const [fontSize, setFontSize] = useState<number>(defaultFontSize);
+  const [fluidSharedObjects, setFluidSharedObjects] = useState<any>();
+  const [localText, setLocalText] = useState<any>();
+
+  useEffect(() => {
+		getFluidData().then(data => setFluidSharedObjects(data));
+	}, []);
+
+  useEffect(() => {
+		if (fluidSharedObjects) {
+
+			// TODO 4: Set the value of object that will appear in the UI.
+		const { sharedText } = fluidSharedObjects;
+		const updateLocalText = () => setLocalText({testo : sharedText.get("testo")});
+	  
+		updateLocalText();
+
+		// TODO 5: Register handlers.
+		sharedText.on("valueChanged",updateLocalText);
+			// TODO 6: Delete handler registration when the React App component is dismounted.
+		return () => { sharedText.off("valueChanged", updateLocalText) }
+		} else {
+			return; // Do nothing because there is no Fluid SharedMap object yet.
+		}
+	}, [fluidSharedObjects])
+
+  function collaborate()
+	{
+    fluidSharedObjects?.sharedText.set("testo", reactAce.current?.editor.getValue());	
+  }
 
   useEffect(() => {
     if (fontSize !== props.fontSize && props.fontSize) setFontSize(props.fontSize);
@@ -145,6 +198,8 @@ const LoideAceEditor = React.forwardRef<AceEditor, LoideAceEditorProps>((props, 
     }
 
     if (props.onChange) props.onChange(props.tabKey, value, runAuto);
+    collaborate();
+
   };
 
   const onFocus = (e: any) => {
@@ -546,36 +601,73 @@ const LoideAceEditor = React.forwardRef<AceEditor, LoideAceEditorProps>((props, 
     return par;
   };
 
-  return (
-    <AceEditor
-      ref={reactAce}
-      height="100%"
-      width="0px"
-      // mode={props.mode}
-      mode="text"
-      theme={props.darkTheme ? "idle_fingers" : "tomorrow"}
-      name={`editor-${props.tabKey}`}
-      value={props.value}
-      fontSize={fontSize}
-      editorProps={{
-        $blockScrolling: true,
-      }}
-      setOptions={{
-        fontSize: 15,
-        enableBasicAutocompletion: true,
-        enableLiveAutocompletion: true,
-        enableSnippets: true,
-        cursorStyle: "smooth",
-        copyWithEmptySelection: true,
-        scrollPastEnd: true,
-      }}
-      onChange={onChange}
-      onFocus={onFocus}
-      style={{ flexGrow: 1 }}
-    />
-  );
+  if(localText)
+  {
+    return (
+      <AceEditor
+        ref={reactAce}
+        height="100%"
+        width="0px"
+        // mode={props.mode}
+        mode="text"
+        theme={props.darkTheme ? "idle_fingers" : "tomorrow"}
+        name={`editor-${props.tabKey}`}
+        value={localText.testo}
+        fontSize={fontSize}
+        editorProps={{
+          $blockScrolling: true,
+        }}
+        setOptions={{
+          fontSize: 15,
+          enableBasicAutocompletion: true,
+          enableLiveAutocompletion: true,
+          enableSnippets: true,
+          cursorStyle: "smooth",
+          copyWithEmptySelection: true,
+          scrollPastEnd: true,
+        }}
+        onChange={onChange}
+        onFocus={onFocus}
+        style={{ flexGrow: 1 }}
+        className="EditorNonCollaborativo"
+      />
+    )
+  }
+  else
+  {
+    return (
+      <AceEditor
+        ref={reactAce}
+        height="100%"
+        width="0px"
+        // mode={props.mode}
+        mode="text"
+        theme={props.darkTheme ? "idle_fingers" : "tomorrow"}
+        name={`editor-${props.tabKey}`}
+        value={props.value}
+        fontSize={fontSize}
+        editorProps={{
+          $blockScrolling: true,
+        }}
+        setOptions={{
+          fontSize: 15,
+          enableBasicAutocompletion: true,
+          enableLiveAutocompletion: true,
+          enableSnippets: true,
+          cursorStyle: "smooth",
+          copyWithEmptySelection: true,
+          scrollPastEnd: true,
+        }}
+        onChange={onChange}
+        onFocus={onFocus}
+        style={{ flexGrow: 1 }}
+        className="EditorNonCollaborativo"
+      />
+    )
+  }
 });
 
 LoideAceEditor.displayName = "LoideAceEditor";
 
 export default LoideAceEditor;
+
