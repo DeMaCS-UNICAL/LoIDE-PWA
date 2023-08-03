@@ -594,6 +594,8 @@ const isValidProjectToLoad = (project: ILoideProject): boolean => {
   return false;
 };
 
+const getRandomColor = () => Math.floor(Math.random() * 16777215).toString(16);
+
 const Editor = {
   resetInput,
   addTab: addEditorTab,
@@ -633,6 +635,7 @@ const Utils = {
   restoreAppearanceFromLocalStorage,
   restoreRunAutoFromLocalStorage,
   isValidProjectToLoad,
+  getRandomColor,
 };
 
 export default Utils;
