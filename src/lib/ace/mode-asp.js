@@ -13,7 +13,7 @@ define("ace/mode/asp", [], function (require, exports, module) {
 
   (function () {
     this.lineCommentStart = "%";
-  }.call(Mode.prototype));
+  }).call(Mode.prototype);
 
   exports.Mode = Mode;
 });
