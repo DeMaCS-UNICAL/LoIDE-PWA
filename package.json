@@ -25,7 +25,8 @@
     "format:staged": "pretty-quick --staged",
     "prettier:check": "prettier --check ./src",
     "prettier:write": "prettier --write ./src",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "env": "node read_env.js"
   },
   "dependencies": {
     "@ionic/react": "^6.2.8",
