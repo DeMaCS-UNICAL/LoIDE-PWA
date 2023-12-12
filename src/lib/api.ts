@@ -12,7 +12,7 @@ import { setConnectingToTheServer } from "../redux/slices/UIStatus";
 import { setConnected } from "../redux/slices/SocketStatus";
 
 // LoIDE Web Server API URL
-const APIUrl = "localhost:8084";
+const APIUrl = process.env.REACT_APP_LOIDE_API_SERVER || "localhost:8084";
 
 let socket: SocketIOClient.Socket;
 
