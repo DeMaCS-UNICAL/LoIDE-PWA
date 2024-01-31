@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "server-config-schema.json",
+  "type": "object",
+  "properties": {
+    "port": {
+      "type": "object",
+      "title": "Port Configuration",
+      "properties": {
+        "http": {
+          "type": "integer",
+          "title": "HTTP Port",
+          "description": "The port number for HTTP connections"
+        },
+        "https": {
+          "type": "integer",
+          "title": "HTTPS Port",
+          "description": "The port number for HTTPS connections"
+        }
+      },
+      "required": ["http", "https"]
+    },
+    "path": {
+      "type": "object",
+      "title": "SSL Configuration",
+      "properties": {
+        "key": {
+          "type": "string",
+          "title": "SSL Key Path",
+          "description": "The path to the SSL key file"
+        },
+        "cert": {
+          "type": "string",
+          "title": "SSL Certificate Path",
+          "description": "The path to the SSL certificate file"
+        }
+      },
+      "required": ["key", "cert"]
+    },
+    "rate_limit": {
+      "type": "object",
+      "title": "Rate Limit Configuration",
+      "properties": {
+        "windowMs": {
+          "type": "integer",
+          "title": "Rate Limit Window",
+          "description": "The duration (in milliseconds) for which the rate limit should apply"
+        },
+        "max": {
+          "type": "integer",
+          "title": "Max Requests",
+          "description": "The maximum number of requests that a client can make within the windowMs duration"
+        }
+      },
+      "required": ["windowMs", "max"]
+    },
+    "max_age": {
+      "type": "integer",
+      "title": "Max Age",
+      "description": "The maximum age (in milliseconds) for HTTP connections"
+    }
+  },
+  "required": ["port", "path", "rate_limit", "max_age"]
+}
