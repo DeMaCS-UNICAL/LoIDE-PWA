@@ -1,11 +1,15 @@
 {
-    "port": {
-        "http": 9000,
-        "https": 9001
-    },
-    "path": {
-        "key": "",
-        "cert": ""
-    },
-    "max_age": 31536000
+  "port": {
+    "http": 9000,
+    "https": 9001
+  },
+  "path": {
+    "key": "",
+    "cert": ""
+  },
+  "rate_limit": {
+    "windowMs": 600000,
+    "max": 1000
+  },
+  "max_age": 31536000
 }
