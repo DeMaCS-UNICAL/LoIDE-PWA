@@ -128,7 +128,10 @@ docker run -d --network host --mount type=bind,source=[your/path/to/config],targ
 The `--network host` option in the docker run command tells Docker to use the host network for the container. This means the container shares the same network stack as the host and can access network services running on the host directly.
 
 The `--mount type=bind, source=[your/path/to/config], target=/app/config` option is used to create a bind mount. A bind mount is a type of mount that allows you to map a host file or directory to a container file or directory (for more information refer to the [official Docker documentation](https://docs.docker.com/storage/bind-mounts/)).
-In this case we use mounts to provide the configuration file to the container. The configuration file is a JSON file that contains the configuration of the LoIDE PWA. It must be placed in a directory on the host and the _full_ path to this directory must be specified in the source option of the --mount option.
+In this case we use mounts to provide the configuration file to the container.
+
+The configuration file is a JSON file that contains the configuration of the LoIDE PWA. It must be placed in a directory on the host and the _full_ path to this directory must be specified in the source option of the --mount option. The JSON schema needs also to be in the same directory.
+
 For examples on how to create the configuration file refer to the one provided in the repository. If no configuration file is provided the default configuration will be used.
 
 Once the Docker container is running, you can open your web browser and navigate to `http://localhost:[specified-port]` to access the LoIDE GUI.
