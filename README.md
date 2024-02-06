@@ -122,7 +122,7 @@ docker build -t loide-pwa .
 Once the Docker image is built, you can run a Docker container using the following command:
 
 ```bash
-docker run -d --network host --mount type=bind,source=[your/path/to/config],target=/app/config markducks/loide-pwa
+docker run -d --network host --mount type=bind,source=[your/path/to/config],target=/app/config loide-pwa
 ```
 
 The `--network host` option in the docker run command tells Docker to use the host network for the container. This means the container shares the same network stack as the host and can access network services running on the host directly.
