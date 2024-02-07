@@ -136,6 +136,37 @@ For examples on how to create the configuration file refer to the one provided i
 
 Once the Docker container is running, you can open your web browser and navigate to `http://localhost:[specified-port]` to access the LoIDE GUI.
 
+# Configuration
+
+## server-config.json
+
+This configuration file contains various settings for the server.
+
+### Port
+
+This section contains the ports that the server will listen on.
+
+- `http`: The port for HTTP connections. Default is `9000`.
+- `https`: The port for HTTPS connections. Default is `9001`.
+
+### Path
+
+This section contains the paths to the SSL certificate files for HTTPS.
+
+- `key`: The path to the private key file.
+- `cert`: The path to the certificate file.
+
+### Rate_limit
+
+This section contains settings for rate limiting to prevent abuse.
+
+- `windowMs`: The duration in milliseconds for which requests are checked/remembered. Default is `600000` (10 minutes).
+- `max`: Maximum number of connections during `windowMs` before sending a 429 response. Default is `1000`.
+
+### Max_age
+
+The maximum age, in seconds, for HTTP Strict Transport Security (HSTS). This is only applied when using HTTPS. Default is `31536000` (1 year).
+
 ## Versioning
 
 We use [Semantic Versioning](http://semver.org) for versioning. For the versions available, see the [releases on this repository](https://github.com/DeMaCS-UNICAL/LoIDE-PWA/releases).
