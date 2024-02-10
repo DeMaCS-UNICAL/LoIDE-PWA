@@ -76,6 +76,11 @@ const About: React.FC = () => {
         OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
         DEALINGS IN THE SOFTWARE.
       </p>
+
+      <p className="ion-text-justify">
+        All input is sent to the server to be evaluated, and it might be stored for
+        statistical/research purposes and to prevent misuse of the systems.
+      </p>
     </div>
   );
 };
