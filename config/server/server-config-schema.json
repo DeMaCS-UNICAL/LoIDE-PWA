@@ -1,6 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "server-config-schema.json",
+  "title": "LoIDE PWA configuration schema",
+  "description": "The configuration schema for the LoIDE PWA server",
   "type": "object",
   "properties": {
     "port": {
