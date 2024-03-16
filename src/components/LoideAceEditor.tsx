@@ -481,12 +481,12 @@ const LoideAceEditor = React.forwardRef<AceEditor, LoideAceEditorProps>((props, 
     switch (languageChosen) {
       case LoideLanguages.ASP.name:
       case LoideLanguages.DATALOG.name: {
-        const splitRegex = /(([a-zA-Z_]+[0-9]*)*)(\(.+?\))/gi;
+        const splitRegex = /([a-zA-Z_]\w*)(\(.+?\))/gi;
         const words = editorText.match(splitRegex);
         if (words != null) {
           const map = new Map();
           words.forEach(function (word: string) {
-            const nameMatches = word.match(/[^_](([a-zA-Z_]+[0-9]*)*)/);
+            const nameMatches = word.match(/[^_]([a-zA-Z_]\w*)/);
             const aritiesMathces = word.match(/\(.+?\)/);
             if (nameMatches && aritiesMathces) {
               const name = nameMatches[0];
