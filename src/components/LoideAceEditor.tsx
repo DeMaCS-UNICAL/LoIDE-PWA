@@ -486,7 +486,7 @@ const LoideAceEditor = React.forwardRef<AceEditor, LoideAceEditorProps>((props, 
         if (words != null) {
           const map = new Map();
           words.forEach(function (word: string) {
-            const nameMatches = word.match(/[^_](([a-zA-Z_]+[0-9]*)*)/);
+            const nameMatches = word.match(/([a-zA-Z_][a-zA-Z_0-9]*)/);
             const aritiesMathces = word.match(/\(.+?\)/);
             if (nameMatches && aritiesMathces) {
               const name = nameMatches[0];
