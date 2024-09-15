@@ -20,6 +20,9 @@ const cert = properties.path.cert;
 const maxAge = properties.max_age;
 const windowMs = properties.rate_limit.windowMs;
 const max = properties.rate_limit.max;
+const APIUrl = process.env.REACT_APP_LOIDE_API_SERVER
+  ? "http://".concat(process.env.REACT_APP_LOIDE_API_SERVER)
+  : "http://localhost:8084";
 
 // This function validates the JSON schemas
 var jpointer = require("json-pointer");
@@ -56,7 +59,7 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        connectSrc: ["'self'", "http://localhost:8084", "https://is.gd"],
+        connectSrc: ["'self'", APIUrl, "https://is.gd"],
       },
     },
   }),
