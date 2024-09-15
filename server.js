@@ -53,7 +53,12 @@ app.use(
     hsts: {
       maxAge: maxAge,
     },
-    contentSecurityPolicy: false,
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        connectSrc: ["'self'", "http://localhost:8084", "https://is.gd"],
+      },
+    },
   }),
 );
 
