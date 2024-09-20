@@ -4,7 +4,7 @@ import TabToExecute from "../../components/TabToExecute";
 import { EditorTabMap } from "../../lib/LoideInterfaces";
 
 import { AllTabs, CurrentTab, SuffixNameTab } from "../../lib/constants";
-fireEvent();
+setupIonicReact();
 
 const tabs: EditorTabMap = {};
 tabs[1] = {
