@@ -1,6 +1,5 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import TabToExecute from "../../components/TabToExecute";
-import { fireEvent } from "@testing-library/react";
 
 import { EditorTabMap } from "../../lib/LoideInterfaces";
 
