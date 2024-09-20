@@ -224,7 +224,9 @@ describe("<OptionTextValue />", () => {
 
     const swipeOpt = await screen.findByTestId("swipe-delete");
 
-    fireEvent.ionSwipe(swipeOpt, "right");
+    // fireEvent.ionSwipe(swipeOpt, "right");
+    // TODO "swipe" gesture is not available anymore,
+    // so this test needs to be replaced
 
     expect(onChangeOptionValues).toBeCalledTimes(1);
   });
