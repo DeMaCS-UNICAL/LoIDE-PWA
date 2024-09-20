@@ -2,8 +2,23 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
+
 import "@testing-library/jest-dom/extend-expect";
-import { mockIonicReact } from "@ionic/react-test-utils";
-mockIonicReact();
+
++ import { setupIonicReact } from "@ionic/react";
+
++ setupIonicReact();
+
+// Mock matchmedia
+window.matchMedia = window.matchMedia || function () {
+  return {
+    matches: false,
+    addListener: function () { },
+    removeListener: function () { }
+  };
+};
+
+
 // @ts-ignore
+
 global.setImmediate = jest.useRealTimers;
