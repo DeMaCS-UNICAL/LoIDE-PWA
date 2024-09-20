@@ -5,16 +5,17 @@
 import "@testing-library/jest-dom/extend-expect";
 import { setupIonicReact } from "@ionic/react";
 setupIonicReact();
-// @ts-ignore
-/* eslint:disable:no-empty */
 // Mock matchmedia
 window.matchMedia =
   window.matchMedia ||
   function () {
     return {
       matches: false,
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       addListener: function () {},
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       removeListener: function () {},
     };
   };
+// @ts-ignore
 global.setImmediate = jest.useRealTimers;
