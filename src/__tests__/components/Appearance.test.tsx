@@ -35,7 +35,7 @@ describe("<Appearance />", () => {
     );
     await screen.findByText("Dark mode");
     const toogle = await screen.findByTitle("Toogle dark mode");
-    fireEvent.ionChange(toogle, "1");
+    fireEvent.change(toogle, "1");
   });
 
   it("test font size editor item", async () => {
@@ -47,7 +47,7 @@ describe("<Appearance />", () => {
 
     const range = await screen.findByTitle("Font size editor range");
     const labelTexts = screen.queryAllByText("Font size");
-    fireEvent.ionChange(range, "1");
+    fireEvent.change(range, "1");
 
     expect(labelTexts.length).toBeGreaterThanOrEqual(1);
   });
@@ -62,7 +62,7 @@ describe("<Appearance />", () => {
 
     const range = await screen.findByTitle("Font size output range");
     const labelTexts = screen.queryAllByText("Font size");
-    fireEvent.ionChange(range, "1");
+    fireEvent.change(range, "1");
 
     expect(labelTexts.length).toBeGreaterThanOrEqual(1);
   });
