@@ -5,6 +5,7 @@
 import "@testing-library/jest-dom/extend-expect";
 import { setupIonicReact } from "@ionic/react";
 setupIonicReact();
+// @ts-ignore
 // Mock matchmedia
 window.matchMedia =
   window.matchMedia ||
@@ -15,5 +16,4 @@ window.matchMedia =
       removeListener: function () {},
     };
   };
-// @ts-ignore
 global.setImmediate = jest.useRealTimers;
