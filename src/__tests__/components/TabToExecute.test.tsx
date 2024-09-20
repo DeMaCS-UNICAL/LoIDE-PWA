@@ -4,6 +4,7 @@ import TabToExecute from "../../components/TabToExecute";
 import { EditorTabMap } from "../../lib/LoideInterfaces";
 
 import { AllTabs, CurrentTab, SuffixNameTab } from "../../lib/constants";
+import { setupIonicReact } from "@ionic/react";
 setupIonicReact();
 
 const tabs: EditorTabMap = {};
