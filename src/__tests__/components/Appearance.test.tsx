@@ -1,6 +1,5 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import Appearance from "../../components/Appearance";
-import { fireEvent } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { store } from "../../redux";
 
