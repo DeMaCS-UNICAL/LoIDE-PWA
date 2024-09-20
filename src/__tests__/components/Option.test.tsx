@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { fireEvent } from '@testing-library/react';
+import { fireEvent } from "@testing-library/react";
 import Option from "../../components/Option";
 import { IOptionsData } from "../../lib/LoideAPIInterfaces";
 import { ISolverOption } from "../../lib/LoideInterfaces";
