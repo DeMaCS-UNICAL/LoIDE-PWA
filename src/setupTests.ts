@@ -6,7 +6,7 @@ import "@testing-library/jest-dom/extend-expect";
 import { setupIonicReact } from "@ionic/react";
 setupIonicReact();
 // @ts-ignore
-// tslint:disable:no-empty
+/* tslint:disable:no-empty */
 // Mock matchmedia
 window.matchMedia =
   window.matchMedia ||
