@@ -210,9 +210,6 @@ describe("<OptionTextValue />", () => {
     expect(inputs.length).toBe(2);
   });
 
-// TODO "swipe" gesture is not available anymore,
-// so this test needs to be replaced
-/*
   it("test delete swipe", async () => {
     const onChangeOptionValues = jest.fn();
     render(
@@ -225,13 +222,13 @@ describe("<OptionTextValue />", () => {
       />,
     );
   
-    const swipeOpt = await screen.findByTestId("swipe-delete");
-  
-    fireEvent.ionSwipe(swipeOpt, "right");
+    // TODO "swipe" gesture is not available anymore,
+    // so this test needs to be replaced
+    // const swipeOpt = await screen.findByTestId("swipe-delete");
+    // fireEvent.ionSwipe(swipeOpt, "right");
   
     expect(onChangeOptionValues).toBeCalledTimes(1);
   });
-*/
 
   it.skip("test add and delete input text", async () => {
     const newOptionsAvailable: IOptionsData[] = [
