@@ -81,7 +81,7 @@ describe("<Option />", () => {
 
     const select = await screen.findByTestId("select-name-options");
     expect(select.getAttribute("value")).toBe("free choice");
-    fireEvent.ionChange(select, "silent");
+    fireEvent.change(select, "silent");
     expect(onChangeOptionType).toBeCalledTimes(1);
   });
 
@@ -168,7 +168,7 @@ describe("<OptionTextValue />", () => {
 
     const input = await screen.findByPlaceholderText("Insert a value");
 
-    fireEvent.ionChange(input, "--filter");
+    fireEvent.change(input, "--filter");
 
     expect(onChangeOptionValues).toBeCalledTimes(1);
   });
