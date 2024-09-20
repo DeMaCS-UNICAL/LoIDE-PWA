@@ -221,12 +221,12 @@ describe("<OptionTextValue />", () => {
         onChangeDisableOption={jest.fn()}
       />,
     );
-  
-    // TODO "swipe" gesture is not available anymore,
+
+    // TODO ionSwipe is not available anymore,
     // so this test needs to be replaced
     // const swipeOpt = await screen.findByTestId("swipe-delete");
     // fireEvent.ionSwipe(swipeOpt, "right");
-  
+
     expect(onChangeOptionValues).toBeCalledTimes(1);
   });
 
