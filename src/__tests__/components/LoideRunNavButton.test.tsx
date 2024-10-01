@@ -1,6 +1,5 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import LoideRunNavButton from "../../components/LoideRunNavButton";
-import { ionFireEvent as fireEvent } from "@ionic/react-test-utils";
 import { store } from "../../redux";
 import { Provider } from "react-redux";
 

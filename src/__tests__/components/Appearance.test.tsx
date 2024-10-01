@@ -1,6 +1,5 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import Appearance from "../../components/Appearance";
-import { ionFireEvent } from "@ionic/react-test-utils";
 import { Provider } from "react-redux";
 import { store } from "../../redux";
 
@@ -36,7 +35,7 @@ describe("<Appearance />", () => {
     );
     await screen.findByText("Dark mode");
     const toogle = await screen.findByTitle("Toogle dark mode");
-    ionFireEvent.ionChange(toogle, "1");
+    fireEvent.change(toogle, "1");
   });
 
   it("test font size editor item", async () => {
@@ -48,7 +47,7 @@ describe("<Appearance />", () => {
 
     const range = await screen.findByTitle("Font size editor range");
     const labelTexts = screen.queryAllByText("Font size");
-    ionFireEvent.ionChange(range, "1");
+    fireEvent.change(range, "1");
 
     expect(labelTexts.length).toBeGreaterThanOrEqual(1);
   });
@@ -63,7 +62,7 @@ describe("<Appearance />", () => {
 
     const range = await screen.findByTitle("Font size output range");
     const labelTexts = screen.queryAllByText("Font size");
-    ionFireEvent.ionChange(range, "1");
+    fireEvent.change(range, "1");
 
     expect(labelTexts.length).toBeGreaterThanOrEqual(1);
   });
@@ -90,6 +89,6 @@ describe("<Appearance />", () => {
     );
 
     const button = await screen.findByTitle("Reset appearance options");
-    ionFireEvent.click(button);
+    fireEvent.click(button);
   });
 });
