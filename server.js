@@ -24,6 +24,8 @@ const APIUrl = process.env.REACT_APP_LOIDE_API_SERVER
   ? "http://".concat(process.env.REACT_APP_LOIDE_API_SERVER)
   : "http://localhost:8084";
 
+const secureAPIUrl = APIUrl.replace("http", "https");
+  
 // This function validates the JSON schemas
 var jpointer = require("json-pointer");
 var Ajv = require("ajv");
@@ -59,7 +61,7 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        connectSrc: ["'self'", APIUrl, "https://is.gd"],
+        connectSrc: ["'self'", APIUrl, secureAPIUrl, "https://is.gd"],
       },
     },
   }),
