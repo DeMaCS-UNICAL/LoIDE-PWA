@@ -62,6 +62,7 @@
     "workbox-strategies": "^7.0.0"
   },
   "devDependencies": {
+    "@babel/plugin-transform-private-property-in-object":"^7.24.7",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.0.0",
     "@types/ace": "0.0.48",
