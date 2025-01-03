@@ -39,7 +39,7 @@
     "express": "^4.21.2",
     "express-force-ssl": "^0.3.2",
     "express-rate-limit": "^7.1.5",
-    "helmet": "^7.1.0",
+    "helmet": "^8.0.0",
     "ionicons": "^7.1.2",
     "json-pointer": "^0.6.2",
     "mousetrap": "^1.6.5",
