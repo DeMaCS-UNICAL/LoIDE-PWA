@@ -218,7 +218,6 @@ describe("<OptionTextValue />", () => {
 
   it("test delete swipe", async () => {
     const onChangeOptionValues = jest.fn();
-    const user = userEvent.setup()
     render(
       <Option
         optionsAvailable={optionsAvailable}
@@ -231,7 +230,7 @@ describe("<OptionTextValue />", () => {
 
     const swipeOpt = await screen.findByTestId("swipe-delete");
 
-    fireEvent.ionSwipe(swipeOpt, 'onSwipeLeft');
+    fireEvent(swipeOpt, 'onSwipeLeft');
 
     expect(onChangeOptionValues).toBeCalledTimes(1);
   });
