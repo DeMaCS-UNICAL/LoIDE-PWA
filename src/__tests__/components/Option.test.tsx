@@ -51,7 +51,7 @@ describe("<Option />", () => {
       />,
     );
     const button = screen.getByTitle("Delete option");
-    await user.click(button);
+    user.click(button);
     expect(onDeleteOption).toHaveBeenCalledTimes(1);
   });
 
