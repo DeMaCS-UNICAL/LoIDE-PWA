@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
-import { ionFireEvent as fireEvent } from "@ionic/react-test-utils";
+import { render, screen, fireEvent } from "@testing-library/react";
+import userEvent from '@testing-library/user-event';
 import Option from "../../components/Option";
 import { IOptionsData } from "../../lib/LoideAPIInterfaces";
 import { ISolverOption } from "../../lib/LoideInterfaces";
@@ -39,6 +39,7 @@ describe("<Option />", () => {
   });
 
   it("tests delete option button", () => {
+    const user = userEvent.setup()
     const onDeleteOption = jest.fn();
     render(
       <Option
@@ -50,7 +51,7 @@ describe("<Option />", () => {
       />,
     );
     const button = screen.getByTitle("Delete option");
-    fireEvent.click(button);
+    await user.click(button);
     expect(onDeleteOption).toHaveBeenCalledTimes(1);
   });
 
@@ -68,6 +69,7 @@ describe("<Option />", () => {
 
   it("test select", async () => {
     const onChangeOptionType = jest.fn();
+    const user = userEvent.setup()
 
     render(
       <Option
@@ -82,7 +84,7 @@ describe("<Option />", () => {
 
     const select = await screen.findByTestId("select-name-options");
     expect(select.getAttribute("value")).toBe("free choice");
-    fireEvent.ionChange(select, "silent");
+    await user.selectOptions(select, "silent");
     expect(onChangeOptionType).toBeCalledTimes(1);
   });
 
@@ -129,6 +131,7 @@ describe("<Option />", () => {
   it("test disable option", async () => {
     const onChangeDisableOption = jest.fn();
     const onChangeOptionType = jest.fn();
+    const user = userEvent.setup()
     render(
       <Option
         optionsAvailable={optionsAvailable}
@@ -139,7 +142,7 @@ describe("<Option />", () => {
       />,
     );
     const badge = await screen.findByText("Option 1");
-    fireEvent.click(badge);
+    await user.click(badge);
     expect(onChangeDisableOption).toBeCalledTimes(1);
   });
 });
@@ -156,6 +159,7 @@ describe("<OptionTextValue />", () => {
     ];
 
     const onChangeOptionValues = jest.fn();
+    const user = userEvent.setup()
 
     render(
       <Option
@@ -169,7 +173,7 @@ describe("<OptionTextValue />", () => {
 
     const input = await screen.findByPlaceholderText("Insert a value");
 
-    fireEvent.ionChange(input, "--filter");
+    await user.selectOptions(input, "--filter");
 
     expect(onChangeOptionValues).toBeCalledTimes(1);
   });
@@ -185,6 +189,7 @@ describe("<OptionTextValue />", () => {
     ];
 
     const onChangeOptionValues = jest.fn();
+    const user = userEvent.setup()
 
     render(
       <Option
@@ -202,7 +207,7 @@ describe("<OptionTextValue />", () => {
 
     expect(inputs.length).toBe(1);
 
-    fireEvent.click(button);
+    await user.click(button);
 
     expect(onChangeOptionValues).toBeCalledTimes(1);
 
@@ -213,6 +218,7 @@ describe("<OptionTextValue />", () => {
 
   it("test delete swipe", async () => {
     const onChangeOptionValues = jest.fn();
+    const user = userEvent.setup()
     render(
       <Option
         optionsAvailable={optionsAvailable}
@@ -225,7 +231,7 @@ describe("<OptionTextValue />", () => {
 
     const swipeOpt = await screen.findByTestId("swipe-delete");
 
-    fireEvent.ionSwipe(swipeOpt, "right");
+    fireEvent.ionSwipe(swipeOpt, 'onSwipeLeft');
 
     expect(onChangeOptionValues).toBeCalledTimes(1);
   });
@@ -242,6 +248,7 @@ describe("<OptionTextValue />", () => {
 
     const onChangeOptionValues = jest.fn();
     const onChangeDisableOption = jest.fn();
+    const user = userEvent.setup()
 
     // const ref = {
     //     current: {
@@ -264,14 +271,14 @@ describe("<OptionTextValue />", () => {
     let inputs = await screen.findAllByPlaceholderText("Insert a value");
     expect(inputs.length).toBe(1);
 
-    fireEvent.click(button);
+    await user.click(button);
 
     expect(onChangeOptionValues).toBeCalledTimes(1);
 
     inputs = await screen.findAllByPlaceholderText("Insert a value");
 
     const buttonsDelete = await screen.findAllByTitle("Delete option value");
-    fireEvent.click(buttonsDelete[0]);
+    await user.click(buttonsDelete[0]);
 
     expect(onChangeOptionValues).toBeCalledTimes(2);
 
