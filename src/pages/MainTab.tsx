@@ -214,7 +214,7 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
       </IonHeader>
       <IonContent scrollY={false} className="tab-content-of-hidden">
         <IonSplitPane contentId="main" when="lg">
-          {/*--  the side menu  --*/}
+          {/*-- the side settings menu --*/}
           <IonMenu contentId="main">
             <IonHeader>
               <IonToolbar className="side-toolbar">
@@ -225,7 +225,17 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
               <RunSettings />
             </IonContent>
           </IonMenu>
-
+          {/*-- the side output panel --*/}
+          <IonMenu contentId="main" side="end">
+            <IonHeader>
+              <IonToolbar className="side-toolbar">
+                <IonTitle>Output</IonTitle>
+              </IonToolbar>
+            </IonHeader>
+            <IonContent forceOverscroll={true}>
+              <Output model={model} error={error} />
+            </IonContent>
+          </IonMenu>
           {/*-- the main content --*/}
           <div id="main" className="main-side-editor">
             <Editor />
