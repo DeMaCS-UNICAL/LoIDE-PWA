@@ -1,33 +1,33 @@
 import { render, screen } from "@testing-library/react";
-import userEvent from '@testing-library/user-event';
+import userEvent from "@testing-library/user-event";
 import ShortcutsModal from "../../modals/ShortcutsModal";
 
 describe("<ShortcutsModal />", () => {
-  it("renders without crashing", () => {
-    const onDismiss = jest.fn();
+	it("renders without crashing", () => {
+		const onDismiss = jest.fn();
 
-    const { baseElement } = render(<ShortcutsModal isOpen={false} onDismiss={onDismiss} />);
-    
-    expect(baseElement).toBeDefined();
-  });
+		const { baseElement } = render(<ShortcutsModal isOpen={false} onDismiss={onDismiss} />);
 
-  it("displays the title", async () => {
-    const onDismiss = jest.fn();
+		expect(baseElement).toBeDefined();
+	});
 
-    render(<ShortcutsModal isOpen={true} onDismiss={onDismiss} />);
+	it("displays the title", async () => {
+		const onDismiss = jest.fn();
 
-    expect(await screen.findByText("Keyboard Shortcuts")).toBeVisible();
-  });
+		render(<ShortcutsModal isOpen={true} onDismiss={onDismiss} />);
 
-  it("test close button", async () => {
-    const onDismiss = jest.fn();
-    const user = userEvent.setup();
+		expect(await screen.findByText("Keyboard Shortcuts")).toBeVisible();
+	});
 
-    render(<ShortcutsModal isOpen={true} onDismiss={onDismiss} />);
+	it("test close button", async () => {
+		const onDismiss = jest.fn();
+		const user = userEvent.setup();
 
-    const button = await screen.findByText("Close");
-    await user.click(button);
+		render(<ShortcutsModal isOpen={true} onDismiss={onDismiss} />);
 
-    expect(onDismiss).toHaveBeenCalledTimes(1);
-  });
+		const button = await screen.findByText("Close");
+		await user.click(button);
+
+		expect(onDismiss).toHaveBeenCalledTimes(1);
+	});
 });
