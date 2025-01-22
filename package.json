@@ -31,7 +31,6 @@
     "@ionic/core": "^8.4.1",
     "@ionic/react": "^7.2.2",
     "@ionic/react-router": "^8.3.2",
-    "@ionic/react-test-utils": "^0.4.0",
     "@reduxjs/toolkit": "^2.2.7",
     "ace-builds": "^1.23.4",
     "ajv": "^8.17.1",
@@ -64,6 +63,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^16.0.1",
+    "@testing-library/user-event": "^14.5.2",
     "@types/ace": "0.0.48",
     "@types/mousetrap": "^1.6.11",
     "@types/react": "^18.2.18",
