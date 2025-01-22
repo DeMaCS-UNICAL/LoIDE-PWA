@@ -39,7 +39,7 @@ describe("<Option />", () => {
   });
 
   it("tests delete option button", () => {
-    const user = userEvent.setup()
+    const user = userEvent.setup();
     const onDeleteOption = jest.fn();
     render(
       <Option
@@ -69,7 +69,7 @@ describe("<Option />", () => {
 
   it("test select", async () => {
     const onChangeOptionType = jest.fn();
-    const user = userEvent.setup()
+    const user = userEvent.setup();
 
     render(
       <Option
@@ -131,7 +131,7 @@ describe("<Option />", () => {
   it("test disable option", async () => {
     const onChangeDisableOption = jest.fn();
     const onChangeOptionType = jest.fn();
-    const user = userEvent.setup()
+    const user = userEvent.setup();
     render(
       <Option
         optionsAvailable={optionsAvailable}
@@ -159,7 +159,7 @@ describe("<OptionTextValue />", () => {
     ];
 
     const onChangeOptionValues = jest.fn();
-    const user = userEvent.setup()
+    const user = userEvent.setup();
 
     render(
       <Option
@@ -189,7 +189,7 @@ describe("<OptionTextValue />", () => {
     ];
 
     const onChangeOptionValues = jest.fn();
-    const user = userEvent.setup()
+    const user = userEvent.setup();
 
     render(
       <Option
@@ -230,7 +230,7 @@ describe("<OptionTextValue />", () => {
 
     const swipeOpt = await screen.findByTestId("swipe-delete");
 
-    fireEvent(swipeOpt, 'onSwipeLeft');
+    fireEvent(swipeOpt, "onSwipeLeft");
 
     expect(onChangeOptionValues).toBeCalledTimes(1);
   });
@@ -247,7 +247,7 @@ describe("<OptionTextValue />", () => {
 
     const onChangeOptionValues = jest.fn();
     const onChangeDisableOption = jest.fn();
-    const user = userEvent.setup()
+    const user = userEvent.setup();
 
     // const ref = {
     //     current: {
