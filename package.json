@@ -55,7 +55,7 @@
     "redux": "^5.0.1",
     "socket.io-client": "^4.8.0",
     "web-vitals": "^3.4.0",
-    "workbox-core": "^7.0.0",
+    "workbox-core": "^7.3.0",
     "workbox-expiration": "^7.0.0",
     "workbox-precaching": "^7.0.0",
     "workbox-routing": "^7.3.0",
