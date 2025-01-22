@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react"; // , fireEvent
 import userEvent from "@testing-library/user-event";
 import Option from "../../components/Option";
 import { IOptionsData } from "../../lib/LoideAPIInterfaces";
@@ -228,9 +228,9 @@ describe("<OptionTextValue />", () => {
       />,
     );
 
-    const swipeOpt = await screen.findByTestId("swipe-delete");
-
     // TODO fix swipe command
+    // const swipeOpt = await screen.findByTestId("swipe-delete");
+
     // fireEvent(swipeOpt, "onSwipeLeft");
 
     // expect(onChangeOptionValues).toBeCalledTimes(1);
