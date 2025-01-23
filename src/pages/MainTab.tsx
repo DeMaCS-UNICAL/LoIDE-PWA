@@ -19,6 +19,11 @@ import { alertController, actionSheetController } from "@ionic/core";
 import logo from "../assets/img/logo_LoIDE.svg";
 import RunSettings from "../components/RunSettings";
 import Output from "../components/Output";
+import { backspaceOutline, downloadOutline } from "ionicons/icons";
+import Utils from "../lib/utils";
+import { useDispatch, useSelector } from "react-redux";
+import { UIStatusSelector } from "../redux/slices/UIStatus";
+import { outputSelector, setEmpty } from "../redux/slices/Output";
 import LoideRunNavButton from "../components/LoideRunNavButton";
 import Editor from "../components/Editor";
 import OpenProjectModal from "../modals/OpenProjectModal";
@@ -142,6 +147,24 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
       .then((alert) => alert.present());
   };
 
+  const dispatch = useDispatch();
+
+  const { model, error } = useSelector(outputSelector);
+
+  const { fontSizeOutput } = useSelector(UIStatusSelector);
+
+  const clearOutput = () => {
+    dispatch(setEmpty());
+  };
+
+  const downloadOutput = () => {
+    const fileContent = `${model} ${model.length > 0 ? "\n\n" : ""} ${error}`;
+
+    const fileTitle = "LoIDE_Output";
+
+    Utils.downloadTextFile(fileTitle, fileContent);
+  };
+
   return (
     <IonPage>
       <IonHeader>
@@ -231,10 +254,55 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
             <IonHeader>
               <IonToolbar className="side-toolbar">
                 <IonTitle>Output</IonTitle>
+                <IonButtons slot="start">
+                  <IonButton
+                    color="primary"
+                    className="ion-hide-sm-up"
+                    title="Download"
+                    disabled={model.length === 0 && error.length === 0}
+                    onClick={downloadOutput}
+                  >
+                    <IonIcon icon={downloadOutline} />
+                    <span className="margin-button-left">Download</span>
+                  </IonButton>
+                </IonButtons>
+                <IonButtons slot="end">
+                  <IonButton
+                    color="primary"
+                    className="ion-hide-sm-down"
+                    title="Download"
+                    disabled={model.length === 0 && error.length === 0}
+                    onClick={downloadOutput}
+                  >
+                    <IonIcon icon={downloadOutline} />
+                    <span className="margin-button-left">Download</span>
+                  </IonButton>
+                  <IonButton
+                    size="small"
+                    color="medium"
+                    title="Clear"
+                    disabled={model.length === 0 && error.length === 0}
+                    onClick={clearOutput}
+                  >
+                    <IonIcon icon={backspaceOutline} />
+                    <span className="margin-button-left"> Clear </span>
+                  </IonButton>
+                </IonButtons>
               </IonToolbar>
             </IonHeader>
-            <IonContent forceOverscroll={true}>
-              <Output model={model} error={error} />
+            <IonContent scrollY={false} className="tab-content-of-hidden">
+              <IonRow style={{ height: "100%" }}>
+                <IonCol
+                  size-md="8"
+                  offset-md="2"
+                  size-xl="6"
+                  offset-xl="3"
+                  className="ion-no-padding"
+                  style={{ height: "100%" }}
+                >
+                  <Output model={model} error={error} fontSize={fontSizeOutput} />
+                </IonCol>
+              </IonRow>
             </IonContent>
           </IonMenu>
           {/*-- the main content --*/}
