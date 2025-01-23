@@ -19,8 +19,6 @@ import { alertController, actionSheetController } from "@ionic/core";
 import logo from "../assets/img/logo_LoIDE.svg";
 import RunSettings from "../components/RunSettings";
 import Output from "../components/Output";
-import { backspaceOutline, downloadOutline } from "ionicons/icons";
-import { useDispatch } from "react-redux";
 import { UIStatusSelector } from "../redux/slices/UIStatus";
 import { outputSelector, setEmpty } from "../redux/slices/Output";
 import LoideRunNavButton from "../components/LoideRunNavButton";
@@ -32,13 +30,15 @@ import {
   folderOpenOutline,
   saveOutline,
   shareOutline,
+  backspaceOutline,
+  downloadOutline
 } from "ionicons/icons";
 import SaveProjectModal from "../modals/SaveProjectModal";
 import { ActionSheet, ButtonText, WindowConfirmMessages } from "../lib/constants";
 import Utils from "../lib/utils";
 import ShareProjectModal from "../modals/ShareProjectModal";
 import { RouteComponentProps } from "react-router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { languagesDataSelector } from "../redux/slices/LanguagesData";
 import RestoreButton from "../components/RestoreButton";
 import Mousetrap from "mousetrap";
