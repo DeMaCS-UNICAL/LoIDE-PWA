@@ -31,7 +31,7 @@ import {
   saveOutline,
   shareOutline,
   backspaceOutline,
-  downloadOutline
+  downloadOutline,
 } from "ionicons/icons";
 import SaveProjectModal from "../modals/SaveProjectModal";
 import { ActionSheet, ButtonText, WindowConfirmMessages } from "../lib/constants";
@@ -44,7 +44,7 @@ import RestoreButton from "../components/RestoreButton";
 import Mousetrap from "mousetrap";
 
 type MainTabPageProps = RouteComponentProps<{
-  data: string;
+  data: string,
 }>;
 
 const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
@@ -52,8 +52,8 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
   const [showSaveModal, setShowSaveModal] = useState<boolean>(false);
   const [showShareModal, setShowShareModal] = useState<boolean>(false);
   const [buttonsPopover, setButtonsPopover] = useState<{
-    open: boolean;
-    event: Event | undefined;
+    open: boolean,
+    event: Event | undefined,
   }>({ open: false, event: undefined });
 
   const { languages } = useSelector(languagesDataSelector);
