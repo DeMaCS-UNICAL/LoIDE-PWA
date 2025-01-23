@@ -18,7 +18,7 @@ import {
 import { alertController, actionSheetController } from "@ionic/core";
 import logo from "../assets/img/logo_LoIDE.svg";
 import RunSettings from "../components/RunSettings";
-import Option from "../components/Option";
+import Output from "../components/Output";
 import LoideRunNavButton from "../components/LoideRunNavButton";
 import Editor from "../components/Editor";
 import OpenProjectModal from "../modals/OpenProjectModal";
