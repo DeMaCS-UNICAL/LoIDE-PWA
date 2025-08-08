@@ -18,6 +18,9 @@ import {
 import { alertController, actionSheetController } from "@ionic/core";
 import logo from "../assets/img/logo_LoIDE.svg";
 import RunSettings from "../components/RunSettings";
+import Output from "../components/Output";
+import { UIStatusSelector } from "../redux/slices/UIStatus";
+import { outputSelector, setEmpty } from "../redux/slices/Output";
 import LoideRunNavButton from "../components/LoideRunNavButton";
 import Editor from "../components/Editor";
 import OpenProjectModal from "../modals/OpenProjectModal";
@@ -27,19 +30,21 @@ import {
   folderOpenOutline,
   saveOutline,
   shareOutline,
+  backspaceOutline,
+  downloadOutline,
 } from "ionicons/icons";
 import SaveProjectModal from "../modals/SaveProjectModal";
 import { ActionSheet, ButtonText, WindowConfirmMessages } from "../lib/constants";
 import Utils from "../lib/utils";
 import ShareProjectModal from "../modals/ShareProjectModal";
 import { RouteComponentProps } from "react-router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { languagesDataSelector } from "../redux/slices/LanguagesData";
 import RestoreButton from "../components/RestoreButton";
 import Mousetrap from "mousetrap";
 
 type MainTabPageProps = RouteComponentProps<{
-  data: string;
+  data: string,
 }>;
 
 const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
@@ -47,8 +52,8 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
   const [showSaveModal, setShowSaveModal] = useState<boolean>(false);
   const [showShareModal, setShowShareModal] = useState<boolean>(false);
   const [buttonsPopover, setButtonsPopover] = useState<{
-    open: boolean;
-    event: Event | undefined;
+    open: boolean,
+    event: Event | undefined,
   }>({ open: false, event: undefined });
 
   const { languages } = useSelector(languagesDataSelector);
@@ -141,6 +146,24 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
       .then((alert) => alert.present());
   };
 
+  const dispatch = useDispatch();
+
+  const { model, error } = useSelector(outputSelector);
+
+  const { fontSizeOutput } = useSelector(UIStatusSelector);
+
+  const clearOutput = () => {
+    dispatch(setEmpty());
+  };
+
+  const downloadOutput = () => {
+    const fileContent = `${model} ${model.length > 0 ? "\n\n" : ""} ${error}`;
+
+    const fileTitle = "LoIDE_Output";
+
+    Utils.downloadTextFile(fileTitle, fileContent);
+  };
+
   return (
     <IonPage>
       <IonHeader>
@@ -214,7 +237,7 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
       </IonHeader>
       <IonContent scrollY={false} className="tab-content-of-hidden">
         <IonSplitPane contentId="main" when="lg">
-          {/*--  the side menu  --*/}
+          {/*-- the side settings menu --*/}
           <IonMenu contentId="main">
             <IonHeader>
               <IonToolbar className="side-toolbar">
@@ -225,7 +248,62 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
               <RunSettings />
             </IonContent>
           </IonMenu>
-
+          {/*-- the side output panel --*/}
+          <IonMenu contentId="main" side="end">
+            <IonHeader>
+              <IonToolbar className="side-toolbar">
+                <IonTitle>Output</IonTitle>
+                <IonButtons slot="start">
+                  <IonButton
+                    color="primary"
+                    className="ion-hide-sm-up"
+                    title="Download"
+                    disabled={model.length === 0 && error.length === 0}
+                    onClick={downloadOutput}
+                  >
+                    <IonIcon icon={downloadOutline} />
+                    <span className="margin-button-left">Download</span>
+                  </IonButton>
+                </IonButtons>
+                <IonButtons slot="end">
+                  <IonButton
+                    color="primary"
+                    className="ion-hide-sm-down"
+                    title="Download"
+                    disabled={model.length === 0 && error.length === 0}
+                    onClick={downloadOutput}
+                  >
+                    <IonIcon icon={downloadOutline} />
+                    <span className="margin-button-left">Download</span>
+                  </IonButton>
+                  <IonButton
+                    size="small"
+                    color="medium"
+                    title="Clear"
+                    disabled={model.length === 0 && error.length === 0}
+                    onClick={clearOutput}
+                  >
+                    <IonIcon icon={backspaceOutline} />
+                    <span className="margin-button-left"> Clear </span>
+                  </IonButton>
+                </IonButtons>
+              </IonToolbar>
+            </IonHeader>
+            <IonContent scrollY={false} className="tab-content-of-hidden">
+              <IonRow style={{ height: "100%" }}>
+                <IonCol
+                  size-md="8"
+                  offset-md="2"
+                  size-xl="6"
+                  offset-xl="3"
+                  className="ion-no-padding"
+                  style={{ height: "100%" }}
+                >
+                  <Output model={model} error={error} fontSize={fontSizeOutput} />
+                </IonCol>
+              </IonRow>
+            </IonContent>
+          </IonMenu>
           {/*-- the main content --*/}
           <div id="main" className="main-side-editor">
             <Editor />
