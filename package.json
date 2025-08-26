@@ -40,7 +40,7 @@
     "express-force-ssl": "^0.3.2",
     "express-rate-limit": "^7.1.5",
     "helmet": "^8.0.0",
-    "ionicons": "^7.1.2",
+    "ionicons": "^8.0.13",
     "json-pointer": "^0.6.2",
     "mousetrap": "^1.6.5",
     "react": "^18.2.0",
