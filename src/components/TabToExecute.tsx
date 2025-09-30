@@ -79,12 +79,10 @@ const TabToExecute: React.FC<TabToExecuteProps> = (props) => {
             <IonLabel>Choose tab to execute</IonLabel>
           </IonListHeader>
           <IonItem>
-            <IonLabel> Current tab </IonLabel>
-            <IonRadio title="Current tab" slot="start" value={`${CurrentTab}`} />
+            <IonRadio title="Current tab" slot="start" value={`${CurrentTab}`} labelPlacement="end">Current tab</IonRadio>
           </IonItem>
           <IonItem lines="none">
-            <IonLabel> All tabs </IonLabel>
-            <IonRadio title="All tabs" slot="start" value={`${AllTabs}`} />
+            <IonRadio title="All tabs" slot="start" value={`${AllTabs}`} labelPlacement="end">All tabs</IonRadio>
           </IonItem>
         </IonRadioGroup>
       </IonList>
@@ -97,13 +95,15 @@ const TabToExecute: React.FC<TabToExecuteProps> = (props) => {
             onClick={() => onChange(`${key}`, !getIfChecked(key))}
             data-testid={`item-tab-${key}`}
           >
-            <IonLabel> {`${props.tabs[key].title}`} </IonLabel>
             <IonCheckbox
               slot="start"
               title={props.tabs[key].title}
               name={`${key}`}
               checked={getIfChecked(key)}
-            />
+              labelPlacement="end"
+            >
+              {`${props.tabs[key].title}`}
+            </IonCheckbox>
           </IonItem>
         ))}
       </IonList>
