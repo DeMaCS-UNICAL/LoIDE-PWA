@@ -79,10 +79,14 @@ const TabToExecute: React.FC<TabToExecuteProps> = (props) => {
             <IonLabel>Choose tab to execute</IonLabel>
           </IonListHeader>
           <IonItem>
-            <IonRadio title="Current tab" slot="start" value={`${CurrentTab}`} labelPlacement="end">Current tab</IonRadio>
+            <IonRadio title="Current tab" slot="start" value={`${CurrentTab}`} labelPlacement="end">
+              Current tab
+            </IonRadio>
           </IonItem>
           <IonItem lines="none">
-            <IonRadio title="All tabs" slot="start" value={`${AllTabs}`} labelPlacement="end">All tabs</IonRadio>
+            <IonRadio title="All tabs" slot="start" value={`${AllTabs}`} labelPlacement="end">
+              All tabs
+            </IonRadio>
           </IonItem>
         </IonRadioGroup>
       </IonList>

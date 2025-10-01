@@ -55,7 +55,7 @@ describe("MainTab page", () => {
     fireEvent.click(button);
 
     let modal: HTMLElement | null = await screen.findByText("Open project or text files");
-    
+
     expect(modal).not.toBeNull();
 
     const closeButton = await screen.findByText("Close");
@@ -78,7 +78,7 @@ describe("MainTab page", () => {
     fireEvent.click(button);
 
     let modal: HTMLElement | null = await screen.findByText("Save project");
-    
+
     expect(modal).not.toBeNull();
 
     const closeButton = await screen.findByText("Close");
