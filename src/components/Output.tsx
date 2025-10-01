@@ -31,7 +31,7 @@ const Output: React.FC<OutputProps> = ({ model, error, fontSize = 20 }) => {
     >
       <div className="output-content ion-padding">
         <div className="output-model" onDoubleClick={updateSelectedText}>
-          {language == LoideLanguages.ASP.name || language == LoideLanguages.DATALOG.name ? (
+          {language === LoideLanguages.ASP.name || language === LoideLanguages.DATALOG.name ? (
             <HighlightAtom text={model} highlight={atomNameSelected} />
           ) : (
             model
