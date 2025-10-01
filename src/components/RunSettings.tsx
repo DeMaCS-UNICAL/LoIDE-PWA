@@ -251,22 +251,19 @@ const RunSettings: React.FC = () => {
               <IonLabel>Language, Solver and Executor</IonLabel>
             </IonListHeader>
             <IonItem>
-              <IonLabel> Language </IonLabel>
-              <IonSelect value={currentLanguage} onIonChange={selectLanguage}>
+              <IonSelect label="Language" value={currentLanguage} onIonChange={selectLanguage}>
                 {languagesOptions}
               </IonSelect>
             </IonItem>
 
             <IonItem>
-              <IonLabel> Solver </IonLabel>
-              <IonSelect value={currentSolver} onIonChange={selectSolver}>
+              <IonSelect label="Solver" value={currentSolver} onIonChange={selectSolver}>
                 {solversOptions}
               </IonSelect>
             </IonItem>
 
             <IonItem>
-              <IonLabel> Executor </IonLabel>
-              <IonSelect value={currentExecutor} onIonChange={selectExecutor}>
+              <IonSelect label="Executor" value={currentExecutor} onIonChange={selectExecutor}>
                 {executorsOptions}
               </IonSelect>
             </IonItem>
@@ -311,13 +308,14 @@ const RunSettings: React.FC = () => {
                 <IonLabel>Execution options</IonLabel>
               </IonListHeader>
               <IonItem>
-                <IonLabel>Run automatically </IonLabel>
                 <IonToggle
                   title="Run automatically"
                   checked={runAuto}
                   slot="end"
                   onIonChange={onRunAutoChange}
-                />
+                >
+                  Run automatically
+                </IonToggle>
               </IonItem>
             </IonList>
           )}

@@ -1,4 +1,4 @@
-import { IonButton, IonCol, IonInput, IonItem, IonLabel, IonList, IonRow } from "@ionic/react";
+import { IonButton, IonCol, IonInput, IonItem, IonList, IonRow } from "@ionic/react";
 import React, { useState } from "react";
 import { defaultProjectName } from "../lib/constants";
 import Utils from "../lib/utils";
@@ -26,8 +26,9 @@ const SaveProject: React.FC = () => {
         <IonCol sizeMd="10" offsetMd="1" sizeLg="8" offsetLg="2">
           <IonList>
             <IonItem>
-              <IonLabel position="floating">Project name</IonLabel>
               <IonInput
+                label="Project name"
+                labelPlacement="floating"
                 placeholder="Insert a project name"
                 value={nameProject}
                 clearInput={true}

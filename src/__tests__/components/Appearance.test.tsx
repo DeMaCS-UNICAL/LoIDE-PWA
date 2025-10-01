@@ -1,6 +1,6 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import Appearance from "../../components/Appearance";
-import { ionFireEvent } from "@ionic/react-test-utils";
 import { Provider } from "react-redux";
 import { store } from "../../redux";
 
@@ -36,7 +36,7 @@ describe("<Appearance />", () => {
     );
     await screen.findByText("Dark mode");
     const toogle = await screen.findByTitle("Toogle dark mode");
-    ionFireEvent.ionChange(toogle, "1");
+    fireEvent.change(toogle, "1");
   });
 
   it("test font size editor item", async () => {
@@ -46,11 +46,15 @@ describe("<Appearance />", () => {
       </Provider>,
     );
 
-    const range = await screen.findByTitle("Font size editor range");
-    const labelTexts = screen.queryAllByText("Font size");
-    ionFireEvent.ionChange(range, "1");
+    const range = await screen.findByTestId("font-size-editor-range");
 
-    expect(labelTexts.length).toBeGreaterThanOrEqual(1);
+    // This checks if the value attribute exists
+    expect(range).toHaveAttribute("value");
+
+    fireEvent.change(range, { target: { value: "1" } });
+
+    // Check the current value of the range
+    expect(await screen.findByTestId("font-size-editor-range")).toHaveValue(1);
   });
 
   it("test font size output item", async () => {
@@ -59,16 +63,20 @@ describe("<Appearance />", () => {
         <Appearance />
       </Provider>,
     );
-    await screen.findAllByText("Font size");
 
-    const range = await screen.findByTitle("Font size output range");
-    const labelTexts = screen.queryAllByText("Font size");
-    ionFireEvent.ionChange(range, "1");
+    const range = await screen.findByTestId("font-size-output-range");
 
-    expect(labelTexts.length).toBeGreaterThanOrEqual(1);
+    // This checks if the value attribute exists
+    expect(range).toHaveAttribute("value");
+
+    fireEvent.change(range, { target: { value: "1" } });
+
+    // Check the current value of the range
+    expect(await screen.findByTestId("font-size-output-range")).toHaveValue(1);
   });
 
   it("test reset button", async () => {
+    const user = userEvent.setup();
     Object.defineProperty(window, "matchMedia", {
       writable: true,
       value: jest.fn().mockImplementation((query) => ({
@@ -90,6 +98,6 @@ describe("<Appearance />", () => {
     );
 
     const button = await screen.findByTitle("Reset appearance options");
-    ionFireEvent.click(button);
+    await user.click(button);
   });
 });
