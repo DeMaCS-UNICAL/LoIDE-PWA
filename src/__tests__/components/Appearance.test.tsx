@@ -46,11 +46,15 @@ describe("<Appearance />", () => {
       </Provider>,
     );
 
-    const range = await screen.findByTitle("Font size editor range");
-    const labelTexts = screen.queryAllByText("Font size");
-    fireEvent.change(range, "1");
+    const range = await screen.findByTestId("font-size-editor-range");
 
-    expect(labelTexts.length).toBeGreaterThanOrEqual(1);
+    // This checks if the value attribute exists
+    expect(range).toHaveAttribute("value");
+
+    fireEvent.change(range, { target: { value: "1" } });
+
+    // Check the current value of the range
+    expect(await screen.findByTestId("font-size-editor-range")).toHaveValue(1);
   });
 
   it("test font size output item", async () => {
@@ -59,13 +63,16 @@ describe("<Appearance />", () => {
         <Appearance />
       </Provider>,
     );
-    await screen.findAllByText("Font size");
 
-    const range = await screen.findByTitle("Font size output range");
-    const labelTexts = screen.queryAllByText("Font size");
-    fireEvent.change(range, "1");
+    const range = await screen.findByTestId("font-size-output-range");
 
-    expect(labelTexts.length).toBeGreaterThanOrEqual(1);
+    // This checks if the value attribute exists
+    expect(range).toHaveAttribute("value");
+
+    fireEvent.change(range, { target: { value: "1" } });
+
+    // Check the current value of the range
+    expect(await screen.findByTestId("font-size-output-range")).toHaveValue(1);
   });
 
   it("test reset button", async () => {
