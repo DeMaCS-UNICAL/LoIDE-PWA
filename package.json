@@ -16,7 +16,7 @@
     "start:prod": "npm run build && node server.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --transformIgnorePatterns 'node_modules/(?!(@ionic/react|@ionic/react-router|@ionic/core|@stencil/core|ionicons)/)' --watchAll=false",
-    "test:ci": "CI=true run-p types lint prettier:check 'test -- --coverage' --silent",
+    "test:ci": "CI=true run-p types lint prettier:check test:coverage --silent",
     "test:coverage": "CI=true npm test -- --env=jsdom --coverage --colors",
     "lint": "eslint ./src",
     "lint:fix": "eslint --fix ./src",
@@ -38,7 +38,6 @@
     "ajv": "^8.17.1",
     "babel-jest": "^30.2.0",
     "babel-loader": "^10.0.0",
-    "babel-plugin-named-asset-import": "^0.3.8",
     "babel-preset-react-app": "^10.1.0",
     "bfj": "^9.1.2",
     "browserslist": "^4.18.1",
@@ -59,7 +58,6 @@
     "identity-obj-proxy": "^3.0.0",
     "ionicons": "^8.0.13",
     "jest": "^27.4.3",
-    "jest-resolve": "^27.4.2",
     "jest-watch-typeahead": "^1.0.0",
     "json-pointer": "^0.6.2",
     "mini-css-extract-plugin": "^2.9.4",
@@ -69,7 +67,6 @@
     "postcss-loader": "^8.2.0",
     "postcss-normalize": "^13.0.1",
     "postcss-preset-env": "^10.4.0",
-    "prompts": "^2.4.2",
     "react": "^18.2.0",
     "react-ace": "^10.1.0",
     "react-app-polyfill": "^3.0.0",
@@ -91,17 +88,11 @@
     "socket.io-client": "^4.8.1",
     "source-map-loader": "^5.0.0",
     "style-loader": "^4.0.0",
-    "tailwindcss": "^3.4.18",
     "terser-webpack-plugin": "^5.3.14",
     "web-vitals": "^5.1.0",
     "webpack": "^5.102.0",
     "webpack-dev-server": "^5.2.2",
     "webpack-manifest-plugin": "^5.0.1",
-    "workbox-core": "^7.3.0",
-    "workbox-expiration": "^7.3.0",
-    "workbox-precaching": "^7.3.0",
-    "workbox-routing": "^7.3.0",
-    "workbox-strategies": "^7.3.0",
     "workbox-webpack-plugin": "^7.3.0"
   },
   "devDependencies": {
@@ -138,14 +129,11 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+      "defaults and fully supports es6-module",
+      "maintained node versions"
     ],
     "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
+      "defaults"
     ]
   },
   "contributors": [
