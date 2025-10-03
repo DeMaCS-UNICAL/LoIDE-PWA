@@ -1,19 +1,13 @@
 'use strict';
 
 const path = require('path');
-// const camelcase = require('camelcase');
+const camelcase = require('camelcase');
 
 // This is a custom Jest transformer turning file imports into filenames.
 // http://facebook.github.io/jest/docs/en/webpack.html
 
 module.exports = {
-  /**
-   * Jest allows `process` to be async (return a Promise) – perfect for
-   * loading an ES‑module at runtime.
-   */
-  async process(src, filename) {
-    const { default: camelcase } = await import('camelcase');
-
+  process(src, filename) {
     const assetFilename = JSON.stringify(path.basename(filename));
 
     if (filename.match(/\.svg$/)) {
