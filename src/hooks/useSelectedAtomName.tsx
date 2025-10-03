@@ -36,7 +36,7 @@ export const useSelectedAtomName = () => {
       try {
         res = regex.test(text);
         return res;
-      } catch (err) {
+      } catch {
         return false;
       }
     },
@@ -51,7 +51,7 @@ export const useSelectedAtomName = () => {
       const res = regex.exec(text);
       if (res && res.length > 0) return res[0];
       return "";
-    } catch (err) {
+    } catch {
       return "";
     }
   }, []);

@@ -39,7 +39,7 @@ describe("<LoideToolbarEditor />", () => {
     const button = await screen.findByTitle("Undo");
     fireEvent.click(button);
 
-    expect(onUndo).toBeCalledTimes(1);
+    expect(onUndo).toHaveBeenCalledTimes(1);
   });
 
   it("test redo button", async () => {
@@ -59,7 +59,7 @@ describe("<LoideToolbarEditor />", () => {
     const button = await screen.findByTitle("Redo");
     fireEvent.click(button);
 
-    expect(onRedo).toBeCalledTimes(1);
+    expect(onRedo).toHaveBeenCalledTimes(1);
   });
 
   it("test search button", async () => {
@@ -79,7 +79,7 @@ describe("<LoideToolbarEditor />", () => {
     const button = await screen.findByTitle("Search");
     fireEvent.click(button);
 
-    expect(onSearch).toBeCalledTimes(1);
+    expect(onSearch).toHaveBeenCalledTimes(1);
   });
 
   it("test paste button", async () => {
@@ -100,7 +100,7 @@ describe("<LoideToolbarEditor />", () => {
     const button = await screen.findByTitle("Paste");
     fireEvent.click(button);
 
-    expect(onPaste).toBeCalledTimes(1);
+    expect(onPaste).toHaveBeenCalledTimes(1);
   });
 
   it.skip("test copy button", async () => {
@@ -121,7 +121,7 @@ describe("<LoideToolbarEditor />", () => {
     const button = await screen.findByTitle("Copy");
     fireEvent.click(button);
 
-    expect(onCopy).toBeCalledTimes(1);
+    expect(onCopy).toHaveBeenCalledTimes(1);
   });
 
   it.skip("test cut button", async () => {
@@ -142,7 +142,7 @@ describe("<LoideToolbarEditor />", () => {
     const button = await screen.findByTitle("Cut");
     fireEvent.click(button);
 
-    expect(onCut).toBeCalledTimes(1);
+    expect(onCut).toHaveBeenCalledTimes(1);
   });
 
   it("test download content tab button", async () => {
@@ -163,6 +163,6 @@ describe("<LoideToolbarEditor />", () => {
     const button = await screen.findByTitle("Download content");
     fireEvent.click(button);
 
-    expect(onDownloadTab).toBeCalledTimes(1);
+    expect(onDownloadTab).toHaveBeenCalledTimes(1);
   });
 });

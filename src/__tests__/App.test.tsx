@@ -5,7 +5,7 @@ import { store } from "../redux";
 
 jest.mock("../lib/api");
 
-describe.only("<App />", () => {
+describe("<App />", () => {
   beforeAll(() => {
     window.HTMLElement.prototype.scrollIntoView = jest.fn();
   });
