@@ -1,7 +1,7 @@
 {
   "name": "loide-pwa",
   "description": "Progressive Web App IDE for Logic Programming",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "license": "MIT",
   "private": true,
   "repository": {
@@ -49,9 +49,6 @@
     "css-minimizer-webpack-plugin": "^7.0.2",
     "dotenv": "^17.2.3",
     "dotenv-expand": "^12.0.3",
-    "eslint": "^8.3.0",
-    "eslint-config-react-app": "^7.0.1",
-    "eslint-webpack-plugin": "^3.1.1",
     "express": "^5.1.0",
     "express-force-ssl": "^0.3.2",
     "express-rate-limit": "^8.1.0",
@@ -108,6 +105,9 @@
     "workbox-webpack-plugin": "^7.3.0"
   },
   "devDependencies": {
+    "@eslint/compat": "^1.4.0",
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.36.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
@@ -118,27 +118,23 @@
     "@types/react-router": "^5.1.20",
     "@types/react-router-dom": "^5.3.3",
     "@types/socket.io-client": "^1.4.36",
-    "@typescript-eslint/eslint-plugin": "^5.62.0",
-    "@typescript-eslint/parser": "^5.62.0",
-    "eslint": "^8.46.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-config-react-app": "^7.0.1",
-    "eslint-import-resolver-typescript": "^3.7.0",
-    "eslint-plugin-import": "^2.30.0",
-    "eslint-plugin-prettier": "^5.2.1",
-    "eslint-plugin-react": "^7.37.3",
-    "eslint-plugin-react-hooks": "^4.6.2",
+    "@typescript-eslint/eslint-plugin": "^8.45.0",
+    "@typescript-eslint/parser": "^8.45.0",
+    "eslint": "^9.36.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jest": "^29.0.1",
+    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^6.1.0",
+    "eslint-webpack-plugin": "^5.0.2",
+    "globals": "^16.4.0",
     "husky": "^9.1.7",
     "npm-run-all": "^4.1.5",
     "prettier": "^3.6.2",
     "pretty-quick": "^4.2.2",
     "sass": "^1.93.2"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "browserslist": {
     "production": [

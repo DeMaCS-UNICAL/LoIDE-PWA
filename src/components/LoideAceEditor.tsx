@@ -1,4 +1,3 @@
-/* eslint-disable no-template-curly-in-string */
 import React, { useEffect, useRef, useState } from "react";
 import AceEditor from "react-ace";
 

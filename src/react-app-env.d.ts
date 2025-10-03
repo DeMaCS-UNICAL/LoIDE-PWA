@@ -1,8 +1,7 @@
-// eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference types="node" />
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference types="react" />
-// eslint-disable-next-line @typescript-eslint/triple-slash-reference
+
 /// <reference types="react-dom" />
 
 declare namespace NodeJS {

@@ -99,7 +99,7 @@ describe("<TabToExecute />", () => {
 
     fireEvent(radioGroup, new CustomEvent("ionChange", { detail: { value: CurrentTab } }));
 
-    expect(onCheckCurrentTab).toBeCalled();
+    expect(onCheckCurrentTab).toHaveBeenCalled();
     expect(tabsIDToExecute.length).toBe(0);
   });
 
@@ -124,7 +124,7 @@ describe("<TabToExecute />", () => {
 
     fireEvent(radioGroup, new CustomEvent("ionChange", { detail: { value: AllTabs } }));
 
-    expect(onCheckAllTabs).toBeCalled();
+    expect(onCheckAllTabs).toHaveBeenCalled();
     expect(tabsIDToExecute.length).toBe(Object.keys(tabs).length);
   });
 
@@ -148,7 +148,7 @@ describe("<TabToExecute />", () => {
 
     await user.click(item);
 
-    expect(onCheckTab).toBeCalled();
+    expect(onCheckTab).toHaveBeenCalled();
     expect(tabsIDToExecute.length).toBe(1);
   });
 });
