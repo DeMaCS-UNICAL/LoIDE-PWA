@@ -9,26 +9,26 @@ import "ace-builds/src-noconflict/ext-language_tools";
 import "ace-builds/src-min-noconflict/ext-searchbox";
 import ace from "ace-builds/src-noconflict/ace";
 import { LoideLanguages, LoideSolvers } from "../lib/constants";
-import { EditSession } from "ace-builds";
-
-EditSession.prototype.toJSON = function () {
-  return {
-    annotations: this.getAnnotations(),
-    breakpoints: this.getBreakpoints(),
-    folds: this.getAllFolds().map(function (fold: any) {
-      return fold.range;
-    }),
-    history: {
-      undo: this.getUndoManager().$undoStack,
-      redo: this.getUndoManager().$redoStack,
-    },
-    mode: this.getMode().$id,
-    scrollLeft: this.getScrollLeft(),
-    scrollTop: this.getScrollTop(),
-    selection: this.getSelection().toJSON(),
-    value: this.getValue(),
-  };
-};
+// import { EditSession } from "ace-builds";
+//
+// EditSession.prototype.toJSON = function () {
+//   return {
+//     annotations: this.getAnnotations(),
+//     breakpoints: this.getBreakpoints(),
+//     folds: this.getAllFolds().map(function (fold: any) {
+//       return fold.range;
+//     }),
+//     history: {
+//       undo: this.getUndoManager().$undoStack,
+//       redo: this.getUndoManager().$redoStack,
+//     },
+//     mode: this.getMode().$id,
+//     scrollLeft: this.getScrollLeft(),
+//     scrollTop: this.getScrollTop(),
+//     selection: this.getSelection().toJSON(),
+//     value: this.getValue(),
+//   };
+// };
 
 const createEditSession = (session: any) => {
   const editSession = new ace.EditSession(session.value);
