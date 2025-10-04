@@ -32,6 +32,8 @@ describe("OutputTab page", () => {
     );
     const buttons = await screen.findAllByTitle("Download");
 
+    HTMLAnchorElement.prototype.click = jest.fn();
+
     fireEvent.click(buttons[0]);
     fireEvent.click(buttons[1]);
   });
