@@ -2,7 +2,6 @@ import {
   IonButton,
   IonIcon,
   IonItem,
-  IonLabel,
   IonList,
   IonListHeader,
   IonRange,
@@ -53,13 +52,14 @@ const Appearance: React.FC = () => {
         <IonListHeader>General</IonListHeader>
         <IonItem>
           <IonIcon slot="start" color="dark" icon={moonOutline} />
-          <IonLabel>Dark mode </IonLabel>
           <IonToggle
             title="Toogle dark mode"
             checked={darkMode}
             slot="end"
             onIonChange={onDarkModeChange}
-          />
+          >
+            Dark mode
+          </IonToggle>
         </IonItem>
         <IonListHeader>Editor</IonListHeader>
         <IonItem>
@@ -71,9 +71,10 @@ const Appearance: React.FC = () => {
             pin={true}
             snaps={true}
             title="Font size editor range"
-          >
-            <IonLabel slot="start">Font size</IonLabel>
-          </IonRange>
+            labelPlacement="start"
+            label="Font size"
+            data-testid="font-size-editor-range"
+          ></IonRange>
         </IonItem>
         <IonListHeader>Output</IonListHeader>
         <IonItem>
@@ -85,9 +86,10 @@ const Appearance: React.FC = () => {
             pin={true}
             snaps={true}
             title="Font size output range"
-          >
-            <IonLabel slot="start">Font size</IonLabel>
-          </IonRange>
+            labelPlacement="start"
+            label="Font size"
+            data-testid="font-size-output-range"
+          ></IonRange>
         </IonItem>
       </IonList>
       <IonButton

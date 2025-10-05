@@ -1,4 +1,4 @@
-@import "./style/tabs.scss";
+@use "./style/tabs.scss";
 
 :root {
   --landscape-width: 25; // % OR vw for responsive window resizing!

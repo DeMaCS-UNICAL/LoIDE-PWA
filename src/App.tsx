@@ -9,6 +9,7 @@ import {
   IonTabBar,
   IonTabButton,
   IonTabs,
+  setupIonicReact,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import {
@@ -54,6 +55,8 @@ import { setError, setModel } from "./redux/slices/Output";
 import { setLanguages } from "./redux/slices/LanguagesData";
 import Mousetrap from "mousetrap";
 import ShortcutsModal from "./modals/ShortcutsModal";
+
+setupIonicReact();
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -117,13 +120,13 @@ const App: React.FC = () => {
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-            <Route path={`/${LoidePath.Editor}/:data`} component={MainTab} exact={true} />
-            <Route path={`/${LoidePath.RunSettings}`} component={RunSettingsTab} exact={true} />
+            <Route exact path={`/${LoidePath.Editor}/:data?`} component={MainTab} />
+            <Route exact path={`/${LoidePath.RunSettings}`} component={RunSettingsTab} />
             <Route path={`/${LoidePath.Output}`} component={OutputTab} />
             <Route path={`/${LoidePath.Appearance}`} component={AppearanceTab} />
-            <Route path={`/${LoidePath.About}`} component={AboutTab} />
-            <Route path="/" render={() => <Redirect to={`/${LoidePath.Editor}`} />} exact={true} />
-            <Route component={MainTab} />
+            <Route exact path={`/${LoidePath.About}`} component={AboutTab} />
+            <Route exact path="/" render={() => <Redirect to={`/${LoidePath.Editor}`} />} />
+            {/* <Route component={MainTab} /> */}
           </IonRouterOutlet>
 
           <IonTabBar slot="bottom">

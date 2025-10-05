@@ -52,7 +52,7 @@ import {
 const isJSON = (str: string) => {
   try {
     JSON.parse(str);
-  } catch (e) {
+  } catch {
     return false;
   }
   return true;
@@ -215,7 +215,7 @@ const getPropName = (obj: any) =>
 const isClipboardReadSupported = (): boolean => {
   try {
     return typeof navigator?.clipboard?.readText === "undefined" ? false : true;
-  } catch (error) {
+  } catch {
     return false;
   }
 };
@@ -223,7 +223,7 @@ const isClipboardReadSupported = (): boolean => {
 const isClipboardWriteSupported = (): boolean => {
   try {
     return typeof navigator?.clipboard?.writeText === "undefined" ? false : true;
-  } catch (error) {
+  } catch {
     return false;
   }
 };
@@ -582,7 +582,7 @@ const getProjectFromLocalStorage = (): ILoideProject | undefined => {
   if (projectString) {
     try {
       project = JSON.parse(projectString);
-    } catch (error) {
+    } catch {
       project = undefined;
     }
   }

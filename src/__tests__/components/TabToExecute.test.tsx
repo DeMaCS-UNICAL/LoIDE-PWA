@@ -1,11 +1,12 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import TabToExecute from "../../components/TabToExecute";
-import { ionFireEvent as fireEvent, ionFireEvent, mockIonicReact } from "@ionic/react-test-utils";
 
 import { EditorTabMap } from "../../lib/LoideInterfaces";
 
 import { AllTabs, CurrentTab, SuffixNameTab } from "../../lib/constants";
-mockIonicReact();
+import { setupIonicReact } from "@ionic/react";
+setupIonicReact();
 
 const tabs: EditorTabMap = {};
 tabs[1] = {
@@ -98,7 +99,7 @@ describe("<TabToExecute />", () => {
 
     fireEvent(radioGroup, new CustomEvent("ionChange", { detail: { value: CurrentTab } }));
 
-    expect(onCheckCurrentTab).toBeCalled();
+    expect(onCheckCurrentTab).toHaveBeenCalled();
     expect(tabsIDToExecute.length).toBe(0);
   });
 
@@ -123,7 +124,7 @@ describe("<TabToExecute />", () => {
 
     fireEvent(radioGroup, new CustomEvent("ionChange", { detail: { value: AllTabs } }));
 
-    expect(onCheckAllTabs).toBeCalled();
+    expect(onCheckAllTabs).toHaveBeenCalled();
     expect(tabsIDToExecute.length).toBe(Object.keys(tabs).length);
   });
 
@@ -132,6 +133,7 @@ describe("<TabToExecute />", () => {
     const onCheckTab = jest.fn((id: number, value: boolean) => {
       if (value) tabsIDToExecute.push(id);
     });
+    const user = userEvent.setup();
     render(
       <TabToExecute
         tabs={tabs}
@@ -144,9 +146,9 @@ describe("<TabToExecute />", () => {
 
     const item = await screen.findByTestId(`item-tab-1`);
 
-    ionFireEvent.click(item);
+    await user.click(item);
 
-    expect(onCheckTab).toBeCalled();
+    expect(onCheckTab).toHaveBeenCalled();
     expect(tabsIDToExecute.length).toBe(1);
   });
 });

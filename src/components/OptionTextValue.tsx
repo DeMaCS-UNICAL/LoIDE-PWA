@@ -1,7 +1,6 @@
 import {
   IonItemSliding,
   IonItem,
-  IonLabel,
   IonInput,
   IonButton,
   IonIcon,
@@ -31,9 +30,6 @@ const OptionTextValue: React.FC<OptionTextValueProp> = (props) => {
   return (
     <IonItemSliding ref={slideOptions}>
       <IonItem data-testid="option-text-value-item">
-        <IonLabel style={props.disabled ? { opacity: 0.3 } : {}}>
-          <b> Value </b>
-        </IonLabel>
         <IonInput
           clearInput={true}
           enterkeyhint="done"
@@ -44,6 +40,9 @@ const OptionTextValue: React.FC<OptionTextValueProp> = (props) => {
           value={props.value}
           disabled={props.disabled}
         />
+        <div slot="label" style={props.disabled ? { opacity: 0.3 } : {}}>
+          <b> Value </b>
+        </div>
         {props.lastItem && (
           <IonButton
             color="light"

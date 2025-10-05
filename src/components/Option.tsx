@@ -6,7 +6,6 @@ import {
   IonButton,
   IonIcon,
   IonItem,
-  IonLabel,
   IonList,
   IonSelect,
   IonSelectOption,
@@ -131,16 +130,15 @@ const Option: React.FC<OptionProps> = (props) => {
       </IonItem>
 
       <IonItem>
-        <IonLabel>
-          <b>Name</b>
-        </IonLabel>
-
         <IonSelect
           data-testid="select-name-options"
           onIonChange={onChangeOptionType}
           value={option.name}
           disabled={props.disabled}
         >
+          <div slot="label">
+            <b>Name</b>
+          </div>
           {options}
         </IonSelect>
       </IonItem>
