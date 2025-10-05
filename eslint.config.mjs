@@ -68,7 +68,6 @@ export default defineConfig([{
         // Core
         "no-duplicate-imports": "error",
         // React
-        "react/react-in-jsx-scope": "warn",              // React 17+ auto JSX
         "react/jsx-uses-react": "warn",
         "react/jsx-uses-vars": "error",
         "react/no-unescaped-entities": "warn",

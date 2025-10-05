@@ -341,10 +341,11 @@ module.exports = function (webpackEnv) {
       rules: [
         // Handle node_modules packages that contain sourcemaps
         shouldUseSourceMap && {
-          enforce: 'pre',
-          exclude: /@babel(?:\/|\\{1,2})runtime/,
+          // enforce: 'pre',
+          // exclude: /@babel(?:\/|\\{1,2})runtime/,
           test: /\.(js|mjs|jsx|ts|tsx|css)$/,
-          loader: require.resolve('source-map-loader'),
+          // loader: require.resolve('source-map-loader'),
+          extractSourceMap: true
         },
         {
           // "oneOf" will traverse all following loaders until one will
