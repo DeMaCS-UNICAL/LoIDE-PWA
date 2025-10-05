@@ -1,30 +1,114 @@
 {
   "name": "loide-pwa",
+  "version": "1.2.0",
   "description": "Progressive Web App IDE for Logic Programming",
-  "version": "1.1.0",
-  "license": "MIT",
-  "private": true,
+  "bugs": {
+    "url": "https://github.com/DeMaCS-UNICAL/LoIDE-PWA/issues"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/DeMaCS-UNICAL/LoIDE-PWA.git"
   },
-  "bugs": {
-    "url": "https://github.com/DeMaCS-UNICAL/LoIDE-PWA/issues"
-  },
+  "license": "MIT",
+  "contributors": [
+    {
+      "name": "Stefano Germano"
+    },
+    {
+      "name": "Eliana Palermiti"
+    },
+    {
+      "name": "Rocco Palermiti"
+    },
+    {
+      "name": "Alexander Karaulshchikov"
+    },
+    {
+      "name": "Giorgio Andronico"
+    },
+    {
+      "name": "Francesco Calimeri"
+    }
+  ],
   "scripts": {
+    "build": "node scripts/build.js",
+    "format:staged": "pretty-quick --staged",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint --fix ./src",
+    "prepare": "husky",
+    "prettier:check": "prettier --check ./src",
+    "prettier:write": "prettier --write ./src",
     "start": "node scripts/start.js",
     "start:prod": "npm run build && node server.js",
-    "build": "node scripts/build.js",
     "test": "node scripts/test.js --transformIgnorePatterns 'node_modules/(?!(@ionic/react|@ionic/react-router|@ionic/core|@stencil/core|ionicons)/)' --watchAll=false",
     "test:ci": "CI=true run-p types lint prettier:check test:coverage --silent",
     "test:coverage": "CI=true npm test -- --env=jsdom --coverage --colors",
-    "lint": "eslint ./src",
-    "lint:fix": "eslint --fix ./src",
-    "types": "tsc --noEmit",
-    "format:staged": "pretty-quick --staged",
-    "prettier:check": "prettier --check ./src",
-    "prettier:write": "prettier --write ./src",
-    "prepare": "husky"
+    "types": "tsc --noEmit"
+  },
+  "babel": {
+    "presets": [
+      "react-app"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      "defaults and fully supports es6-module"
+    ],
+    "development": [
+      "defaults"
+    ]
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}",
+      "!src/**/*.d.ts"
+    ],
+    "moduleFileExtensions": [
+      "web.js",
+      "js",
+      "web.ts",
+      "ts",
+      "web.tsx",
+      "tsx",
+      "json",
+      "web.jsx",
+      "jsx",
+      "node"
+    ],
+    "moduleNameMapper": {
+      "^react-native$": "react-native-web",
+      "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy",
+      "ionicons/components/ion-icon.js": "@ionic/core/components/ion-icon.js"
+    },
+    "modulePaths": [],
+    "resetMocks": true,
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "setupFiles": [
+      "react-app-polyfill/jsdom"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/setupTests.ts"
+    ],
+    "testEnvironment": "jsdom",
+    "testMatch": [
+      "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
+      "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
+    ],
+    "transform": {
+      "^.+\\.(js|jsx|mjs|cjs|ts|tsx)$": "<rootDir>/config/jest/babelTransform.js",
+      "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
+      "^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+    },
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$",
+      "^.+\\.module\\.(css|sass|scss)$"
+    ],
+    "watchPlugins": [
+      "jest-watch-typeahead/filename",
+      "jest-watch-typeahead/testname"
+    ]
   },
   "dependencies": {
     "@babel/core": "^7.28.4",
@@ -127,96 +211,5 @@
     "prettier": "^3.6.2",
     "pretty-quick": "^4.2.2",
     "sass": "^1.93.2"
-  },
-  "browserslist": {
-    "production": [
-      "defaults and fully supports es6-module"
-    ],
-    "development": [
-      "defaults"
-    ]
-  },
-  "contributors": [
-    {
-      "name": "Stefano Germano",
-      "email": "germano@mat.unical.it"
-    },
-    {
-      "name": "Eliana Palermiti",
-      "email": "eliana_palermiti@libero.it"
-    },
-    {
-      "name": "Rocco Palermiti",
-      "email": "roccopalermiti@virgilio.it"
-    },
-    {
-      "name": "Alexander Karaulshchikov",
-      "email": "alexander.karaulshchikov@gmail.com"
-    },
-    {
-      "name": "Giorgio Andronico",
-      "email": "bytecodex2@gmail.com"
-    },
-    {
-      "name": "Francesco Calimeri",
-      "email": "calimeri@mat.unical.it"
-    }
-  ],
-  "jest": {
-    "roots": [
-      "<rootDir>/src"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}",
-      "!src/**/*.d.ts"
-    ],
-    "setupFiles": [
-      "react-app-polyfill/jsdom"
-    ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/src/setupTests.ts"
-    ],
-    "testMatch": [
-      "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
-      "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
-    ],
-    "testEnvironment": "jsdom",
-    "transform": {
-      "^.+\\.(js|jsx|mjs|cjs|ts|tsx)$": "<rootDir>/config/jest/babelTransform.js",
-      "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
-      "^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
-    },
-    "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$",
-      "^.+\\.module\\.(css|sass|scss)$"
-    ],
-    "modulePaths": [],
-    "moduleNameMapper": {
-      "^react-native$": "react-native-web",
-      "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy",
-      "ionicons/components/ion-icon.js": "@ionic/core/components/ion-icon.js"
-    },
-    "moduleFileExtensions": [
-      "web.js",
-      "js",
-      "web.ts",
-      "ts",
-      "web.tsx",
-      "tsx",
-      "json",
-      "web.jsx",
-      "jsx",
-      "node"
-    ],
-    "watchPlugins": [
-      "jest-watch-typeahead/filename",
-      "jest-watch-typeahead/testname"
-    ],
-    "resetMocks": true
-  },
-  "babel": {
-    "presets": [
-      "react-app"
-    ]
   }
 }
