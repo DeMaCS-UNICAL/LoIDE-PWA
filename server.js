@@ -48,7 +48,13 @@ if (key.length !== 0 && cert.length !== 0) {
   var secureServer = https.createServer(options, app);
 }
 
-const connectURLs = ["'self'", "https://is.gd", process.env.REACT_APP_LOIDE_API_SERVER?.trim()].filter(Boolean);
+const connectURLs = [
+  "'self'",
+  "https://is.gd",
+  // it could be simplified once all browsers comply with the Content Security Policy standard (https://w3c.github.io/webappsec-csp/#match-schemes)
+  process.env.REACT_APP_LOIDE_API_SERVER?.trim(),
+  enableHTTPS && process.env.REACT_APP_LOIDE_API_SERVER ? "wss://" + process.env.REACT_APP_LOIDE_API_SERVER.trim() : "",
+].filter(Boolean);
 
 app.use(
   helmet({
