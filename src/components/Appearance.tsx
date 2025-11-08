@@ -1,10 +1,12 @@
 import {
   IonButton,
+  IonCol,
   IonIcon,
   IonItem,
   IonList,
   IonListHeader,
   IonRange,
+  IonRow,
   IonToggle,
 } from "@ionic/react";
 import { moonOutline } from "ionicons/icons";
@@ -61,36 +63,42 @@ const Appearance: React.FC = () => {
             Dark mode
           </IonToggle>
         </IonItem>
-        <IonListHeader>Editor</IonListHeader>
-        <IonItem>
-          <IonRange
-            value={fontSizeEditor}
-            onIonChange={onFontEditorChange}
-            min={15}
-            max={30}
-            pin={true}
-            snaps={true}
-            title="Font size editor range"
-            labelPlacement="start"
-            label="Font size"
-            data-testid="font-size-editor-range"
-          ></IonRange>
-        </IonItem>
-        <IonListHeader>Output</IonListHeader>
-        <IonItem>
-          <IonRange
-            value={fontSizeOutput}
-            onIonChange={onFontOutputChange}
-            min={15}
-            max={30}
-            pin={true}
-            snaps={true}
-            title="Font size output range"
-            labelPlacement="start"
-            label="Font size"
-            data-testid="font-size-output-range"
-          ></IonRange>
-        </IonItem>
+        <IonRow>
+          <IonCol>
+            <IonListHeader>Editor</IonListHeader>
+            <IonItem>
+              <IonRange
+                value={fontSizeEditor}
+                onIonChange={onFontEditorChange}
+                min={15}
+                max={30}
+                pin={true}
+                snaps={true}
+                title="Font size editor range"
+                labelPlacement="start"
+                label="Font size"
+                data-testid="font-size-editor-range"
+              ></IonRange>
+            </IonItem>
+          </IonCol>
+          <IonCol>
+            <IonListHeader>Output</IonListHeader>
+            <IonItem>
+              <IonRange
+                value={fontSizeOutput}
+                onIonChange={onFontOutputChange}
+                min={15}
+                max={30}
+                pin={true}
+                snaps={true}
+                title="Font size output range"
+                labelPlacement="start"
+                label="Font size"
+                data-testid="font-size-output-range"
+              ></IonRange>
+            </IonItem>
+          </IonCol>
+        </IonRow>
       </IonList>
       <IonButton
         className="ion-margin-top"

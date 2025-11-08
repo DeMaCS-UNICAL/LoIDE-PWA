@@ -2,12 +2,12 @@ import React from "react";
 import {
   IonButton,
   IonButtons,
-  IonCol,
+  // IonCol,
   IonContent,
   IonHeader,
   IonIcon,
   IonPage,
-  IonRow,
+  // IonRow,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
@@ -72,13 +72,13 @@ const OutputTab: React.FC = () => {
               onClick={clearOutput}
             >
               <IonIcon icon={backspaceOutline} />
-              <span className="margin-button-left"> Clear </span>
+              <span className="margin-button-left">Clear</span>
             </IonButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent scrollY={false} className="tab-content-of-hidden">
-        <IonRow style={{ height: "100%" }}>
+        {/* <IonRow style={{ height: "100%" }}>
           <IonCol
             size-md="8"
             offset-md="2"
@@ -86,10 +86,10 @@ const OutputTab: React.FC = () => {
             offset-xl="3"
             className="ion-no-padding"
             style={{ height: "100%" }}
-          >
-            <Output model={model} error={error} fontSize={fontSizeOutput} />
-          </IonCol>
-        </IonRow>
+          > */}
+        <Output model={model} error={error} fontSize={fontSizeOutput} />
+        {/* </IonCol>
+        </IonRow> */}
       </IonContent>
     </IonPage>
   );

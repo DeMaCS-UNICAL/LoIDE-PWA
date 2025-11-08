@@ -12,12 +12,11 @@ import {
   IonPage,
   IonPopover,
   IonSplitPane,
-  IonTitle,
+  // IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import { alertController, actionSheetController } from "@ionic/core";
 import logo from "../assets/img/logo_LoIDE.svg";
-import RunSettings from "../components/RunSettings";
 import LoideRunNavButton from "../components/LoideRunNavButton";
 import Editor from "../components/Editor";
 import OpenProjectModal from "../modals/OpenProjectModal";
@@ -27,6 +26,8 @@ import {
   folderOpenOutline,
   saveOutline,
   shareOutline,
+  ellipseOutline,
+  checkmarkCircleOutline,
 } from "ionicons/icons";
 import SaveProjectModal from "../modals/SaveProjectModal";
 import { ActionSheet, ButtonText, WindowConfirmMessages } from "../lib/constants";
@@ -37,6 +38,9 @@ import { useSelector } from "react-redux";
 import { languagesDataSelector } from "../redux/slices/LanguagesData";
 import RestoreButton from "../components/RestoreButton";
 import Mousetrap from "mousetrap";
+import { useIsMobile } from "../hooks/useIsMobile";
+import RunSettingsTab from "./RunSettingsTab";
+import OutputTab from "./OutputTab";
 
 type MainTabPageProps = RouteComponentProps<{
   data: string;
@@ -50,6 +54,11 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
     open: boolean;
     event: Event | undefined;
   }>({ open: false, event: undefined });
+
+  const [pinnedTabs, setPinnedTabs] = useState({
+    settings: !useIsMobile,
+    output: !useIsMobile,
+  });
 
   const { languages } = useSelector(languagesDataSelector);
 
@@ -148,6 +157,26 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
           <IonButtons slot="start">
             <LoideRunNavButton />
           </IonButtons>
+          <IonButtons slot="start">
+            <IonIcon
+              icon={pinnedTabs.settings ? checkmarkCircleOutline : ellipseOutline}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setPinnedTabs({ ...pinnedTabs, settings: !pinnedTabs.settings });
+              }}
+              style={{ marginLeft: "4px", cursor: "pointer" }}
+            />
+            <IonIcon
+              icon={pinnedTabs.output ? checkmarkCircleOutline : ellipseOutline}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setPinnedTabs({ ...pinnedTabs, output: !pinnedTabs.output });
+              }}
+              style={{ marginLeft: "4px", cursor: "pointer" }}
+            />
+          </IonButtons>
           <img
             className="logo"
             style={{
@@ -215,21 +244,38 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
       <IonContent scrollY={false} className="tab-content-of-hidden">
         <IonSplitPane contentId="main" when="lg">
           {/*--  the side menu  --*/}
-          <IonMenu contentId="main">
-            <IonHeader>
-              <IonToolbar className="side-toolbar">
-                <IonTitle>Run settings</IonTitle>
-              </IonToolbar>
-            </IonHeader>
-            <IonContent forceOverscroll={true}>
-              <RunSettings />
-            </IonContent>
-          </IonMenu>
+          {pinnedTabs.settings && (
+            <IonMenu contentId="main">
+              {/* <IonHeader>
+                <IonToolbar className="side-toolbar">
+                  <IonTitle>Run settings</IonTitle>
+                </IonToolbar>
+              </IonHeader>
+              <IonContent forceOverscroll={true}>
+                <RunSettings />
+              </IonContent> */}
+              <RunSettingsTab />
+            </IonMenu>
+          )}
 
           {/*-- the main content --*/}
           <div id="main" className="main-side-editor">
             <Editor />
           </div>
+
+          {pinnedTabs.output && (
+            <IonMenu contentId="main" side="end" type="push">
+              {/* <IonHeader>
+                <IonToolbar className="side-toolbar">
+                  <IonTitle>Output</IonTitle>
+                </IonToolbar>
+              </IonHeader>
+              <IonContent forceOverscroll={true}>
+                <OutputTab />
+              </IonContent> */}
+              <OutputTab />
+            </IonMenu>
+          )}
         </IonSplitPane>
         <OpenProjectModal isOpen={showOpenModal} onDismiss={setShowOpenModal} />
         <SaveProjectModal isOpen={showSaveModal} onDismiss={setShowSaveModal} />
