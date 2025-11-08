@@ -151,7 +151,7 @@ const App: React.FC = () => {
             >
               <IonIcon icon={documentTextOutline} />
               <IonLabel>Output</IonLabel>
-              {newOutput && <IonBadge color="danger">!</IonBadge>}
+              {newOutput && <IonBadge color="success">!</IonBadge>}
             </IonTabButton>
 
             <IonTabButton tab={LoidePath.Appearance} href={`/${LoidePath.Appearance}`}>
