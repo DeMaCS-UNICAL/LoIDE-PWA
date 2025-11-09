@@ -1,8 +1,9 @@
 import React from "react";
 import logo from "../assets/img/logo_LoIDE.svg";
+import { getLoideVersion } from "../lib/env";
 
 const About: React.FC = () => {
-  const loideVersion = process.env.REACT_APP_LOIDE_VERSION;
+  const loideVersion = getLoideVersion();
   return (
     <div style={{ lineHeight: "20px" }}>
       <div className="ion-text-center ion-margin-top">

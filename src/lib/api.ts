@@ -10,9 +10,10 @@ import {
 import { store } from "../redux";
 import { setConnectingToTheServer } from "../redux/slices/UIStatus";
 import { setConnected } from "../redux/slices/SocketStatus";
+import { getApiBase } from "./env";
 
 // LoIDE Web Server API URL
-const APIUrl = process.env.REACT_APP_LOIDE_API_SERVER || "localhost:8084";
+const APIUrl = getApiBase();
 
 let socket: SocketIOClient.Socket;
 
