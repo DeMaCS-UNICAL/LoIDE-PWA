@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import SaveProject from "../../components/SaveProject";
+import { vi } from "vitest";
 
 describe("<SaveProject />", () => {
   it("renders without crashing", () => {
@@ -14,7 +15,7 @@ describe("<SaveProject />", () => {
   });
 
   it("test download button", async () => {
-    global.URL.createObjectURL = jest.fn();
+    global.URL.createObjectURL = vi.fn();
     render(<SaveProject />);
     const button = await screen.findByTitle("Download");
 

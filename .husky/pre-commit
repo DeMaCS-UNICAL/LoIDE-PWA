@@ -14,4 +14,4 @@ export PATH="$NVM_DIR/versions/node/$v/bin:$PATH"
 npm run format:staged
 npm run lint
 npm run types
-npm test
+npm run test

@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import Option from "../../components/Option";
 import { IOptionsData } from "../../lib/LoideAPIInterfaces";
 import { ISolverOption } from "../../lib/LoideInterfaces";
+import { vi } from "vitest";
 
 const optionsAvailable: IOptionsData[] = [
   {
@@ -32,21 +33,21 @@ describe("<Option />", () => {
         optionsAvailable={optionsAvailable}
         optionData={optionData}
         disabled={false}
-        onChangeDisableOption={jest.fn()}
+        onChangeDisableOption={vi.fn()}
       />,
     );
     expect(baseElement).toBeDefined();
   });
 
   it("tests delete option button", () => {
-    const onDeleteOption = jest.fn();
+    const onDeleteOption = vi.fn();
     render(
       <Option
         optionsAvailable={optionsAvailable}
         optionData={optionData}
         onDeleteOption={onDeleteOption}
         disabled={false}
-        onChangeDisableOption={jest.fn()}
+        onChangeDisableOption={vi.fn()}
       />,
     );
     const button = screen.getByTitle("Delete option");
@@ -60,7 +61,7 @@ describe("<Option />", () => {
         optionsAvailable={optionsAvailable}
         optionData={optionData}
         disabled={false}
-        onChangeDisableOption={jest.fn()}
+        onChangeDisableOption={vi.fn()}
       />,
     );
     screen.getByText("Name");
@@ -68,7 +69,7 @@ describe("<Option />", () => {
 
   it.skip("test select", async () => {
     //TODO skipped due to changes in test APIs
-    const onChangeOptionType = jest.fn();
+    const onChangeOptionType = vi.fn();
     const user = userEvent.setup();
 
     render(
@@ -77,7 +78,7 @@ describe("<Option />", () => {
         optionData={optionData}
         onChangeOptionType={onChangeOptionType}
         disabled={false}
-        onChangeDisableOption={jest.fn()}
+        onChangeDisableOption={vi.fn()}
       />,
     );
     expect(screen.getByText(optionsAvailable[0].name)).toBeInTheDocument();
@@ -102,7 +103,7 @@ describe("<Option />", () => {
         optionsAvailable={newOptionsAvailable}
         optionData={optionData}
         disabled={false}
-        onChangeDisableOption={jest.fn()}
+        onChangeDisableOption={vi.fn()}
       />,
     );
     expect(screen.getByText("Value")).toBeInTheDocument();
@@ -122,15 +123,15 @@ describe("<Option />", () => {
         optionsAvailable={newOptionsAvailable}
         optionData={optionData}
         disabled={false}
-        onChangeDisableOption={jest.fn()}
+        onChangeDisableOption={vi.fn()}
       />,
     );
     expect(screen.queryByText("Value")).not.toBeInTheDocument();
   });
 
   it("test disable option", async () => {
-    const onChangeDisableOption = jest.fn();
-    const onChangeOptionType = jest.fn();
+    const onChangeDisableOption = vi.fn();
+    const onChangeOptionType = vi.fn();
     const user = userEvent.setup();
     render(
       <Option
@@ -159,7 +160,7 @@ describe("<OptionTextValue />", () => {
       },
     ];
 
-    const onChangeOptionValues = jest.fn();
+    const onChangeOptionValues = vi.fn();
     const user = userEvent.setup();
 
     render(
@@ -168,7 +169,7 @@ describe("<OptionTextValue />", () => {
         optionData={optionData}
         onChangeOptionValues={onChangeOptionValues}
         disabled={false}
-        onChangeDisableOption={jest.fn()}
+        onChangeDisableOption={vi.fn()}
       />,
     );
 
@@ -189,7 +190,7 @@ describe("<OptionTextValue />", () => {
       },
     ];
 
-    const onChangeOptionValues = jest.fn();
+    const onChangeOptionValues = vi.fn();
     const user = userEvent.setup();
 
     render(
@@ -198,7 +199,7 @@ describe("<OptionTextValue />", () => {
         optionData={optionData}
         onChangeOptionValues={onChangeOptionValues}
         disabled={false}
-        onChangeDisableOption={jest.fn()}
+        onChangeDisableOption={vi.fn()}
       />,
     );
 
@@ -218,14 +219,14 @@ describe("<OptionTextValue />", () => {
   });
 
   it("test delete swipe", async () => {
-    const onChangeOptionValues = jest.fn();
+    const onChangeOptionValues = vi.fn();
     render(
       <Option
         optionsAvailable={optionsAvailable}
         optionData={optionData}
         onChangeOptionValues={onChangeOptionValues}
         disabled={false}
-        onChangeDisableOption={jest.fn()}
+        onChangeDisableOption={vi.fn()}
       />,
     );
 
@@ -247,8 +248,8 @@ describe("<OptionTextValue />", () => {
       },
     ];
 
-    const onChangeOptionValues = jest.fn();
-    const onChangeDisableOption = jest.fn();
+    const onChangeOptionValues = vi.fn();
+    const onChangeDisableOption = vi.fn();
     const user = userEvent.setup();
 
     // const ref = {

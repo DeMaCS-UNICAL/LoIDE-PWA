@@ -1,5 +1,5 @@
 import { APIWSEvents, ButtonText, Errors, Toast } from "./constants";
-import io from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 import { toastController } from "@ionic/core";
 import {
   ILanguageData,
@@ -15,7 +15,7 @@ import { getApiBase } from "./env";
 // LoIDE Web Server API URL
 const APIUrl = getApiBase();
 
-let socket: SocketIOClient.Socket;
+let socket: Socket;
 
 export const createSocket = () => {
   if (!socket) {
