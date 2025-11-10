@@ -35,17 +35,15 @@
     "format:staged": "pretty-quick --staged",
     "lint": "eslint ./src",
     "lint:fix": "eslint --fix ./src",
-    "prepare": "husky",
     "prettier:check": "prettier --check ./src",
     "prettier:write": "prettier --write ./src",
     "start": "vite",
     "start:prod": "npm run build && node server.js",
     "preview": "vite preview",
-    "test-old": "node scripts/test.js --transformIgnorePatterns 'node_modules/(?!(@ionic/react|@ionic/react-router|@ionic/core|@stencil/core|ionicons)/)' --watchAll=false",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ci": "CI=true run-p types lint prettier:check test:coverage",
-    "test:coverage": "CI=true vitest run --coverage",
+    "test:coverage": "vitest run --coverage",
     "types": "tsc --noEmit"
   },
   "babel": {
