@@ -17,8 +17,7 @@ const About: React.FC = () => {
 
         <p className="ion-text-center">
           <em>
-            Version:
-            <span className="version"> {loideVersion}</span>
+            Version: <span className="version">{loideVersion}</span>
           </em>
         </p>
       </div>

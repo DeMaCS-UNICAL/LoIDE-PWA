@@ -6,7 +6,7 @@ export function getApiBase(): string {
 }
 
 export function getLoideVersion(): string {
-  return getViteEnvVar("VITE_LOIDE_VERSION") || "unknown";
+  return APP_VERSION || "unknown";
 }
 
 /**

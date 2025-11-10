@@ -8,6 +8,9 @@ export default defineConfig({
     port: 3000,
     open: true, // automatically open browser
   },
+  define: {
+    APP_VERSION: JSON.stringify(process.env.npm_package_version),
+  },
   build: {
     outDir: "build", // CRA's default build output
   },
