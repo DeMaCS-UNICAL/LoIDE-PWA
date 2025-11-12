@@ -1,10 +1,11 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import ShortcutsModal from "../../modals/ShortcutsModal";
+import { vi } from "vitest";
 
 describe("<ShortcutsModal />", () => {
   it("renders without crashing", () => {
-    const onDismiss = jest.fn();
+    const onDismiss = vi.fn();
 
     const { baseElement } = render(<ShortcutsModal isOpen={false} onDismiss={onDismiss} />);
 
@@ -12,7 +13,7 @@ describe("<ShortcutsModal />", () => {
   });
 
   it("displays the title", async () => {
-    const onDismiss = jest.fn();
+    const onDismiss = vi.fn();
 
     render(<ShortcutsModal isOpen={true} onDismiss={onDismiss} />);
 
@@ -20,7 +21,7 @@ describe("<ShortcutsModal />", () => {
   });
 
   it("test close button", async () => {
-    const onDismiss = jest.fn();
+    const onDismiss = vi.fn();
     const user = userEvent.setup();
 
     render(<ShortcutsModal isOpen={true} onDismiss={onDismiss} />);

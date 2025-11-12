@@ -1,5 +1,5 @@
 import { APIWSEvents, ButtonText, Errors, Toast } from "./constants";
-import io from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 import { toastController } from "@ionic/core";
 import {
   ILanguageData,
@@ -10,11 +10,12 @@ import {
 import { store } from "../redux";
 import { setConnectingToTheServer } from "../redux/slices/UIStatus";
 import { setConnected } from "../redux/slices/SocketStatus";
+import { getApiBase } from "./env";
 
 // LoIDE Web Server API URL
-const APIUrl = process.env.REACT_APP_LOIDE_API_SERVER || "localhost:8084";
+const APIUrl = getApiBase();
 
-let socket: SocketIOClient.Socket;
+let socket: Socket;
 
 export const createSocket = () => {
   if (!socket) {

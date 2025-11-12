@@ -1,11 +1,12 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import OpenProjectModal from "../../modals/OpenProjectModal";
+import { vi } from "vitest";
 import { Provider } from "react-redux";
 import { store } from "../../redux";
 
 describe("<OpenProjectModal />", () => {
   it("renders without crashing", () => {
-    const onDismiss = jest.fn();
+    const onDismiss = vi.fn();
     const { baseElement } = render(
       <Provider store={store}>
         <OpenProjectModal isOpen={false} onDismiss={onDismiss} />
@@ -15,7 +16,7 @@ describe("<OpenProjectModal />", () => {
   });
 
   it("displays the title", async () => {
-    const onDismiss = jest.fn();
+    const onDismiss = vi.fn();
 
     render(
       <Provider store={store}>
@@ -26,7 +27,7 @@ describe("<OpenProjectModal />", () => {
   });
 
   it("test close button", async () => {
-    const onDismiss = jest.fn();
+    const onDismiss = vi.fn();
 
     render(
       <Provider store={store}>

@@ -6,6 +6,9 @@ import { EditorTabMap } from "../../lib/LoideInterfaces";
 
 import { AllTabs, CurrentTab, SuffixNameTab } from "../../lib/constants";
 import { setupIonicReact } from "@ionic/react";
+
+import { vi, describe, it, expect } from "vitest";
+
 setupIonicReact();
 
 const tabs: EditorTabMap = {};
@@ -27,9 +30,9 @@ describe("<TabToExecute />", () => {
       <TabToExecute
         tabs={tabs}
         tabsIDToExecute={[]}
-        onCheckCurrentTab={jest.fn()}
-        onCheckTab={jest.fn()}
-        onCheckAllTabs={jest.fn()}
+        onCheckCurrentTab={vi.fn()}
+        onCheckTab={vi.fn()}
+        onCheckAllTabs={vi.fn()}
       />,
     );
     expect(baseElement).toBeDefined();
@@ -40,9 +43,9 @@ describe("<TabToExecute />", () => {
       <TabToExecute
         tabs={tabs}
         tabsIDToExecute={[]}
-        onCheckCurrentTab={jest.fn()}
-        onCheckTab={jest.fn()}
-        onCheckAllTabs={jest.fn()}
+        onCheckCurrentTab={vi.fn()}
+        onCheckTab={vi.fn()}
+        onCheckAllTabs={vi.fn()}
       />,
     );
 
@@ -54,9 +57,9 @@ describe("<TabToExecute />", () => {
       <TabToExecute
         tabs={tabs}
         tabsIDToExecute={[]}
-        onCheckCurrentTab={jest.fn()}
-        onCheckTab={jest.fn()}
-        onCheckAllTabs={jest.fn()}
+        onCheckCurrentTab={vi.fn()}
+        onCheckTab={vi.fn()}
+        onCheckAllTabs={vi.fn()}
       />,
     );
 
@@ -68,9 +71,9 @@ describe("<TabToExecute />", () => {
       <TabToExecute
         tabs={tabs}
         tabsIDToExecute={[]}
-        onCheckCurrentTab={jest.fn()}
-        onCheckTab={jest.fn()}
-        onCheckAllTabs={jest.fn()}
+        onCheckCurrentTab={vi.fn()}
+        onCheckTab={vi.fn()}
+        onCheckAllTabs={vi.fn()}
       />,
     );
 
@@ -80,7 +83,7 @@ describe("<TabToExecute />", () => {
 
   it("test click the current tab radio item", async () => {
     let tabsIDToExecute: number[] = [1, 2];
-    const onCheckCurrentTab = jest.fn((value: boolean) => {
+    const onCheckCurrentTab = vi.fn((value: boolean) => {
       if (value) {
         tabsIDToExecute = [];
       }
@@ -90,8 +93,8 @@ describe("<TabToExecute />", () => {
         tabs={tabs}
         tabsIDToExecute={tabsIDToExecute}
         onCheckCurrentTab={onCheckCurrentTab}
-        onCheckTab={jest.fn()}
-        onCheckAllTabs={jest.fn()}
+        onCheckTab={vi.fn()}
+        onCheckAllTabs={vi.fn()}
       />,
     );
 
@@ -105,7 +108,7 @@ describe("<TabToExecute />", () => {
 
   it("test click the all tabs radio item", async () => {
     let tabsIDToExecute: number[] = [];
-    const onCheckAllTabs = jest.fn((value: boolean) => {
+    const onCheckAllTabs = vi.fn((value: boolean) => {
       if (value) {
         tabsIDToExecute = [...Object.keys(tabs).map((item) => Number(item))];
       }
@@ -114,8 +117,8 @@ describe("<TabToExecute />", () => {
       <TabToExecute
         tabs={tabs}
         tabsIDToExecute={tabsIDToExecute}
-        onCheckCurrentTab={jest.fn()}
-        onCheckTab={jest.fn()}
+        onCheckCurrentTab={vi.fn()}
+        onCheckTab={vi.fn()}
         onCheckAllTabs={onCheckAllTabs}
       />,
     );
@@ -130,7 +133,7 @@ describe("<TabToExecute />", () => {
 
   it("test click the tab items", async () => {
     const tabsIDToExecute: number[] = [];
-    const onCheckTab = jest.fn((id: number, value: boolean) => {
+    const onCheckTab = vi.fn((id: number, value: boolean) => {
       if (value) tabsIDToExecute.push(id);
     });
     const user = userEvent.setup();
@@ -138,9 +141,9 @@ describe("<TabToExecute />", () => {
       <TabToExecute
         tabs={tabs}
         tabsIDToExecute={tabsIDToExecute}
-        onCheckCurrentTab={jest.fn()}
+        onCheckCurrentTab={vi.fn()}
         onCheckTab={onCheckTab}
-        onCheckAllTabs={jest.fn()}
+        onCheckAllTabs={vi.fn()}
       />,
     );
 

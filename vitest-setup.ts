@@ -2,9 +2,20 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
-import "@testing-library/jest-dom";
+import "@testing-library/jest-dom/vitest";
+// import "@testing-library/jest-dom";
+import { cleanup } from "@testing-library/react";
+import { afterEach, vi } from "vitest";
+
 import { setupIonicReact } from "@ionic/react";
+
 setupIonicReact();
+
+// Ensure cleanup after each test
+afterEach(() => {
+  cleanup();
+});
+
 // Mock matchmedia
 window.matchMedia =
   window.matchMedia ||
@@ -17,5 +28,13 @@ window.matchMedia =
       removeListener: function () {},
     };
   };
-// @ts-ignore
-global.setImmediate = jest.useRealTimers;
+
+vi.useRealTimers();
+
+const ResizeObserver = vi.fn(() => ({
+  observe: function () {},
+  unobserve: function () {},
+  disconnect: function () {},
+}));
+
+vi.stubGlobal("ResizeObserver", ResizeObserver);

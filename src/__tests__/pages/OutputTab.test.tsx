@@ -2,10 +2,11 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import OutputTab from "../../pages/OutputTab";
 import { Provider } from "react-redux";
 import { store } from "../../redux";
+import { vi } from "vitest";
 
 describe("OutputTab page", () => {
   it("OutputTab renders without crashing", () => {
-    window.HTMLElement.prototype.scrollIntoView = jest.fn();
+    window.HTMLElement.prototype.scrollIntoView = vi.fn();
     const { baseElement } = render(
       <Provider store={store}>
         <OutputTab />
@@ -20,11 +21,11 @@ describe("OutputTab page", () => {
         <OutputTab />
       </Provider>,
     );
-    await screen.findByText("Output");
+    expect(await screen.findByText("Output")).toBeInTheDocument();
   });
 
   it("test download button", async () => {
-    global.URL.createObjectURL = jest.fn();
+    global.URL.createObjectURL = vi.fn();
     render(
       <Provider store={store}>
         <OutputTab />
@@ -32,14 +33,14 @@ describe("OutputTab page", () => {
     );
     const buttons = await screen.findAllByTitle("Download");
 
-    HTMLAnchorElement.prototype.click = jest.fn();
+    HTMLAnchorElement.prototype.click = vi.fn();
 
     fireEvent.click(buttons[0]);
     fireEvent.click(buttons[1]);
   });
 
   it("test clear button", async () => {
-    global.URL.createObjectURL = jest.fn();
+    global.URL.createObjectURL = vi.fn();
     render(
       <Provider store={store}>
         <OutputTab />

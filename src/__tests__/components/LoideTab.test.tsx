@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import LoideTab from "../../components/LoideTab";
+import { vi } from "vitest";
 import { SuffixNameTab } from "../../lib/constants";
 
 describe("<LoideTab />", () => {
@@ -7,7 +8,7 @@ describe("<LoideTab />", () => {
   const title = `${SuffixNameTab}1`;
 
   it("tab renders without crashing", () => {
-    const deleteMock = jest.fn();
+    const deleteMock = vi.fn();
     const { baseElement } = render(
       <LoideTab tabkey={key} onDeleteTab={deleteMock}>
         <span> {title}</span>
@@ -17,7 +18,7 @@ describe("<LoideTab />", () => {
   });
 
   it("renders tab title", async () => {
-    const deleteMock = jest.fn();
+    const deleteMock = vi.fn();
     render(
       <LoideTab tabkey={key} onDeleteTab={deleteMock}>
         <span> {title}</span>
@@ -27,7 +28,7 @@ describe("<LoideTab />", () => {
   });
 
   it("clicks delete tab button", async () => {
-    const deleteMock = jest.fn();
+    const deleteMock = vi.fn();
     render(
       <LoideTab tabkey={key} onDeleteTab={deleteMock}>
         <span> {title}</span>
