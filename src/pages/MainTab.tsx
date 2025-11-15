@@ -14,6 +14,9 @@ import {
   IonSplitPane,
   IonTitle,
   IonToolbar,
+  IonGrid,
+  IonRow,
+  IonCol,
 } from "@ionic/react";
 import { alertController, actionSheetController } from "@ionic/core";
 import logo from "../assets/img/logo_LoIDE.svg";
@@ -38,6 +41,12 @@ import { languagesDataSelector } from "../redux/slices/LanguagesData";
 import RestoreButton from "../components/RestoreButton";
 import Mousetrap from "mousetrap";
 
+// 🔹 nuovo import per l'Output
+import Output from "../components/Output";
+// 🔹 nuovi selector per model/error/fontSize
+import { UIStatusSelector } from "../redux/slices/UIStatus";
+import { outputSelector } from "../redux/slices/Output";
+
 type MainTabPageProps = RouteComponentProps<{
   data: string;
 }>;
@@ -52,6 +61,11 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
   }>({ open: false, event: undefined });
 
   const { languages } = useSelector(languagesDataSelector);
+
+  // 🔹 model/error dall'Output store
+  const { model, error } = useSelector(outputSelector);
+  // 🔹 fontSize per l'output
+  const { fontSizeOutput } = useSelector(UIStatusSelector);
 
   useEffect(() => {
     if (languages.length > 0) {
@@ -228,9 +242,39 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
 
           {/*-- the main content --*/}
           <div id="main" className="main-side-editor">
-            <Editor />
+            <IonGrid style={{ height: "100%" }}>
+              <IonRow style={{ height: "100%" }}>
+                {/* Colonna Editor:
+                    - full width su mobile
+                    - 7/12 su schermi grandi
+                 */}
+                <IonCol
+                  size="12"
+                  sizeLg="7"
+                  className="ion-no-padding"
+                  style={{ height: "100%" }}
+                >
+                  <Editor />
+                </IonCol>
+
+                {/* Colonna Output:
+                    - visibile SOLO da lg in su
+                 */}
+                <IonCol
+                  sizeLg="5"
+                  className="ion-no-padding ion-hide-md-down"
+                  style={{
+                    height: "100%",
+                    borderLeft: "1px solid var(--ion-color-step-150)",
+                  }}
+                >
+                  <Output model={model} error={error} fontSize={fontSizeOutput} />
+                </IonCol>
+              </IonRow>
+            </IonGrid>
           </div>
         </IonSplitPane>
+
         <OpenProjectModal isOpen={showOpenModal} onDismiss={setShowOpenModal} />
         <SaveProjectModal isOpen={showSaveModal} onDismiss={setShowSaveModal} />
         <ShareProjectModal isOpen={showShareModal} onDismiss={setShowShareModal} />

@@ -154,10 +154,14 @@ const App: React.FC = () => {
               <IonLabel>Run Settings</IonLabel>
             </IonTabButton>
 
+            {/* Output tab:
+                - rimane identico
+                - MA è nascosto sugli schermi grandi (ion-hide-lg-up)
+              */}
             <IonTabButton
               tab={LoidePath.Output}
               href={`/${LoidePath.Output}`}
-              className="output-tab-button"
+              className="output-tab-button ion-hide-lg-up"
             >
               <IonIcon icon={documentTextOutline} />
               <IonLabel>Output</IonLabel>

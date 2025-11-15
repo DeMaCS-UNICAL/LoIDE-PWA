@@ -1,10 +1,12 @@
 import pako from "pako";
 
-function toBase64Url(bytes: Uint8Array): string {
-  const base64 = btoa(String.fromCharCode(...bytes));
-  return base64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-}
-
+/**
+ * JSON minimale per ASP-Chef:
+ * - input: programma ASP
+ * - language: "asp"
+ * - solver: "clingo"
+ * - qualche opzione di default realistica
+ */
 export function buildAspChefState(programText: string) {
   return {
     input: [programText],
@@ -42,20 +44,39 @@ export function buildAspChefState(programText: string) {
   };
 }
 
-
+/**
+ * Encode ASP-Chef state usando:
+ *   JSON → UTF-8 → zlib (header) → Base64 standard
+ */
 export function encodeAspChefState(state: any): string {
   const json = JSON.stringify(state);
   const utf8 = new TextEncoder().encode(json);
-  const deflated = pako.deflate(utf8, { raw: true });
-  return toBase64Url(deflated);
+
+  // ⚠️ NIENTE { raw: true } → usiamo zlib con header, come fa il token eJz...
+  const deflated = pako.deflate(utf8); // default = zlib stream
+
+  // Base64 standard (btoa su stringa binaria)
+  let binary = "";
+  for (let i = 0; i < deflated.length; i++) {
+    binary += String.fromCharCode(deflated[i]);
+  }
+  const base64 = btoa(binary);
+
+  return base64;
 }
 
+/**
+ * Genera la URL finale per ASP-Chef
+ */
 export function generateAspChefUrl(programText: string): string {
   const state = buildAspChefState(programText);
   const encoded = encodeAspChefState(state);
   return `https://asp-chef.alviano.net/#${encoded}`;
 }
 
+/**
+ * Apre ASP-Chef in una nuova tab con l'input corrente di LoIDE
+ */
 export function openAspChefFromLoide(programText: string) {
   const url = generateAspChefUrl(programText);
   window.open(url, "_blank", "noopener,noreferrer");
