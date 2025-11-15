@@ -12,13 +12,18 @@ import {
   setupIonicReact,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
+
 import {
   codeSlashOutline,
   documentTextOutline,
   cog,
   informationCircleOutline,
   colorPaletteOutline,
+  restaurantOutline,
 } from "ionicons/icons";
+
+import { openAspChefFromLoide } from "./integrations/ASPChef";
+
 import MainTab from "./pages/MainTab";
 import RunSettingsTab from "./pages/RunSettingsTab";
 import OutputTab from "./pages/OutputTab";
@@ -41,18 +46,23 @@ import "@ionic/react/css/display.css";
 
 /* Theme variables */
 import "./theme/variables.scss";
-
 import "./global.scss";
+
 import AboutTab from "./pages/AboutTab";
+import AppearanceTab from "./pages/AppearanceTab";
+
+import Utils from "./lib/utils";
 import * as API from "./lib/api";
+
 import { IOutputData } from "./lib/LoideAPIInterfaces";
 import { LocalStorageItems, LoidePath } from "./lib/constants";
-import AppearanceTab from "./pages/AppearanceTab";
-import Utils from "./lib/utils";
+
 import { useDispatch, useSelector } from "react-redux";
 import { UIStatusSelector } from "./redux/slices/UIStatus";
 import { setError, setModel } from "./redux/slices/Output";
 import { setLanguages } from "./redux/slices/LanguagesData";
+import { editorSelector } from "./redux/slices/Editor";
+
 import Mousetrap from "mousetrap";
 import ShortcutsModal from "./modals/ShortcutsModal";
 
@@ -64,6 +74,7 @@ const App: React.FC = () => {
   const [showShortcutsModal, setShowShortcutsModal] = useState<boolean>(false);
 
   const { newOutput } = useSelector(UIStatusSelector);
+  const editorState = useSelector(editorSelector);
 
   useEffect(() => {
     API.createSocket();
@@ -126,7 +137,6 @@ const App: React.FC = () => {
             <Route path={`/${LoidePath.Appearance}`} component={AppearanceTab} />
             <Route exact path={`/${LoidePath.About}`} component={AboutTab} />
             <Route exact path="/" render={() => <Redirect to={`/${LoidePath.Editor}`} />} />
-            {/* <Route component={MainTab} /> */}
           </IonRouterOutlet>
 
           <IonTabBar slot="bottom">
@@ -154,6 +164,33 @@ const App: React.FC = () => {
               {newOutput && <IonBadge color="danger">!</IonBadge>}
             </IonTabButton>
 
+            {/* -------------------------
+                  ASP-CHEF BUTTON
+               ------------------------- */}
+            <IonTabButton
+              tab={LoidePath.ASPChef}
+              href="#"
+              onClick={() => {
+                const { currentTabIndex, tabs } = editorState;
+
+                // tabs è un oggetto, non un array → replichiamo la logica di Editor.tsx
+                const tabKeys = Object.keys(tabs || {});
+                if (tabKeys.length === 0) {
+                  openAspChefFromLoide("");
+                  return;
+                }
+
+                const currentKey = tabKeys[currentTabIndex];
+                const currentTab = (tabs as any)[currentKey];
+                const currentLoideProgram = currentTab?.value?.toString() ?? "";
+
+                openAspChefFromLoide(currentLoideProgram);
+              }}
+            >
+              <IonIcon icon={restaurantOutline} />
+              <IonLabel>ASP Chef</IonLabel>
+            </IonTabButton>
+
             <IonTabButton tab={LoidePath.Appearance} href={`/${LoidePath.Appearance}`}>
               <IonIcon icon={colorPaletteOutline} />
               <IonLabel>Appearance</IonLabel>
@@ -165,6 +202,7 @@ const App: React.FC = () => {
             </IonTabButton>
           </IonTabBar>
         </IonTabs>
+
         <ShortcutsModal isOpen={showShortcutsModal} onDismiss={setShowShortcutsModal} />
       </IonReactRouter>
     </IonApp>

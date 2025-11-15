@@ -110,9 +110,13 @@ const LoideAceEditor = React.forwardRef<AceEditor, LoideAceEditorProps>((props, 
       });
       if (isInAndSupported) {
         edt.editor.getSession().setMode("ace/mode/" + props.mode);
+        console.log("props.mode " + props.mode);
       } else {
-        edt.editor.getSession().setMode("ace/mode/text");
+        //edt.editor.getSession().setMode("ace/mode/text");
+        edt.editor.getSession().setMode("ace/mode/asp");
+        console.log("props.mode " + "textttt");
       }
+      
     }
   }, [props.mode]);
 

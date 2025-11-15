@@ -2,8 +2,10 @@ export const LoidePath = {
   Editor: "editor",
   RunSettings: "run-settings",
   Output: "output",
+  ASPChef: "asp-chef",
   About: "about",
   Appearance: "appearance",
+
 };
 
 export const APIWSEvents = {
@@ -126,6 +128,7 @@ export const LocalStorageItems = {
 export const ActionSheet = {
   Reset: "Reset actions",
   Tab: "Tab actions",
+  Examples: "Example programs",
 };
 
 export const URLInput = {

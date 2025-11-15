@@ -6,3 +6,8 @@ declare module "*.svg" {
 declare module "react-resize-panel";
 
 declare module "react-detect-offline";
+
+declare module "*.lp" {
+  const content: string;
+  export default content;
+}
