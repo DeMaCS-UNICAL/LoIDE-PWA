@@ -1,0 +1,12 @@
+#   Refer for explanation to following link:
+#   https://lefthook.dev/configuration/
+
+pre-commit:
+  commands:
+    format:
+      run: npm run format:staged
+      stage_fixed: true
+    lint:
+      run: npm run lint:fix
+    types:
+      run: npm run types

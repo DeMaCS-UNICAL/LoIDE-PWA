@@ -1,13 +1,15 @@
-export const createSocket = jest.fn();
+import { vi } from "vitest";
 
-export const setRunProjectListener = jest.fn();
+export const createSocket = vi.fn();
 
-export const setGetLanguagesListener = jest.fn();
+export const setRunProjectListener = vi.fn();
 
-export const emitGetLanguages = jest.fn();
+export const setGetLanguagesListener = vi.fn();
 
-export const emitRunProject = jest.fn();
+export const emitGetLanguages = vi.fn();
 
-export const isConnected = jest.fn();
+export const emitRunProject = vi.fn();
 
-export const disconnectAndClearSocket = jest.fn();
+export const isConnected = vi.fn();
+
+export const disconnectAndClearSocket = vi.fn();

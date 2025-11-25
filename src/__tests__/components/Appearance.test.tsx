@@ -3,10 +3,11 @@ import userEvent from "@testing-library/user-event";
 import Appearance from "../../components/Appearance";
 import { Provider } from "react-redux";
 import { store } from "../../redux";
+import { vi } from "vitest";
 
 describe("<Appearance />", () => {
   it("Appearance renders without crashing", () => {
-    window.HTMLElement.prototype.scrollIntoView = jest.fn();
+    window.HTMLElement.prototype.scrollIntoView = vi.fn();
     const { baseElement } = render(
       <Provider store={store}>
         <Provider store={store}>
@@ -79,15 +80,15 @@ describe("<Appearance />", () => {
     const user = userEvent.setup();
     Object.defineProperty(window, "matchMedia", {
       writable: true,
-      value: jest.fn().mockImplementation((query) => ({
+      value: vi.fn().mockImplementation((query) => ({
         matches: false,
         media: query,
         onchange: null,
-        addListener: jest.fn(), // Deprecated
-        removeListener: jest.fn(), // Deprecated
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
-        dispatchEvent: jest.fn(),
+        addListener: vi.fn(), // Deprecated
+        removeListener: vi.fn(), // Deprecated
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
       })),
     });
 

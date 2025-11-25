@@ -1,9 +1,10 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import LoideToolbarEditor from "../../components/LoideToolbarEditor";
+import { vi } from "vitest";
 
 Object.defineProperty(navigator, "clipboard", {
   value: {
-    readText: jest.fn(),
+    readText: vi.fn(),
   },
 });
 
@@ -11,28 +12,28 @@ describe("<LoideToolbarEditor />", () => {
   it("renders without crashing", () => {
     const { baseElement } = render(
       <LoideToolbarEditor
-        onUndo={jest.fn()}
-        onRedo={jest.fn()}
-        onSearch={jest.fn()}
-        onCopy={jest.fn()}
-        onCut={jest.fn()}
-        onDownloadTab={jest.fn()}
+        onUndo={vi.fn()}
+        onRedo={vi.fn()}
+        onSearch={vi.fn()}
+        onCopy={vi.fn()}
+        onCut={vi.fn()}
+        onDownloadTab={vi.fn()}
       />,
     );
     expect(baseElement).toBeDefined();
   });
 
   it("test undo button", async () => {
-    const onUndo = jest.fn();
+    const onUndo = vi.fn();
 
     render(
       <LoideToolbarEditor
         onUndo={onUndo}
-        onRedo={jest.fn()}
-        onSearch={jest.fn()}
-        onCopy={jest.fn()}
-        onCut={jest.fn()}
-        onDownloadTab={jest.fn()}
+        onRedo={vi.fn()}
+        onSearch={vi.fn()}
+        onCopy={vi.fn()}
+        onCut={vi.fn()}
+        onDownloadTab={vi.fn()}
       />,
     );
 
@@ -43,16 +44,16 @@ describe("<LoideToolbarEditor />", () => {
   });
 
   it("test redo button", async () => {
-    const onRedo = jest.fn();
+    const onRedo = vi.fn();
 
     render(
       <LoideToolbarEditor
         onRedo={onRedo}
-        onUndo={jest.fn()}
-        onSearch={jest.fn()}
-        onCopy={jest.fn()}
-        onCut={jest.fn()}
-        onDownloadTab={jest.fn()}
+        onUndo={vi.fn()}
+        onSearch={vi.fn()}
+        onCopy={vi.fn()}
+        onCut={vi.fn()}
+        onDownloadTab={vi.fn()}
       />,
     );
 
@@ -63,16 +64,16 @@ describe("<LoideToolbarEditor />", () => {
   });
 
   it("test search button", async () => {
-    const onSearch = jest.fn();
+    const onSearch = vi.fn();
 
     render(
       <LoideToolbarEditor
         onSearch={onSearch}
-        onUndo={jest.fn()}
-        onRedo={jest.fn()}
-        onCopy={jest.fn()}
-        onCut={jest.fn()}
-        onDownloadTab={jest.fn()}
+        onUndo={vi.fn()}
+        onRedo={vi.fn()}
+        onCopy={vi.fn()}
+        onCut={vi.fn()}
+        onDownloadTab={vi.fn()}
       />,
     );
 
@@ -83,17 +84,17 @@ describe("<LoideToolbarEditor />", () => {
   });
 
   it("test paste button", async () => {
-    const onPaste = jest.fn();
+    const onPaste = vi.fn();
 
     render(
       <LoideToolbarEditor
-        onUndo={jest.fn()}
-        onRedo={jest.fn()}
-        onSearch={jest.fn()}
+        onUndo={vi.fn()}
+        onRedo={vi.fn()}
+        onSearch={vi.fn()}
         onPaste={onPaste}
-        onCopy={jest.fn()}
-        onCut={jest.fn()}
-        onDownloadTab={jest.fn()}
+        onCopy={vi.fn()}
+        onCut={vi.fn()}
+        onDownloadTab={vi.fn()}
       />,
     );
 
@@ -104,17 +105,17 @@ describe("<LoideToolbarEditor />", () => {
   });
 
   it.skip("test copy button", async () => {
-    const onCopy = jest.fn();
+    const onCopy = vi.fn();
 
     render(
       <LoideToolbarEditor
-        onUndo={jest.fn()}
-        onRedo={jest.fn()}
-        onSearch={jest.fn()}
-        onPaste={jest.fn()}
+        onUndo={vi.fn()}
+        onRedo={vi.fn()}
+        onSearch={vi.fn()}
+        onPaste={vi.fn()}
         onCopy={onCopy}
-        onCut={jest.fn()}
-        onDownloadTab={jest.fn()}
+        onCut={vi.fn()}
+        onDownloadTab={vi.fn()}
       />,
     );
 
@@ -125,17 +126,17 @@ describe("<LoideToolbarEditor />", () => {
   });
 
   it.skip("test cut button", async () => {
-    const onCut = jest.fn();
+    const onCut = vi.fn();
 
     render(
       <LoideToolbarEditor
-        onUndo={jest.fn()}
-        onRedo={jest.fn()}
-        onSearch={jest.fn()}
-        onPaste={jest.fn()}
-        onCopy={jest.fn()}
+        onUndo={vi.fn()}
+        onRedo={vi.fn()}
+        onSearch={vi.fn()}
+        onPaste={vi.fn()}
+        onCopy={vi.fn()}
         onCut={onCut}
-        onDownloadTab={jest.fn()}
+        onDownloadTab={vi.fn()}
       />,
     );
 
@@ -146,16 +147,16 @@ describe("<LoideToolbarEditor />", () => {
   });
 
   it("test download content tab button", async () => {
-    const onDownloadTab = jest.fn();
+    const onDownloadTab = vi.fn();
 
     render(
       <LoideToolbarEditor
-        onUndo={jest.fn()}
-        onRedo={jest.fn()}
-        onSearch={jest.fn()}
-        onPaste={jest.fn()}
-        onCopy={jest.fn()}
-        onCut={jest.fn()}
+        onUndo={vi.fn()}
+        onRedo={vi.fn()}
+        onSearch={vi.fn()}
+        onPaste={vi.fn()}
+        onCopy={vi.fn()}
+        onCut={vi.fn()}
         onDownloadTab={onDownloadTab}
       />,
     );
