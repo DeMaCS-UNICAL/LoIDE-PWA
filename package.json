@@ -27,6 +27,9 @@
       "name": "Giorgio Andronico"
     },
     {
+      "name": "Marco Duca"
+    },
+    {
       "name": "Francesco Calimeri"
     }
   ],
@@ -61,9 +64,9 @@
   },
   "dependencies": {
     "@babel/core": "^7.28.4",
-    "@ionic/core": "^8.7.5",
+    "@ionic/core": "^8.7.6",
     "@ionic/react": "^8.7.5",
-    "@ionic/react-router": "^8.7.5",
+    "@ionic/react-router": "^8.7.7",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.6.1",
     "@reduxjs/toolkit": "^2.9.0",
     "@svgr/webpack": "^8.1.0",
@@ -121,7 +124,7 @@
     "style-loader": "^4.0.0",
     "terser-webpack-plugin": "^5.3.14",
     "web-vitals": "^5.1.0",
-    "webpack": "^5.102.0",
+    "webpack": "^5.102.1",
     "webpack-dev-server": "^5.2.2",
     "webpack-manifest-plugin": "^5.0.1",
     "workbox-webpack-plugin": "^7.3.0"
@@ -154,7 +157,7 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^6.1.1",
     "eslint-webpack-plugin": "^5.0.2",
-    "globals": "^16.4.0",
+    "globals": "^16.5.0",
     "jsdom": "^27.1.0",
     "lefthook": "^2.0.2",
     "npm-run-all": "^4.1.5",
