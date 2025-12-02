@@ -52,8 +52,10 @@ const connectURLs = [
   "'self'",
   "https://is.gd",
   // it could be simplified once all browsers comply with the Content Security Policy standard (https://w3c.github.io/webappsec-csp/#match-schemes)
-  process.env.REACT_APP_LOIDE_API_SERVER?.trim(),
-  enableHTTPS && process.env.REACT_APP_LOIDE_API_SERVER ? "wss://" + process.env.REACT_APP_LOIDE_API_SERVER.trim() : "",
+  process.env.VITE_LOIDE_API_SERVER?.trim(),
+  enableHTTPS && process.env.VITE_LOIDE_API_SERVER
+    ? "wss://" + process.env.VITE_LOIDE_API_SERVER.trim()
+    : "",
 ].filter(Boolean);
 
 app.use(
