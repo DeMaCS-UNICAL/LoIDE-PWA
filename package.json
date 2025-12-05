@@ -41,7 +41,7 @@
     "prettier:check": "prettier --check ./src",
     "prettier:write": "prettier --write ./src",
     "start": "vite",
-    "start:prod": "npm run build && node server.js",
+    "start:prod": "node server.js",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
