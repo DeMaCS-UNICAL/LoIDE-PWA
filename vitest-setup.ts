@@ -7,9 +7,13 @@ import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
 import { afterEach, vi } from "vitest";
 
-import { setupIonicReact } from "@ionic/react";
-
-setupIonicReact();
+// Defer importing @ionic/react until after we apply DOM polyfills/mocks.
+// Importing it earlier leads to @ionic/core (Stencil) code running which
+// expects newer DOM APIs and throws in our test environment.
+void (async () => {
+  const { setupIonicReact } = await import("@ionic/react");
+  setupIonicReact();
+})();
 
 // Ensure cleanup after each test
 afterEach(() => {
@@ -38,3 +42,58 @@ const ResizeObserver = vi.fn(() => ({
 }));
 
 vi.stubGlobal("ResizeObserver", ResizeObserver);
+
+// Polyfill/stub CSSStyleSheet and adoptedStyleSheets for test environment
+// Stencil/ionic code checks for constructable stylesheets and adoptedStyleSheets
+// which may be undefined in Node/JSDOM-like test envs. We provide a minimal
+// stub so that the APIs Ionic expects exist and the code paths don't throw.
+/* eslint-disable @typescript-eslint/no-explicit-any */
+if (!("CSSStyleSheet" in globalThis)) {
+  class CSSStyleSheetStub {
+    replaceSync() {
+      // no-op: tests don't depend on actual CSS
+    }
+  }
+  (globalThis as any).CSSStyleSheet = CSSStyleSheetStub;
+}
+
+if (!Object.prototype.hasOwnProperty.call(document, "adoptedStyleSheets")) {
+  // ensure adoptedStyleSheets is an array so that calls like
+  // Object.getOwnPropertyDescriptor(document.adoptedStyleSheets, "length")
+  // don't fail with TypeError
+  Object.defineProperty(document, "adoptedStyleSheets", {
+    configurable: true,
+    enumerable: true,
+    get() {
+      return [] as CSSStyleSheet[];
+    },
+  });
+}
+// Make sure ShadowRoot and Element also expose adoptedStyleSheets to prevent
+// errors when Stencil/ionic code checks or mutates these arrays.
+if (typeof (globalThis as any).ShadowRoot !== "undefined") {
+  if (
+    !Object.prototype.hasOwnProperty.call(
+      (globalThis as any).ShadowRoot.prototype,
+      "adoptedStyleSheets",
+    )
+  ) {
+    Object.defineProperty((globalThis as any).ShadowRoot.prototype, "adoptedStyleSheets", {
+      configurable: true,
+      enumerable: true,
+      get() {
+        return [] as CSSStyleSheet[];
+      },
+    });
+  }
+}
+if (!Object.prototype.hasOwnProperty.call(Element.prototype, "adoptedStyleSheets")) {
+  Object.defineProperty(Element.prototype, "adoptedStyleSheets", {
+    configurable: true,
+    enumerable: true,
+    get() {
+      return [] as CSSStyleSheet[];
+    },
+  });
+}
+/* eslint-enable @typescript-eslint/no-explicit-any */
