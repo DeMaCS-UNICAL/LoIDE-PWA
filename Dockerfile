@@ -4,4 +4,8 @@ COPY . .
 
 RUN npm install
 
-CMD npm run start:prod
+# Make entrypoint script executable
+RUN chmod +x docker-entrypoint.sh
+
+ENTRYPOINT ["./docker-entrypoint.sh"]
+CMD ["npm", "run", "start:prod"]
