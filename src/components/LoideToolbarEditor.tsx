@@ -7,8 +7,6 @@ import {
   cutOutline,
   downloadOutline,
   searchOutline,
-  bookOutline,
-  
 } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import Utils from "../lib/utils";
@@ -21,8 +19,7 @@ interface LoideToolbarEditorProps {
   onCopy: () => void;
   onPaste?: () => void;
   onDownloadTab: () => void;
-  onShowExamples: () => void;
-  onAspChefClick?: () => void; // 👈 nuovo, opzionale per adesso
+  onAspChefClick?: () => void;
 }
 
 const LoideToolbarEditor: React.FC<LoideToolbarEditorProps> = (props) => {
@@ -39,16 +36,6 @@ const LoideToolbarEditor: React.FC<LoideToolbarEditorProps> = (props) => {
       <button title="Download content" className="tab-button" onClick={props.onDownloadTab}>
         <IonIcon color="dark" style={{ fontSize: "20px" }} icon={downloadOutline} />
       </button>
-
-      {/* Examples */}
-      <button
-        title="Examples"
-        className="tab-button space-left"
-        onClick={props.onShowExamples}
-      >
-        <IonIcon color="dark" style={{ fontSize: "20px" }} icon={bookOutline} />
-      </button>
-
 
       {writeClipboardSupported && (
         <>

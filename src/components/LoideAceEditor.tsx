@@ -9,6 +9,7 @@ import "ace-builds/src-noconflict/ext-language_tools";
 import "ace-builds/src-min-noconflict/ext-searchbox";
 import ace from "ace-builds/src-noconflict/ace";
 import { LoideLanguages, LoideSolvers } from "../lib/constants";
+import { ASP_AUTOCOMPLETE_DICT } from "../lib/ace/autocomplete-dicts";
 // import { EditSession } from "ace-builds";
 //
 // EditSession.prototype.toJSON = function () {
@@ -114,17 +115,18 @@ const LoideAceEditor = React.forwardRef<AceEditor, LoideAceEditorProps>((props, 
       } else {
         //edt.editor.getSession().setMode("ace/mode/text");
         edt.editor.getSession().setMode("ace/mode/asp");
+        console.log(props.mode);
         console.log("props.mode " + "textttt");
       }
-      
     }
   }, [props.mode]);
 
   const langTools = ace.require("ace/ext/language_tools");
 
-  const languageChosen = props.mode;
-
-  const solverChosen = props.solver;
+  //const languageChosen = props.mode;
+  const languageChosen = LoideLanguages.ASP.name;
+  const solverChosen = LoideSolvers.DLV;
+  //const solverChosen = props.solver;
 
   const onChange = (value: any) => {
     inizializeAutoComplete(value);
@@ -155,10 +157,75 @@ const LoideAceEditor = React.forwardRef<AceEditor, LoideAceEditorProps>((props, 
     if (props.onFocus) props.onFocus(props.tabKey, e);
   };
 
+  // --- helper per capire il trigger (#, &, ',', ' ') sulla riga corrente ---
+  const getTriggerCharacter = (session: any, pos: any): string | undefined => {
+    const line = session.getLine(pos.row);
+    let characterIndex = pos.column - 1;
+    const searchedCharacters = /[ (,a-zA-Z0-9_#&:-]/;
+
+    let triggerCharacter: string | undefined = undefined;
+
+    while (characterIndex >= 0 && searchedCharacters.test(line[characterIndex])) {
+      if ([",", "(", "#", "&", " "].includes(line[characterIndex])) {
+        triggerCharacter = line[characterIndex];
+        break;
+      }
+      characterIndex--;
+    }
+
+    return triggerCharacter;
+  };
+
+  // --- helper per costruire le completion da ASP_AUTOCOMPLETE_DICT ---
+  const getAspDictCompletions = (trigger: string | undefined) => {
+    const completions: {
+      caption: string;
+      snippet: string;
+      meta: string;
+      docHTML?: string;
+    }[] = [];
+
+    if (trigger === "#") {
+      const dict = ASP_AUTOCOMPLETE_DICT["#"] || {};
+      Object.entries<any>(dict).forEach(([key, elem]) => {
+        // key es: "#show"
+        completions.push({
+          caption: key,              // "#show" — così il prefix "#" combacia
+          snippet: elem.snippet,     // "show ${1:p}/${2:n}" → risultato "#show p/n"
+          meta: "directive / aggregate",
+          docHTML: `<b>${elem.detail}</b><br/><pre>${elem.documentation}</pre>`,
+        });
+      });
+    } else if (trigger === "&") {
+      const dict = ASP_AUTOCOMPLETE_DICT["&"] || {};
+      Object.entries<any>(dict).forEach(([key, elem]) => {
+        // key es: "&abs"
+        completions.push({
+          caption: key,              // "&abs" — cosí il prefix "&" combacia
+          snippet: elem.snippet,     // "abs(${1:X};${2:Z})" → risultato "&abs(X;Z)"
+          meta: "external atom",
+          docHTML: `<b>${elem.detail}</b><br/><pre>${elem.documentation}</pre>`,
+        });
+      });
+    } else if (trigger === "," || trigger === " ") {
+      // conversion types etc. da "language-constants"
+      const consts = ASP_AUTOCOMPLETE_DICT["language-constants"] || [];
+      consts.forEach((c: string) => {
+        completions.push({
+          caption: c,
+          snippet: c,
+          meta: "conversion type",
+        });
+      });
+    }
+
+    return completions;
+  };
+
   const inizializeSnippets = () => {
     langTools.setCompleters([]); // reset completers.
 
-    // completer that include snippets and some keywords
+    // completer che include snippets e alcune keyword
     let completer;
 
     switch (languageChosen) {
@@ -166,7 +233,7 @@ const LoideAceEditor = React.forwardRef<AceEditor, LoideAceEditorProps>((props, 
         switch (solverChosen) {
           case LoideSolvers.IDLV:
             completer = {
-              identifierRegexps: [/[a-zA-Z_0-9#:$\-\u00A2-\uFFFF]/],
+              identifierRegexps: [/[a-zA-Z_0-9#&:$\-\u00A2-\uFFFF]/],
               getCompletions: function (
                 editor: any,
                 session: any,
@@ -191,8 +258,9 @@ const LoideAceEditor = React.forwardRef<AceEditor, LoideAceEditorProps>((props, 
       case LoideLanguages.ASP.name:
         switch (solverChosen) {
           case LoideSolvers.DLV:
+            // completer ORIGINALE (lasciato intatto, solo regex ampliata con &)
             completer = {
-              identifierRegexps: [/[a-zA-Z_0-9#:$\-\u00A2-\uFFFF]/],
+              identifierRegexps: [/[a-zA-Z_0-9#&:$\-\u00A2-\uFFFF]/],
               getCompletions: function (
                 editor: any,
                 session: any,
@@ -378,10 +446,28 @@ const LoideAceEditor = React.forwardRef<AceEditor, LoideAceEditorProps>((props, 
               },
             };
             langTools.addCompleter(completer);
+
+            // nuovo completer che usa aggregates.json, builtins.json, constants.json
+            const aspDictCompleter = {
+              identifierRegexps: [/[a-zA-Z_0-9#&:$\-\u00A2-\uFFFF]/],
+              getCompletions: (
+                editor: any,
+                session: any,
+                pos: any,
+                prefix: any,
+                callback: any,
+              ) => {
+                const trigger = getTriggerCharacter(session, pos);
+                const completions = getAspDictCompletions(trigger);
+                callback(null, completions);
+              },
+            };
+            langTools.addCompleter(aspDictCompleter);
             break;
+
           case LoideSolvers.DLV2:
             completer = {
-              identifierRegexps: [/[a-zA-Z_0-9#:$\-\u00A2-\uFFFF]/],
+              identifierRegexps: [/[a-zA-Z_0-9#&:$\-\u00A2-\uFFFF]/],
               getCompletions: function (
                 editor: any,
                 session: any,
@@ -445,7 +531,7 @@ const LoideAceEditor = React.forwardRef<AceEditor, LoideAceEditorProps>((props, 
             break;
           case LoideSolvers.Clingo:
             completer = {
-              identifierRegexps: [/[a-zA-Z_0-9#:$\-\u00A2-\uFFFF]/],
+              identifierRegexps: [/[a-zA-Z_0-9#&:$\-\u00A2-\uFFFF]/],
               getCompletions: function (
                 editor: any,
                 session: any,

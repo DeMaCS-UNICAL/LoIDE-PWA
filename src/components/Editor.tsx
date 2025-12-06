@@ -15,7 +15,6 @@ import { UIStatusSelector } from "../redux/slices/UIStatus";
 import { runSettingsSelector } from "../redux/slices/RunSettings";
 import { editorSelector, setTabsEditorSessions } from "../redux/slices/Editor";
 import * as API from "../lib/api";
-import { EXAMPLE_PROGRAMS, IExampleProgram } from "../lib/examples";
 
 const Editor: React.FC = () => {
   const dispatch = useDispatch();
@@ -141,45 +140,6 @@ const Editor: React.FC = () => {
       const tabTitle = currentTab.title;
       Utils.downloadTextFile(tabTitle, tabContent);
     }
-  };
-
-  const loadExampleProgram = (example: IExampleProgram) => {
-    const currentTab = tabs[currentTabKey];
-
-    let targetTabKey = currentTabKey;
-
-    const isCurrentEmpty =
-      !currentTab || !currentTab.value || currentTab.value.trim().length === 0;
-
-    if (!isCurrentEmpty) {
-      // La tab corrente ha contenuto → crea una nuova tab
-      Utils.Editor.addTab();
-      // Il nuovo ID sarà tabCountID + 1 (vedi reducer addNewTab)
-      targetTabKey = tabCountID + 1;
-    }
-
-    Utils.Editor.changeTabName(targetTabKey, example.title);
-    Utils.Editor.changeTabValue(targetTabKey, example.code);
-  };
-
-  const showExamplesActionSheet = () => {
-    actionSheetController
-      .create({
-        header: ActionSheet.Examples,
-        buttons: [
-          ...EXAMPLE_PROGRAMS.map((example) => ({
-            text: example.title,
-            handler: () => loadExampleProgram(example),
-          })),
-          {
-            text: ButtonText.Cancel,
-            role: "cancel",
-          },
-        ],
-      })
-      .then((sheet) => {
-        sheet.present();
-      });
   };
 
   const onSaveSession = (tabKey: number, session: any) => {
@@ -319,7 +279,6 @@ const Editor: React.FC = () => {
                 onCopy={copy}
                 onPaste={paste}
                 onDownloadTab={downloadTab}
-                onShowExamples={showExamplesActionSheet}
                 onAspChefClick={handleAspChefClick}
               />
             </div>
@@ -334,7 +293,6 @@ const Editor: React.FC = () => {
             onCopy={copy}
             onPaste={paste}
             onDownloadTab={downloadTab}
-            onShowExamples={showExamplesActionSheet}
             onAspChefClick={handleAspChefClick}
           />
         </div>

@@ -8,7 +8,7 @@ define("ace/mode/asp", [], function (require, exports, module) {
 
   var Mode = function () {
     this.HighlightRules = aspHighlightRules;
-    this.$id = "ace/mode/asp"; // 🔹 aggiungi questo
+    this.$id = "ace/mode/asp";
   };
   oop.inherits(Mode, TextMode);
 
@@ -25,10 +25,11 @@ define("ace/mode/asp_highlight_rules", [], function (require, exports, module) {
   var TextHighlightRules = require("ace/mode/text_highlight_rules").TextHighlightRules;
 
   var aspHighlightRules = function () {
+    // 🔹 tutti i built-in &... che hai nel JSON
     var builtinList =
       "head|tail|append|delNth|flatten|insLast|insNth|last|" +
-      "length|member|memberNth|subList|reverse|delete|abs|int|" +
-      "mod|rand|sum|append_str|length_str|member_str|" +
+      "length|member|memberNth|subList|reverse|reverse_r|delete|delete_r|" +
+      "abs|int|mod|rand|sum|append_str|length_str|member_str|" +
       "reverse_str|sub_str|to_qstr";
 
     this.$rules = {
@@ -107,23 +108,49 @@ define("ace/mode/asp_highlight_rules", [], function (require, exports, module) {
           regex: "#(count|sum|times|min|max)\\b",
         },
 
-        // --- Builtins: &head, &tail, ...
+        // --- Direttive (JSON + completions TSX): #show, #import_sql, #temp, #trigger_frequency, #const, #maxint, ...
+        {
+          token: "keyword.directive.asp",
+          regex:
+            "#(show|import_sql|export_sql|import_local_sparql|import_remote_sparql|" +
+            "external_predicate_conversion|temp|trigger_frequency|" +
+            "const|maxint)\\b",
+        },
+
+        // --- Predicati su liste (da completions TSX): #append, #delnth, #flatten, #head, ...
+        {
+          token: "support.function.list.asp",
+          regex:
+            "#(append|delnth|flatten|head|insLast|insnth|last|" +
+            "length|member|reverse|subList|tail|getnth)\\b",
+        },
+
+        // --- Funzioni aritmetiche: #int, #suc, #pred, #mod, #absdiff, #rand
+        {
+          token: "support.function.arithmetic.asp",
+          regex: "#(int|suc|pred|mod|absdiff|rand)\\b",
+        },
+
+        // --- Aggregates stile #count { ... } già coperti sopra, quindi qui nulla
+
+        // --- Aggregates "Clingo-style" con #: li puoi aggiungere qui se servono altri
+
+        // --- Aggregates/costruzioni generiche già coperti
+
+        // --- Aggregates con #: lasciamo solo i noti per evitare highlight a casaccio
+
+        // --- Aggregates: #count, #sum, #times, #min, #max (ripetuti per sicurezza, ma già gestiti)
+
+        // --- Builtins: &head, &tail, &append, &delNth, ..., &append_str, ...
         {
           token: "support.function.builtin.asp",
           regex: "&(?:" + builtinList + ")\\b",
         },
 
-        // --- External predicates: &foo
+        // --- External predicates generici: &foo
         {
           token: "support.function.external.asp",
           regex: "&[A-Za-z0-9_]+",
-        },
-
-        // --- Direttive: #show, #import_sql, ...
-        {
-          token: "keyword.directive.asp",
-          regex:
-            "#(show|external_predicate_conversion|import_sql|export_sql|import_local_sparql|import_remote_sparql)\\b",
         },
 
         // --- Identificatori generici (predicati, costanti, ecc.)

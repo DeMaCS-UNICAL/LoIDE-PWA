@@ -1,8 +1,4 @@
 // src/lib/examples.ts
-import familyAncestor from "../examples/family-ancestor.lp?raw";
-import graphColoring from "../examples/graph-coloring.lp?raw";
-import simpleScheduling from "../examples/simple-scheduling.lp?raw";
-import choiceAndConstraint from "../examples/choice-and-constraint.lp?raw";
 
 export interface IExampleProgram {
   id: string;
@@ -10,37 +6,46 @@ export interface IExampleProgram {
   description: string;
   language: string;
   code: string;
+  suggested_solver?: string; 
 }
 
-export const EXAMPLE_PROGRAMS: IExampleProgram[] = [
-  {
-    id: "family-ancestor",
-    title: "Family: ancestor relation",
-    description:
-      "Small example with facts and recursive rules to compute the ancestor relation.",
-    language: "asp",
-    code: familyAncestor,
-  },
-  {
-    id: "graph-coloring",
-    title: "Graph 3-coloring",
-    description: "Classic graph 3-coloring example on a tiny triangle graph.",
-    language: "asp",
-    code: graphColoring,
-  },
-  {
-    id: "simple-scheduling",
-    title: "Simple scheduling",
-    description: "Assign three tasks to a single machine without overlaps in time.",
-    language: "asp",
-    code: simpleScheduling,
-  },
-  {
-    id: "choice-and-constraint",
-    title: "Choice and constraint",
-    description:
-      "Toy example that chooses a menu with exactly one main course and one drink.",
-    language: "asp",
-    code: choiceAndConstraint,
-  },
-];
+/**
+ * Tipo del contenuto dei file JSON di esempio.
+ * Ogni JSON deve avere questi campi.
+ */
+interface IExampleFile {
+  id: string;
+  title: string;
+  description: string;
+  language: string;
+  code: string;
+  suggested_solver?: string; 
+}
+
+// Importa TUTTI i .json nella cartella src/examples/
+// grazie a Vite (import.meta.glob)
+//
+// Ogni nuovo file src/examples/*.json viene incluso automaticamente.
+const exampleModules = import.meta.glob("../examples/*.json", {
+  eager: true,
+});
+
+/**
+ * Converte i moduli importati in un array di IExampleProgram.
+ */
+export const EXAMPLE_PROGRAMS: IExampleProgram[] = Object.values(exampleModules)
+  .map((mod) => {
+    // Vite esporta il JSON di solito come default
+    const data = (mod as any).default as IExampleFile;
+
+    return {
+      id: data.id,
+      title: data.title,
+      description: data.description,
+      language: data.language,
+      code: data.code,
+      suggested_solver: data.suggested_solver ?? undefined,
+    };
+  })
+  // opzionale: ordina per titolo, così la lista è deterministica
+  .sort((a, b) => a.title.localeCompare(b.title));

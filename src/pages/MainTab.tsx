@@ -30,6 +30,7 @@ import {
   folderOpenOutline,
   saveOutline,
   shareOutline,
+  codeSlashOutline, // icona per Examples
 } from "ionicons/icons";
 import SaveProjectModal from "../modals/SaveProjectModal";
 import { ActionSheet, ButtonText, WindowConfirmMessages } from "../lib/constants";
@@ -41,11 +42,15 @@ import { languagesDataSelector } from "../redux/slices/LanguagesData";
 import RestoreButton from "../components/RestoreButton";
 import Mousetrap from "mousetrap";
 
-// 🔹 nuovo import per l'Output
-import Output from "../components/Output";
-// 🔹 nuovi selector per model/error/fontSize
-import { UIStatusSelector } from "../redux/slices/UIStatus";
-import { outputSelector } from "../redux/slices/Output";
+// 🔹 Output pane (con Download & Clear)
+import OutputPane from "../components/OutputPane";
+
+// 🔹 Esempi
+import { EXAMPLE_PROGRAMS, IExampleProgram } from "../lib/examples";
+import ExampleExplorerModal from "../modals/ExampleExplorerModal";
+import { editorSelector } from "../redux/slices/Editor";
+
+const VISIBLE_EXAMPLES_LIMIT = 4;
 
 type MainTabPageProps = RouteComponentProps<{
   data: string;
@@ -60,12 +65,22 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
     event: Event | undefined;
   }>({ open: false, event: undefined });
 
+  // 🔹 stato per il modal degli esempi
+  const [showExamplesModal, setShowExamplesModal] = useState<boolean>(false);
+
+  // 🔹 stato per il menu a tendina (popover) degli esempi
+  const [examplesPopover, setExamplesPopover] = useState<{
+    open: boolean;
+    event: Event | undefined;
+  }>({ open: false, event: undefined });
+
   const { languages } = useSelector(languagesDataSelector);
 
-  // 🔹 model/error dall'Output store
-  const { model, error } = useSelector(outputSelector);
-  // 🔹 fontSize per l'output
-  const { fontSizeOutput } = useSelector(UIStatusSelector);
+  // 🔹 stato editor (per capire tab corrente e tabCountID)
+  const { tabCountID, currentTabIndex, tabs } = useSelector(editorSelector);
+
+  // 🔹 primi N esempi da mostrare nel menu a tendina
+  const visibleExamples = EXAMPLE_PROGRAMS.slice(0, VISIBLE_EXAMPLES_LIMIT);
 
   useEffect(() => {
     if (languages.length > 0) {
@@ -155,6 +170,56 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
       .then((alert) => alert.present());
   };
 
+  // 🔹 Logica per caricare un esempio nella tab corrente (o in una nuova tab)
+  const loadExampleProgram = (example: IExampleProgram) => {
+    const keysTab = Object.keys(tabs).map((item) => Number(item));
+    if (keysTab.length === 0) {
+      // nessuna tab? ne creiamo una
+      Utils.Editor.addTab();
+    }
+
+    const updatedKeysTab = Object.keys(tabs).map((item) => Number(item));
+    const currentTabKey = updatedKeysTab[currentTabIndex] ?? updatedKeysTab[0];
+    const currentTab = tabs[currentTabKey];
+
+    let targetTabKey = currentTabKey;
+
+    const isCurrentEmpty =
+      !currentTab || !currentTab.value || currentTab.value.trim().length === 0;
+
+    if (!isCurrentEmpty) {
+      // La tab corrente ha contenuto → crea una nuova tab
+      Utils.Editor.addTab();
+      // Il nuovo ID sarà tabCountID + 1 (vedi reducer addNewTab)
+      targetTabKey = tabCountID + 1;
+    }
+
+    Utils.Editor.changeTabName(targetTabKey, example.title);
+    Utils.Editor.changeTabValue(targetTabKey, example.code);
+  };
+
+  // 🔹 handler per aprire il menu degli esempi ANCORATO al bottone (desktop)
+  const openExamplesPopoverAtButton = (e: React.MouseEvent) => {
+    setExamplesPopover({
+      open: true,
+      event: e.nativeEvent,
+    });
+  };
+
+  // 🔹 handler per aprire il menu degli esempi CENTRATO (es. da toolbar editor / mobile)
+  const openExamplesPopoverCentered = () => {
+    setExamplesPopover({
+      open: true,
+      event: undefined,
+    });
+  };
+
+  // 🔹 handler per click su "Show more…" nel menu a tendina
+  const handleShowMoreExamples = () => {
+    setExamplesPopover({ open: false, event: undefined });
+    setShowExamplesModal(true);
+  };
+
   return (
     <IonPage>
       <IonHeader>
@@ -174,6 +239,17 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
           />
           <RestoreButton />
           <IonButtons slot="end">
+            {/* 🔹 BOTTONE EXAMPLES (desktop) COME MENU A TENDINA */}
+            <IonButton
+              title="Examples"
+              color="tertiary"
+              className="ion-hide-sm-down"
+              onClick={openExamplesPopoverAtButton}
+            >
+              <IonIcon icon={codeSlashOutline} />
+              <span className="margin-button-left">Examples</span>
+            </IonButton>
+
             <IonButton
               title="Open"
               color="warning"
@@ -244,22 +320,18 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
           <div id="main" className="main-side-editor">
             <IonGrid style={{ height: "100%" }}>
               <IonRow style={{ height: "100%" }}>
-                {/* Colonna Editor:
-                    - full width su mobile
-                    - 7/12 su schermi grandi
-                 */}
+                {/* Colonna Editor */}
                 <IonCol
                   size="12"
                   sizeLg="7"
                   className="ion-no-padding"
                   style={{ height: "100%" }}
                 >
-                  <Editor />
+                  {/* 🔹 Passiamo la callback anche all'Editor (centrato) */}
+                  <Editor onShowExamples={openExamplesPopoverCentered} />
                 </IonCol>
 
-                {/* Colonna Output:
-                    - visibile SOLO da lg in su
-                 */}
+                {/* Colonna Output (solo da lg in su) */}
                 <IonCol
                   sizeLg="5"
                   className="ion-no-padding ion-hide-md-down"
@@ -268,7 +340,7 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
                     borderLeft: "1px solid var(--ion-color-step-150)",
                   }}
                 >
-                  <Output model={model} error={error} fontSize={fontSizeOutput} />
+                  <OutputPane />
                 </IonCol>
               </IonRow>
             </IonGrid>
@@ -278,6 +350,8 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
         <OpenProjectModal isOpen={showOpenModal} onDismiss={setShowOpenModal} />
         <SaveProjectModal isOpen={showSaveModal} onDismiss={setShowSaveModal} />
         <ShareProjectModal isOpen={showShareModal} onDismiss={setShowShareModal} />
+
+        {/* 🔹 Popover operations (mobile) */}
         <IonPopover
           data-testid="operations-popover"
           isOpen={buttonsPopover.open}
@@ -285,6 +359,19 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
           onDidDismiss={() => setButtonsPopover({ open: false, event: undefined })}
         >
           <IonList>
+            {/* 🔹 "Examples" PRIMA DI OPEN */}
+            <IonItem
+              button={true}
+              onClick={() => {
+                setButtonsPopover({ open: false, event: undefined });
+                openExamplesPopoverCentered();
+              }}
+              title="Examples"
+            >
+              <IonLabel>Examples</IonLabel>
+              <IonIcon color="tertiary" icon={codeSlashOutline} slot="end" />
+            </IonItem>
+
             <IonItem button={true} onClick={() => setShowOpenModal(true)} title="Open">
               <IonLabel>Open</IonLabel>
               <IonIcon color="warning" icon={folderOpenOutline} slot="end" />
@@ -295,7 +382,6 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
             </IonItem>
             <IonItem button={true} title="Share" onClick={() => setShowShareModal(true)}>
               <IonLabel>Share</IonLabel>
-
               <IonIcon color="success" slot="end" icon={shareOutline} />
             </IonItem>
             <IonItem button={true} title="Reset" onClick={() => showResetActionSheet()}>
@@ -304,6 +390,39 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
             </IonItem>
           </IonList>
         </IonPopover>
+
+        {/* 🔹 Popover Examples (menu a tendina) */}
+        <IonPopover
+          isOpen={examplesPopover.open}
+          event={examplesPopover.event}
+          onDidDismiss={() => setExamplesPopover({ open: false, event: undefined })}
+        >
+          <IonList>
+            {visibleExamples.map((example) => (
+              <IonItem
+                key={example.id}
+                button={true}
+                onClick={() => {
+                  loadExampleProgram(example);
+                  setExamplesPopover({ open: false, event: undefined });
+                }}
+              >
+                <IonLabel>{example.title}</IonLabel>
+              </IonItem>
+            ))}
+
+            <IonItem button={true} onClick={handleShowMoreExamples}>
+              <IonLabel>Show more…</IonLabel>
+            </IonItem>
+          </IonList>
+        </IonPopover>
+
+        {/* 🔹 Modal Explorer per gli esempi */}
+        <ExampleExplorerModal
+          isOpen={showExamplesModal}
+          onDismiss={setShowExamplesModal}
+          onSelectExample={loadExampleProgram}
+        />
       </IonContent>
     </IonPage>
   );

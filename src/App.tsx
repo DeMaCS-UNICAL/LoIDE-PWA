@@ -19,10 +19,7 @@ import {
   cog,
   informationCircleOutline,
   colorPaletteOutline,
-  restaurantOutline,
 } from "ionicons/icons";
-
-import { openAspChefFromLoide } from "./integrations/ASPChef";
 
 import MainTab from "./pages/MainTab";
 import RunSettingsTab from "./pages/RunSettingsTab";
@@ -61,9 +58,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { UIStatusSelector } from "./redux/slices/UIStatus";
 import { setError, setModel } from "./redux/slices/Output";
 import { setLanguages } from "./redux/slices/LanguagesData";
-import { editorSelector } from "./redux/slices/Editor";
 
-import Mousetrap from "mousetrap";
+import Mousetrap from "Mousetrap";
 import ShortcutsModal from "./modals/ShortcutsModal";
 
 setupIonicReact();
@@ -74,7 +70,6 @@ const App: React.FC = () => {
   const [showShortcutsModal, setShowShortcutsModal] = useState<boolean>(false);
 
   const { newOutput } = useSelector(UIStatusSelector);
-  const editorState = useSelector(editorSelector);
 
   useEffect(() => {
     API.createSocket();
@@ -154,10 +149,7 @@ const App: React.FC = () => {
               <IonLabel>Run Settings</IonLabel>
             </IonTabButton>
 
-            {/* Output tab:
-                - rimane identico
-                - MA è nascosto sugli schermi grandi (ion-hide-lg-up)
-              */}
+            {/* Output tab (solo mobile / tablet piccolo) */}
             <IonTabButton
               tab={LoidePath.Output}
               href={`/${LoidePath.Output}`}
@@ -166,33 +158,6 @@ const App: React.FC = () => {
               <IonIcon icon={documentTextOutline} />
               <IonLabel>Output</IonLabel>
               {newOutput && <IonBadge color="danger">!</IonBadge>}
-            </IonTabButton>
-
-            {/* -------------------------
-                  ASP-CHEF BUTTON
-               ------------------------- */}
-            <IonTabButton
-              tab={LoidePath.ASPChef}
-              href="#"
-              onClick={() => {
-                const { currentTabIndex, tabs } = editorState;
-
-                // tabs è un oggetto, non un array → replichiamo la logica di Editor.tsx
-                const tabKeys = Object.keys(tabs || {});
-                if (tabKeys.length === 0) {
-                  openAspChefFromLoide("");
-                  return;
-                }
-
-                const currentKey = tabKeys[currentTabIndex];
-                const currentTab = (tabs as any)[currentKey];
-                const currentLoideProgram = currentTab?.value?.toString() ?? "";
-
-                openAspChefFromLoide(currentLoideProgram);
-              }}
-            >
-              <IonIcon icon={restaurantOutline} />
-              <IonLabel>ASP Chef</IonLabel>
             </IonTabButton>
 
             <IonTabButton tab={LoidePath.Appearance} href={`/${LoidePath.Appearance}`}>
