@@ -10,6 +10,7 @@
     "url": "https://github.com/DeMaCS-UNICAL/LoIDE-PWA.git"
   },
   "license": "MIT",
+  "type": "module",
   "contributors": [
     {
       "name": "Stefano Germano"
