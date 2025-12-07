@@ -119,11 +119,8 @@ function buildConnectSources(apiServer) {
   const sources = ["'self'", "https://is.gd"];
   if (apiServer) {
     sources.push(apiServer);
-    // Determine WebSocket protocol based on the API server's protocol
-    const isSecure = apiServer.startsWith("https://");
-    const wsProtocol = isSecure ? "wss://" : "ws://";
-    const wsHost = apiServer.replace(/^https?:\/\//, "");
-    sources.push(wsProtocol + wsHost);
+    const wsHost = apiServer.replace(/^(https?|wss?|http?|ws?):\/\//, "");
+    sources.push("ws://" + wsHost, "wss://" + wsHost);
   }
   log(`Connect Sources: ${sources.join(", ")}`);
   return sources;
