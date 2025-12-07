@@ -75,7 +75,7 @@ npm start
 ```
 
 Runs the app in the development mode.
-Open [http://localhost:9000](http://localhost:9000) to view it in the browser.
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.
 You will also see any lint errors in the console.
@@ -89,6 +89,8 @@ npm run start:prod
 ```
 
 Builds the app for production to the `build` folder and start a server that serve the build.
+
+Open [http://localhost:9000](http://localhost:9000) to view it in the browser.
 
 If you wish to run _LoIDE_ over HTTPS, you must provide paths to certificate files in the `server-config.json` file.
 Then, you can start _LoIDE_ in a browser at [http://localhost:9001](http://localhost:9001)
