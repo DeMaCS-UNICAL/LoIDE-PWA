@@ -596,6 +596,14 @@ const isValidProjectToLoad = (project: ILoideProject): boolean => {
 
 const getRandomColor = () => Math.floor(Math.random() * 16777215).toString(16);
 
+const downloadOutput = (model: string, error: string) => {
+  const fileContent = `${model} ${model.length > 0 ? "\n\n" : ""} ${error}`;
+
+  const fileTitle = "LoIDE_Output";
+
+  Utils.downloadTextFile(fileTitle, fileContent);
+};
+
 const Editor = {
   resetInput,
   addTab: addEditorTab,
@@ -636,6 +644,7 @@ const Utils = {
   restoreRunAutoFromLocalStorage,
   isValidProjectToLoad,
   getRandomColor,
+  downloadOutput,
 };
 
 export default Utils;
