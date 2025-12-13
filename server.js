@@ -118,9 +118,9 @@ function log(message) {
 function buildConnectSources(apiServer) {
   const sources = ["'self'", "https://is.gd"];
   if (apiServer) {
-    sources.push(apiServer);
-    const wsHost = apiServer.replace(/^(https?|wss?|http?|ws?):\/\//, "");
-    sources.push("ws://" + wsHost, "wss://" + wsHost);
+    const host = apiServer.replace(/^(https?|wss?|http?|ws?):\/\//, "");
+    // Allow all protocol variants for flexibility
+    sources.push("http://" + host, "https://" + host, "ws://" + host, "wss://" + host);
   }
   log(`Connect Sources: ${sources.join(", ")}`);
   return sources;
