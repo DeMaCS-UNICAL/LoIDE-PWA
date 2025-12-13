@@ -43,6 +43,13 @@ const ResizeObserver = vi.fn(() => ({
 
 vi.stubGlobal("ResizeObserver", ResizeObserver);
 
+// Polyfill scrollTo for JSDOM (used by IonSegmentView)
+if (!Element.prototype.scrollTo) {
+  Element.prototype.scrollTo = function () {
+    // no-op: tests don't need actual scrolling
+  };
+}
+
 // Polyfill/stub CSSStyleSheet and adoptedStyleSheets for test environment
 // Stencil/ionic code checks for constructable stylesheets and adoptedStyleSheets
 // which may be undefined in Node/JSDOM-like test envs. We provide a minimal
