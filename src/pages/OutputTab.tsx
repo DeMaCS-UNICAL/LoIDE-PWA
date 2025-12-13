@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import {
   IonButton,
   IonButtons,
@@ -14,28 +14,14 @@ import {
 import Output from "../components/Output";
 import { backspaceOutline, downloadOutline } from "ionicons/icons";
 import Utils from "../lib/utils";
-import { useDispatch, useSelector } from "react-redux";
-import { UIStatusSelector } from "../redux/slices/UIStatus";
-import { outputSelector, setEmpty } from "../redux/slices/Output";
+import useOutput from "../hooks/useOutput";
+import useAppearance from "../hooks/useAppearance";
 
 const OutputTab: React.FC = () => {
-  const dispatch = useDispatch();
+  const { clearOutput, model, error } = useOutput();
+  const { fontSizeOutput } = useAppearance();
+  const downloadOutput = useCallback(() => Utils.downloadOutput(model, error), [model, error]);
 
-  const { model, error } = useSelector(outputSelector);
-
-  const { fontSizeOutput } = useSelector(UIStatusSelector);
-
-  const clearOutput = () => {
-    dispatch(setEmpty());
-  };
-
-  const downloadOutput = () => {
-    const fileContent = `${model} ${model.length > 0 ? "\n\n" : ""} ${error}`;
-
-    const fileTitle = "LoIDE_Output";
-
-    Utils.downloadTextFile(fileTitle, fileContent);
-  };
   return (
     <IonPage>
       <IonHeader>
