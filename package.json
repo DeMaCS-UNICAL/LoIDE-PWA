@@ -108,7 +108,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@types/socket.io-client": "^1.4.36",
     "@typescript-eslint/eslint-plugin": "^8.45.0",
-    "@typescript-eslint/parser": "^8.45.0",
+    "@typescript-eslint/parser": "^8.49.0",
     "@vitejs/plugin-react": "^5.1.0",
     "@vitest/browser": "^4.0.8",
     "@vitest/coverage-v8": "^4.0.8",
