@@ -1,32 +1,20 @@
-import React, { useCallback } from "react";
-import {
-  IonButton,
-  IonButtons,
-  IonCol,
-  IonContent,
-  IonHeader,
-  IonIcon,
-  IonPage,
-  IonRow,
-  IonTitle,
-  IonToolbar,
-} from "@ionic/react";
-import Output from "../components/Output";
-import { backspaceOutline, downloadOutline } from "ionicons/icons";
-import Utils from "../lib/utils";
+import { IonButton, IonButtons, IonHeader, IonIcon, IonToolbar } from "@ionic/react";
+import Output from "./Output";
 import useOutput from "../hooks/useOutput";
 import useAppearance from "../hooks/useAppearance";
+import { useCallback } from "react";
+import Utils from "../lib/utils";
+import { backspaceOutline, downloadOutline } from "ionicons/icons";
 
-const OutputTab: React.FC = () => {
+const OutputPane = () => {
   const { clearOutput, model, error } = useOutput();
   const { fontSizeOutput } = useAppearance();
   const downloadOutput = useCallback(() => Utils.downloadOutput(model, error), [model, error]);
 
   return (
-    <IonPage>
+    <div style={{ display: "flex", flexDirection: "column", height: "100%", overflow: "hidden" }}>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Output</IonTitle>
           <IonButtons slot="start">
             <IonButton
               color="primary"
@@ -63,22 +51,11 @@ const OutputTab: React.FC = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent scrollY={false} className="tab-content-of-hidden">
-        <IonRow style={{ height: "100%" }}>
-          <IonCol
-            size-md="8"
-            offset-md="2"
-            size-xl="6"
-            offset-xl="3"
-            className="ion-no-padding"
-            style={{ height: "100%" }}
-          >
-            <Output model={model} error={error} fontSize={fontSizeOutput} />
-          </IonCol>
-        </IonRow>
-      </IonContent>
-    </IonPage>
+      <div style={{ flex: 1, overflow: "auto" }}>
+        <Output model={model} error={error} fontSize={fontSizeOutput} />
+      </div>
+    </div>
   );
 };
 
-export default OutputTab;
+export default OutputPane;
