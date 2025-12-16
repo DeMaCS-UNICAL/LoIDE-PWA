@@ -126,7 +126,6 @@ export const LocalStorageItems = {
 export const ActionSheet = {
   Reset: "Reset actions",
   Tab: "Tab actions",
-  Examples: "Example programs",
 };
 
 export const URLInput = {
