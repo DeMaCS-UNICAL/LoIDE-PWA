@@ -41,7 +41,6 @@ import { languagesDataSelector } from "../redux/slices/LanguagesData";
 import RestoreButton from "../components/RestoreButton";
 import Mousetrap from "mousetrap";
 
-
 import OutputPane from "../components/OutputPane";
 
 type MainTabPageProps = RouteComponentProps<{
@@ -237,13 +236,7 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
             <IonGrid style={{ height: "100%" }}>
               <IonRow style={{ height: "100%" }}>
                 {/* Colonna Editor */}
-                <IonCol
-                  size="12"
-                  sizeLg="7"
-                  className="ion-no-padding"
-                  style={{ height: "100%" }}
-                >
-                  
+                <IonCol size="12" sizeLg="7" className="ion-no-padding" style={{ height: "100%" }}>
                   <Editor />
                 </IonCol>
 

@@ -5,11 +5,7 @@ import Output from "./Output";
 import { useSelector, useDispatch } from "react-redux";
 import { UIStatusSelector } from "../redux/slices/UIStatus";
 import { outputSelector, setEmpty } from "../redux/slices/Output";
-import {
-  backspaceOutline,
-  downloadOutline,
-  restaurantOutline,
-} from "ionicons/icons";
+import { backspaceOutline, downloadOutline, restaurantOutline } from "ionicons/icons";
 import Utils from "../lib/utils";
 //import { openAspChefFromLoide } from "../integrations/ASPChef";
 import { editorSelector } from "../redux/slices/Editor";
@@ -31,9 +27,7 @@ const OutputPane: React.FC = () => {
   const downloadOutput = () => {
     if (!hasContent) return;
 
-    const fileContent = `${model} ${
-      model.length > 0 ? "\n\n" : ""
-    } ${error}`;
+    const fileContent = `${model} ${model.length > 0 ? "\n\n" : ""} ${error}`;
     const fileTitle = "LoIDE_Output";
 
     Utils.downloadTextFile(fileTitle, fileContent);
@@ -76,9 +70,8 @@ const OutputPane: React.FC = () => {
         }}
       >
         <IonButtons>
-
           {/* 🔹 ASP Chef — ora disabilitato senza output */}
-          
+
           {/* 🔹 Download — ora disabilitato senza output */}
           <IonButton
             color="primary"

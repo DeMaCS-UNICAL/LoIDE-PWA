@@ -6,7 +6,7 @@ export interface IExampleProgram {
   description: string;
   language: string;
   code: string;
-  suggested_solver?: string; 
+  suggested_solver?: string;
 }
 
 /**
@@ -19,7 +19,7 @@ interface IExampleFile {
   description: string;
   language: string;
   code: string;
-  suggested_solver?: string; 
+  suggested_solver?: string;
 }
 
 // Importa TUTTI i .json nella cartella src/examples/
