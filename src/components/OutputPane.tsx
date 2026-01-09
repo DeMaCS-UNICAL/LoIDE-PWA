@@ -5,17 +5,16 @@ import Output from "./Output";
 import { useSelector, useDispatch } from "react-redux";
 import { UIStatusSelector } from "../redux/slices/UIStatus";
 import { outputSelector, setEmpty } from "../redux/slices/Output";
-import { backspaceOutline, downloadOutline, restaurantOutline } from "ionicons/icons";
+import { backspaceOutline, downloadOutline } from "ionicons/icons";
 import Utils from "../lib/utils";
-//import { openAspChefFromLoide } from "../integrations/ASPChef";
-import { editorSelector } from "../redux/slices/Editor";
+// import { openAspChefFromLoide } from "../integrations/ASPChef";
+// import { editorSelector } from "../redux/slices/Editor";
 
 const OutputPane: React.FC = () => {
   const dispatch = useDispatch();
 
   const { model, error } = useSelector(outputSelector);
   const { fontSizeOutput } = useSelector(UIStatusSelector);
-  const editorState = useSelector(editorSelector);
 
   const hasContent = model.length > 0 || error.length > 0;
 
@@ -36,7 +35,7 @@ const OutputPane: React.FC = () => {
   /*const openAspChef = () => {
     if (!hasContent) return;
 
-    const { currentTabIndex, tabs } = editorState;
+    const { currentTabIndex, tabs } = useSelector(editorSelector);
 
     const tabKeys = Object.keys(tabs || {});
     if (tabKeys.length === 0) {
@@ -70,9 +69,7 @@ const OutputPane: React.FC = () => {
         }}
       >
         <IonButtons>
-          {/* 🔹 ASP Chef — ora disabilitato senza output */}
-
-          {/* 🔹 Download — ora disabilitato senza output */}
+          {/* Download */}
           <IonButton
             color="primary"
             title="Download"
@@ -83,7 +80,7 @@ const OutputPane: React.FC = () => {
             <span className="margin-button-left">Download</span>
           </IonButton>
 
-          {/* 🔹 Clear — ora disabilitato senza output */}
+          {/* Clear */}
           <IonButton
             size="small"
             color="medium"
@@ -97,7 +94,7 @@ const OutputPane: React.FC = () => {
         </IonButtons>
       </div>
 
-      {/* Area Output */}
+      {/* Output */}
       <div style={{ flex: 1, minHeight: 0 }}>
         <Output model={model} error={error} fontSize={fontSizeOutput} />
       </div>
