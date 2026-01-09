@@ -69,7 +69,7 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
 
   const { languages } = useSelector(languagesDataSelector);
 
-  // editor state
+  // editor state (per caricare esempi in tab corrente/nuova)
   const { tabCountID, currentTabIndex, tabs } = useSelector(editorSelector);
 
   const visibleExamples = EXAMPLE_PROGRAMS.slice(0, VISIBLE_EXAMPLES_LIMIT);
@@ -82,9 +82,10 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
         Utils.setProjectFromConfig(config, languages);
       }
     }
-  }, [languages, match.params.data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [languages]);
 
-  // Keyboard shortcuts
+  // Keyboard shortcuts (robusto: bind una volta + setState funzionale)
   useEffect(() => {
     const open = () => {
       setShowOpenModal((v) => !v);
@@ -104,9 +105,9 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
     Mousetrap.bind(["ctrl+shift+s", "command+shift+s"], share);
 
     return () => {
-      Mousetrap.unbind(["ctrl+o", "command+o"], open);
-      Mousetrap.unbind(["ctrl+s", "command+s"], save);
-      Mousetrap.unbind(["ctrl+shift+s", "command+shift+s"], share);
+      Mousetrap.unbind(["ctrl+o", "command+o"]);
+      Mousetrap.unbind(["ctrl+s", "command+s"]);
+      Mousetrap.unbind(["ctrl+shift+s", "command+shift+s"]);
     };
   }, []);
 
@@ -142,7 +143,7 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
       .then((alert) => alert.present());
   };
 
-  const showResetActionSheet = () =>
+  const showResetActionSheet = () => {
     actionSheetController
       .create({
         header: ActionSheet.Reset,
@@ -164,6 +165,7 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
         ],
       })
       .then((alert) => alert.present());
+  };
 
   // ==========================
   // Examples logic
@@ -184,6 +186,7 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
 
     if (!isCurrentEmpty) {
       Utils.Editor.addTab();
+      // nuovo id tab (coerente con il reducer addNewTab)
       targetTabKey = tabCountID + 1;
     }
 
@@ -214,7 +217,10 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
 
           <img
             className="logo"
-            style={{ marginTop: "6px", marginLeft: "10px" }}
+            style={{
+              marginTop: "6px",
+              marginLeft: "10px",
+            }}
             height="30px"
             src={logo}
             alt="loide-logo"
@@ -223,6 +229,7 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
           <RestoreButton />
 
           <IonButtons slot="end">
+            {/* Examples (desktop) */}
             <IonButton
               title="Examples"
               color="tertiary"
@@ -292,6 +299,7 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
 
       <IonContent scrollY={false} className="tab-content-of-hidden">
         <IonSplitPane contentId="main" when="lg">
+          {/* side menu */}
           <IonMenu contentId="main">
             <IonHeader>
               <IonToolbar className="side-toolbar">
@@ -303,6 +311,7 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
             </IonContent>
           </IonMenu>
 
+          {/* main content */}
           <div id="main" className="main-side-editor">
             <Editor />
           </div>
@@ -312,6 +321,7 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
         <SaveProjectModal isOpen={showSaveModal} onDismiss={setShowSaveModal} />
         <ShareProjectModal isOpen={showShareModal} onDismiss={setShowShareModal} />
 
+        {/* Popover operations (mobile) */}
         <IonPopover
           data-testid="operations-popover"
           isOpen={buttonsPopover.open}
@@ -319,6 +329,7 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
           onDidDismiss={() => setButtonsPopover({ open: false, event: undefined })}
         >
           <IonList>
+            {/* Examples (mobile) */}
             <IonItem
               button={true}
               onClick={() => {
@@ -353,6 +364,7 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
           </IonList>
         </IonPopover>
 
+        {/* Popover Examples */}
         <IonPopover
           isOpen={examplesPopover.open}
           event={examplesPopover.event}
@@ -378,9 +390,10 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
           </IonList>
         </IonPopover>
 
+        {/* Modal Explorer Examples */}
         <ExampleExplorerModal
           isOpen={showExamplesModal}
-          onDismiss={() => setShowExamplesModal(false)}
+          onDismiss={setShowExamplesModal}
           onSelectExample={loadExampleProgram}
         />
       </IonContent>

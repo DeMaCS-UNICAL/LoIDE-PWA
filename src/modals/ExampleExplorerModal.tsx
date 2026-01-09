@@ -1,3 +1,4 @@
+// src/modals/ExampleExplorerModal.tsx
 import React, { useEffect, useState } from "react";
 import {
   IonButton,
@@ -21,7 +22,7 @@ import { EXAMPLE_PROGRAMS, IExampleProgram } from "../lib/examples";
 
 interface ExampleExplorerModalProps {
   isOpen: boolean;
-  onDismiss: () => void;
+  onDismiss: (open: boolean) => void;
   onSelectExample: (example: IExampleProgram) => void;
 }
 
@@ -34,6 +35,7 @@ const ExampleExplorerModal: React.FC<ExampleExplorerModalProps> = ({
 
   useEffect(() => {
     if (isOpen) {
+      // Quando apro la modal, seleziono il primo esempio (se esiste)
       if (EXAMPLE_PROGRAMS.length > 0) {
         setSelectedId(EXAMPLE_PROGRAMS[0].id);
       } else {
@@ -47,14 +49,16 @@ const ExampleExplorerModal: React.FC<ExampleExplorerModalProps> = ({
   const handleUseExample = () => {
     if (selectedExample) {
       onSelectExample(selectedExample);
-      onDismiss();
+      onDismiss(false);
     }
   };
 
+  // 👇 Helper per mostrare uno o più badge "Suggested solver"
   const renderSuggestedSolverBadge = (example: IExampleProgram) => {
     const raw = example.suggested_solver;
 
     if (!raw || raw.trim().length === 0) {
+      // Nessun solver suggerito → N/A
       return (
         <div
           style={{
@@ -70,12 +74,14 @@ const ExampleExplorerModal: React.FC<ExampleExplorerModalProps> = ({
       );
     }
 
+    // Supporta "clingo, dlv,solverx ,  solvery"
     const solvers = raw
       .split(",")
       .map((s) => s.trim())
       .filter((s) => s.length > 0);
 
     if (solvers.length === 0) {
+      // Stringa sporca ma senza valori utili → fallback N/A
       return (
         <div
           style={{
@@ -114,12 +120,12 @@ const ExampleExplorerModal: React.FC<ExampleExplorerModalProps> = ({
   };
 
   return (
-    <IonModal isOpen={isOpen} onDidDismiss={onDismiss}>
+    <IonModal isOpen={isOpen} onDidDismiss={() => onDismiss(false)}>
       <IonHeader>
         <IonToolbar>
           <IonTitle>Examples Explorer</IonTitle>
           <IonButtons slot="end">
-            <IonButton onClick={onDismiss}>
+            <IonButton onClick={() => onDismiss(false)}>
               <IonIcon icon={closeOutline} />
             </IonButton>
           </IonButtons>
@@ -129,6 +135,7 @@ const ExampleExplorerModal: React.FC<ExampleExplorerModalProps> = ({
       <IonContent fullscreen>
         <IonGrid style={{ height: "100%" }}>
           <IonRow style={{ height: "100%" }}>
+            {/* Colonna sinistra: lista esempi */}
             <IonCol
               size="12"
               sizeMd="4"
@@ -153,20 +160,17 @@ const ExampleExplorerModal: React.FC<ExampleExplorerModalProps> = ({
               </IonList>
             </IonCol>
 
+            {/* Colonna destra: anteprima */}
             <IonCol size="12" sizeMd="8" className="ion-padding">
               {selectedExample ? (
                 <>
                   <h2 style={{ marginTop: 0 }}>{selectedExample.title}</h2>
 
-                  <p
-                    style={{
-                      marginBottom: "0.5rem",
-                      color: "var(--ion-color-medium)",
-                    }}
-                  >
+                  <p style={{ marginBottom: "0.5rem", color: "var(--ion-color-medium)" }}>
                     Language: <strong>{selectedExample.language}</strong>
                   </p>
 
+                  {/* 👇 Badge "Suggested solver" (uno o più) */}
                   {renderSuggestedSolverBadge(selectedExample)}
 
                   <p style={{ marginBottom: "1rem" }}>{selectedExample.description}</p>
@@ -195,7 +199,7 @@ const ExampleExplorerModal: React.FC<ExampleExplorerModalProps> = ({
                       gap: "0.5rem",
                     }}
                   >
-                    <IonButton fill="outline" color="medium" onClick={onDismiss}>
+                    <IonButton fill="outline" color="medium" onClick={() => onDismiss(false)}>
                       Close
                     </IonButton>
                     <IonButton color="primary" onClick={handleUseExample}>
