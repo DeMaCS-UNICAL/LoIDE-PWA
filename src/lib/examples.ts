@@ -26,9 +26,10 @@ interface IExampleFile {
 // grazie a Vite (import.meta.glob)
 //
 // Ogni nuovo file src/examples/*.json viene incluso automaticamente.
-const exampleModules = import.meta.glob("../examples/*.json", {
+const exampleModules = import.meta.glob("../examples/!(examples-schema).json", {
   eager: true,
 });
+
 
 /**
  * Converte i moduli importati in un array di IExampleProgram.
