@@ -25,7 +25,7 @@ define("ace/mode/asp_highlight_rules", [], function (require, exports, module) {
   var TextHighlightRules = require("ace/mode/text_highlight_rules").TextHighlightRules;
 
   var aspHighlightRules = function () {
-    // 🔹 tutti i built-in &... che hai nel JSON
+    // 🔹 all built-in &... obtained from completions JSON
     var builtinList =
       "head|tail|append|delNth|flatten|insLast|insNth|last|" +
       "length|member|memberNth|subList|reverse|reverse_r|delete|delete_r|" +
@@ -34,81 +34,107 @@ define("ace/mode/asp_highlight_rules", [], function (require, exports, module) {
 
     this.$rules = {
       start: [
+        //
         // --- TESTING block: %** ... **%
+        //
         {
           token: "testing.block.asp",
           regex: "\\s*%\\*\\*",
           push: "testing_block",
         },
 
-        // --- Commento multilinea: %/ ... /%
+        //
+        // --- Multiline comment: %/ ... /%
+        //
         {
           token: "comment.block.asp",
           regex: "\\s*%/",
           push: "comment_block",
         },
 
-        // --- Commento inline: % ... (fino a fine riga)
+        //
+        // --- Inline line comment: % ... (until EOL)
+        //
         {
           token: "comment.line.asp",
           regex: "%.*$",
         },
 
-        // --- Stringhe singole: '...'
+        //
+        // --- Single quoted strings: '...'
+        //
         {
           token: "string.quoted.single.asp",
           regex: "'(?:[^'\\\\]|\\\\.)*'",
         },
 
-        // --- Stringhe doppie: "..."
+        //
+        // --- Double quoted strings: "..."
+        //
         {
           token: "string.quoted.double.asp",
           regex: '"(?:[^"\\\\]|\\\\.)*"',
         },
 
-        // --- Variabili (iniziano con maiuscola)
+        //
+        // --- Variables (starting with uppercase)
+        //
         {
           token: "variable.asp",
           regex: "\\b[A-Z][A-Za-z0-9_]*\\b",
         },
 
-        // --- Strong: :-
+        //
+        // --- Strong rule operator: :-
+        //
         {
           token: "keyword.operator.strong.asp",
           regex: ":-",
         },
 
-        // --- Weak: a:~ ...
+        //
+        // --- Weak constraint prefix: a:~
+        //
         {
           token: "keyword.operator.weak.asp",
           regex: "[a-zA-Z0-9]+:\\~\\s*",
         },
 
+        //
         // --- Weak cost: [10@1,foo,bar]
+        //
         {
           token: "constant.other.weak_cost.asp",
           regex: "\\[\\d+@\\d+,\\w+,\\w+\\]",
         },
 
-        // --- Operator / keyword: not, |, !=, >, <, =, >=, <=, , .
+        //
+        // --- Operators / keywords: not, !=, >=, <=, |, =, etc.
+        //
         {
           token: "keyword.control.asp",
           regex: "\\bnot\\b|\\|{1,2}|!=|>=|<=|=|>|<|,|\\.",
         },
 
-        // --- Numeri (semplificati)
+        //
+        // --- Numeric literals (simplified)
+        //
         {
           token: "constant.numeric.asp",
           regex: "\\b\\d+(?:\\.\\d+)?\\b",
         },
 
+        //
         // --- Aggregates: #count, #sum, #times, #min, #max
+        //
         {
           token: "support.function.aggregate.asp",
           regex: "#(count|sum|times|min|max)\\b",
         },
 
-        // --- Direttive (JSON + completions TSX): #show, #import_sql, #temp, #trigger_frequency, #const, #maxint, ...
+        //
+        // --- Directives (matching completions / SQL / triggers / consts)
+        //
         {
           token: "keyword.directive.asp",
           regex:
@@ -117,50 +143,52 @@ define("ace/mode/asp_highlight_rules", [], function (require, exports, module) {
             "const|maxint)\\b",
         },
 
-        // --- Predicati su liste (da completions TSX): #append, #delnth, #flatten, #head, ...
+        //
+        // --- List predicates (matching completions JSON)
+        //
         {
           token: "support.function.list.asp",
           regex:
-            "#(append|delnth|flatten|head|insLast|insnth|last|" +
+            "#(append|delNth|flatten|head|insLast|insNth|last|" +
             "length|member|reverse|subList|tail|getnth)\\b",
         },
 
-        // --- Funzioni aritmetiche: #int, #suc, #pred, #mod, #absdiff, #rand
+        //
+        // --- Arithmetic helpers: #int, #mod, #rand, #pred, #suc, etc.
+        //
         {
           token: "support.function.arithmetic.asp",
           regex: "#(int|suc|pred|mod|absdiff|rand)\\b",
         },
 
-        // --- Aggregates stile #count { ... } già coperti sopra, quindi qui nulla
-
-        // --- Aggregates "Clingo-style" con #: li puoi aggiungere qui se servono altri
-
-        // --- Aggregates/costruzioni generiche già coperti
-
-        // --- Aggregates con #: lasciamo solo i noti per evitare highlight a casaccio
-
-        // --- Aggregates: #count, #sum, #times, #min, #max (ripetuti per sicurezza, ma già gestiti)
-
-        // --- Builtins: &head, &tail, &append, &delNth, ..., &append_str, ...
+        //
+        // --- Built-in external predicates: &head, &append_str, etc.
+        //
         {
           token: "support.function.builtin.asp",
           regex: "&(?:" + builtinList + ")\\b",
         },
 
-        // --- External predicates generici: &foo
+        //
+        // --- Generic external predicate: &foo
+        //
         {
           token: "support.function.external.asp",
           regex: "&[A-Za-z0-9_]+",
         },
 
-        // --- Identificatori generici (predicati, costanti, ecc.)
+        //
+        // --- Generic identifier (predicate, constant, etc.)
+        //
         {
           token: "identifier.asp",
           regex: "[a-z_][A-Za-z0-9_]*\\b",
         },
       ],
 
-      // Stato: commento multilinea %/ ... /%
+      //
+      // State: multiline comment: %/ ... /%
+      //
       comment_block: [
         {
           token: "comment.block.asp",
@@ -172,7 +200,19 @@ define("ace/mode/asp_highlight_rules", [], function (require, exports, module) {
         },
       ],
 
-      
+      //
+      // State: TESTING block %** ... **%
+      //
+      testing_block: [
+        {
+          token: "testing.block.asp",
+          regex: "\\*\\*%",
+          next: "pop",
+        },
+        {
+          defaultToken: "testing.block.asp",
+        },
+      ],
     };
 
     this.normalizeRules();
