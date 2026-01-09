@@ -27,3 +27,5 @@ yarn-error.log*
 
 # vite-plugin-pwa dev files
 dev-dist/
+
+package-lock.json

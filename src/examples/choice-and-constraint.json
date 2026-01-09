@@ -1,8 +1,8 @@
 {
   "id": "choice-and-constraint",
   "title": "Choice and constraint",
-  "description": "Toy example that chooses a menu with exactly one main course and one drink.",
+  "description": "Toy example that chooses a menu with exactly one main course and one drink (DLV1-compatible).",
   "language": "asp",
-  "code": "% Choice & constraint example: choose exactly one main course and one drink\n\nmain(pasta; pizza; salad).\ndrink(water; wine).\n\n1 { choose_main(M) : main(M) } 1.\n1 { choose_drink(D) : drink(D) } 1.\n\n:- choose_main(pizza), choose_drink(wine).\n\n#show choose_main/1.\n#show choose_drink/1.\n",
-  "suggested_solver": "clingo,dlv"
+  "code": "main(pasta).\nmain(pizza).\nmain(salad).\n\ndrink(water).\ndrink(wine).\n\n{ choose_main(M) : main(M) }.\n{ choose_drink(D) : drink(D) }.\n\n:- #count { M : choose_main(M) } != 1.\n:- #count { D : choose_drink(D) } != 1.\n\n:- choose_main(pizza), choose_drink(wine).\n",
+  "suggested_solver": "dlv"
 }
