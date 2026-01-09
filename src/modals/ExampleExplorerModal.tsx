@@ -199,11 +199,7 @@ const ExampleExplorerModal: React.FC<ExampleExplorerModalProps> = ({
                       gap: "0.5rem",
                     }}
                   >
-                    <IonButton
-                      fill="outline"
-                      color="medium"
-                      onClick={() => onDismiss(false)}
-                    >
+                    <IonButton fill="outline" color="medium" onClick={() => onDismiss(false)}>
                       Close
                     </IonButton>
                     <IonButton color="primary" onClick={handleUseExample}>

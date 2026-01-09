@@ -6,7 +6,7 @@ export interface IExampleProgram {
   description: string;
   language: string;
   code: string;
-  suggested_solver?: string; 
+  suggested_solver?: string;
 }
 
 /**
@@ -19,7 +19,7 @@ interface IExampleFile {
   description: string;
   language: string;
   code: string;
-  suggested_solver?: string; 
+  suggested_solver?: string;
 }
 
 // Importa TUTTI i .json nella cartella src/examples/
@@ -29,7 +29,6 @@ interface IExampleFile {
 const exampleModules = import.meta.glob("../examples/!(examples-schema).json", {
   eager: true,
 });
-
 
 /**
  * Converte i moduli importati in un array di IExampleProgram.

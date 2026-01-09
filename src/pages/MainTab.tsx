@@ -182,8 +182,7 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
 
     let targetTabKey = currentTabKey;
 
-    const isCurrentEmpty =
-      !currentTab || !currentTab.value || currentTab.value.trim().length === 0;
+    const isCurrentEmpty = !currentTab || !currentTab.value || currentTab.value.trim().length === 0;
 
     if (!isCurrentEmpty) {
       Utils.Editor.addTab();
