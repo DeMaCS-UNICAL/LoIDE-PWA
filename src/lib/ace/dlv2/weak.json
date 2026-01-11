@@ -1,0 +1,10 @@
+{
+  "weak": {
+    ":~": {
+      "label": ":~",
+      "snippet": ":~ ${1:body}. [${2:weight}@${3:level}]",
+      "detail": "Weak constraint",
+      "documentation": "Optimizes models by minimizing weight at level"
+    }
+  }
+}
