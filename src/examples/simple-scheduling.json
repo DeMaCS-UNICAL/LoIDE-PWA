@@ -1,7 +1,0 @@
-{
-  "id": "simple-scheduling",
-  "title": "Simple scheduling",
-  "description": "Assign three tasks to a single machine without overlaps in time.",
-  "language": "asp",
-  "code": "% Simple scheduling example\n\njob(a, 1, 3).\njob(b, 4, 6).\njob(c, 7, 9).\n\n% A machine can run one job at a time; this example avoids overlaps by construction.\nrun(J) :- job(J,_,_).\n\n#show run/1.\n"
-}
