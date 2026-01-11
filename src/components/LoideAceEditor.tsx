@@ -10,7 +10,7 @@ import "ace-builds/src-min-noconflict/ext-searchbox";
 
 import ace from "ace-builds/src-noconflict/ace";
 import { LoideLanguages, LoideSolvers } from "../lib/constants";
-import { ASP_AUTOCOMPLETE_DICT, getAspCompletions } from "../lib/ace/dlv2/autocomplete-dicts";
+import { getAspCompletions } from "../lib/ace/dlv2/autocomplete-dicts";
 
 const createEditSession = (session: any) => {
   const editSession = new ace.EditSession(session.value);
@@ -128,14 +128,13 @@ const LoideAceEditor = React.forwardRef<AceEditor, LoideAceEditorProps>((props, 
 
       langTools.addCompleter(baseCompleter);
 
-      // JSON COMPLETER FIXATO
       const jsonCompleter = {
         identifierRegexps: [/[a-zA-Z0-9_#:-]/],
         getCompletions: (_ed: any, session: any, pos: any, prefix: any, cb: any) => {
-          const text = session.getValue();
+          const textModel = session.getValue();
 
           // caso buffer vuoto → Ctrl+Space
-          if (!prefix && text.trim().length === 0) {
+          if (!prefix && textModel.trim().length === 0) {
             return cb(null, [
               ...getAspCompletions("#"),
               ...getAspCompletions("weak"),
@@ -170,12 +169,12 @@ const LoideAceEditor = React.forwardRef<AceEditor, LoideAceEditorProps>((props, 
     }
   };
 
-  const inizializeAutoComplete = (text: string) => {
+  const inizializeAutoComplete = () => {
     inizializeSnippets();
   };
 
   const onChange = (value: string) => {
-    inizializeAutoComplete(value);
+    inizializeAutoComplete();
     const last = value[value.length - 1];
     let runAuto = false;
     if (last === "." && props.runAuto) runAuto = true;
