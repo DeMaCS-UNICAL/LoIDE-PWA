@@ -95,7 +95,6 @@ const LoideAceEditor = React.forwardRef<AceEditor, LoideAceEditorProps>((props, 
 
   const langTools = ace.require("ace/ext/language_tools");
 
- 
   const languageChosen = props.mode;
   const solverChosen = props.solver;
 
