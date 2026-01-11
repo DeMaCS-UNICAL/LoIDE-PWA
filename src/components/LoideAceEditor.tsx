@@ -88,16 +88,16 @@ const LoideAceEditor = React.forwardRef<AceEditor, LoideAceEditorProps>((props, 
       if (supported) {
         edt.editor.getSession().setMode("ace/mode/" + props.mode);
       } else {
-        edt.editor.getSession().setMode("ace/mode/asp");
+        edt.editor.getSession().setMode("ace/mode/text");
       }
     }
   }, [props.mode]);
 
   const langTools = ace.require("ace/ext/language_tools");
 
-  // PER DEBUG → NON SI TOCCA
-  const languageChosen = LoideLanguages.ASP.name;
-  const solverChosen = LoideSolvers.DLV;
+ 
+  const languageChosen = props.mode;
+  const solverChosen = props.solver;
 
   const getTrigger = (session: any, pos: any): string | undefined => {
     const line = session.getLine(pos.row);
