@@ -12,6 +12,27 @@ import ace from "ace-builds/src-noconflict/ace";
 import { LoideLanguages, LoideSolvers } from "../lib/constants";
 import { getAspCompletions } from "../lib/ace/dlv2/autocomplete-dicts";
 
+// import { EditSession } from "ace-builds";
+//
+// EditSession.prototype.toJSON = function () {
+//   return {
+//     annotations: this.getAnnotations(),
+//     breakpoints: this.getBreakpoints(),
+//     folds: this.getAllFolds().map(function (fold: any) {
+//       return fold.range;
+//     }),
+//     history: {
+//       undo: this.getUndoManager().$undoStack,
+//       redo: this.getUndoManager().$redoStack,
+//     },
+//     mode: this.getMode().$id,
+//     scrollLeft: this.getScrollLeft(),
+//     scrollTop: this.getScrollTop(),
+//     selection: this.getSelection().toJSON(),
+//     value: this.getValue(),
+//   };
+// };
+
 const createEditSession = (session: any) => {
   const editSession = new ace.EditSession(session.value);
   editSession.setAnnotations(session.annotations);
