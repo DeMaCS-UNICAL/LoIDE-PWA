@@ -14,6 +14,9 @@ import {
   IonSplitPane,
   IonTitle,
   IonToolbar,
+  IonGrid,
+  IonRow,
+  IonCol,
 } from "@ionic/react";
 import { alertController, actionSheetController } from "@ionic/core";
 import logo from "../assets/img/logo_LoIDE.svg";
@@ -37,6 +40,8 @@ import { useSelector } from "react-redux";
 import { languagesDataSelector } from "../redux/slices/LanguagesData";
 import RestoreButton from "../components/RestoreButton";
 import Mousetrap from "mousetrap";
+
+import OutputPane from "../components/OutputPane";
 
 type MainTabPageProps = RouteComponentProps<{
   data: string;
@@ -228,7 +233,26 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
 
           {/*-- the main content --*/}
           <div id="main" className="main-side-editor">
-            <Editor />
+            <IonGrid style={{ height: "100%" }}>
+              <IonRow style={{ height: "100%" }}>
+                {/* Colonna Editor */}
+                <IonCol size="12" sizeLg="7" className="ion-no-padding" style={{ height: "100%" }}>
+                  <Editor />
+                </IonCol>
+
+                {/* Colonna Output (solo da lg in su) */}
+                <IonCol
+                  sizeLg="5"
+                  className="ion-no-padding ion-hide-md-down"
+                  style={{
+                    height: "100%",
+                    borderLeft: "1px solid var(--ion-color-step-150)",
+                  }}
+                >
+                  <OutputPane />
+                </IonCol>
+              </IonRow>
+            </IonGrid>
           </div>
         </IonSplitPane>
         <OpenProjectModal isOpen={showOpenModal} onDismiss={setShowOpenModal} />
