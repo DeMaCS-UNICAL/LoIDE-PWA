@@ -54,7 +54,9 @@ describe("<App />", () => {
         <App />
       </Provider>,
     );
-    screen.getByText("Run Settings");
+    // Multiple "Run Settings" texts exist (tab bar + sidebar segment), so check for at least one
+    const runSettings = screen.getAllByText("Run Settings");
+    expect(runSettings.length).toBeGreaterThan(0);
   });
 
   it("renders the Output tab button", async () => {
@@ -63,7 +65,9 @@ describe("<App />", () => {
         <App />
       </Provider>,
     );
-    screen.getByText("Output");
+    // Multiple "Output" texts exist (tab bar + sidebar segment), so check for at least one
+    const outputs = screen.getAllByText("Output");
+    expect(outputs.length).toBeGreaterThan(0);
   });
 
   it("renders the Appearance tab button", async () => {
@@ -72,7 +76,7 @@ describe("<App />", () => {
         <App />
       </Provider>,
     );
-    screen.getByText("Appearance");
+    expect(screen.getByText("Appearance")).toBeInTheDocument();
   });
 
   it("renders the About tab button", async () => {
@@ -81,6 +85,6 @@ describe("<App />", () => {
         <App />
       </Provider>,
     );
-    screen.getByText("About");
+    expect(screen.getByText("About")).toBeInTheDocument();
   });
 });
