@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  IonBadge,
   IonButton,
   IonButtons,
   IonContent,
@@ -11,8 +12,11 @@ import {
   IonMenu,
   IonPage,
   IonPopover,
+  IonSegment,
+  IonSegmentButton,
+  IonSegmentContent,
+  IonSegmentView,
   IonSplitPane,
-  IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import { alertController, actionSheetController } from "@ionic/core";
@@ -37,6 +41,8 @@ import { useSelector } from "react-redux";
 import { languagesDataSelector } from "../redux/slices/LanguagesData";
 import RestoreButton from "../components/RestoreButton";
 import Mousetrap from "mousetrap";
+import OutputPane from "../components/OutputPane";
+import useOutput from "../hooks/useOutput";
 
 type MainTabPageProps = RouteComponentProps<{
   data: string;
@@ -46,12 +52,14 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
   const [showOpenModal, setShowOpenModal] = useState<boolean>(false);
   const [showSaveModal, setShowSaveModal] = useState<boolean>(false);
   const [showShareModal, setShowShareModal] = useState<boolean>(false);
+  const [selectedSegment, setSelectedSegment] = useState<string>("run-settings");
   const [buttonsPopover, setButtonsPopover] = useState<{
     open: boolean;
     event: Event | undefined;
   }>({ open: false, event: undefined });
 
   const { languages } = useSelector(languagesDataSelector);
+  const { newOutput, resetNewOutputBadge } = useOutput();
 
   useEffect(() => {
     if (languages.length > 0) {
@@ -216,14 +224,40 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
         <IonSplitPane contentId="main" when="lg">
           {/*--  the side menu  --*/}
           <IonMenu contentId="main">
-            <IonHeader>
-              <IonToolbar className="side-toolbar">
-                <IonTitle>Run settings</IonTitle>
-              </IonToolbar>
-            </IonHeader>
-            <IonContent forceOverscroll={true}>
-              <RunSettings />
-            </IonContent>
+            <IonSegment
+              value={selectedSegment}
+              onIonChange={(e) => setSelectedSegment(e.detail.value as string)}
+            >
+              <IonSegmentButton value="run-settings" contentId="run-settings">
+                <IonLabel>Run Settings</IonLabel>
+              </IonSegmentButton>
+              <IonSegmentButton value="output" contentId="output" onClick={resetNewOutputBadge}>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <IonLabel>Output</IonLabel>
+
+                  {newOutput && selectedSegment !== "output" && (
+                    <IonBadge color="tertiary" style={{ marginRight: "4px" }}>
+                      new
+                    </IonBadge>
+                  )}
+                </div>
+                {newOutput && selectedSegment !== "output" && (
+                  <IonBadge color="success" style={{ marginRight: "4px" }}>
+                    !
+                  </IonBadge>
+                )}
+              </IonSegmentButton>
+            </IonSegment>
+            <IonSegmentView>
+              <IonSegmentContent id="run-settings">
+                <IonContent forceOverscroll={true}>
+                  <RunSettings />
+                </IonContent>
+              </IonSegmentContent>
+              <IonSegmentContent id="output" onClick={resetNewOutputBadge}>
+                <OutputPane />
+              </IonSegmentContent>
+            </IonSegmentView>
           </IonMenu>
 
           {/*-- the main content --*/}

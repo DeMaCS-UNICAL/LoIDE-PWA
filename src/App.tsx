@@ -45,16 +45,14 @@ import "./theme/variables.scss";
 import "./global.scss";
 import AboutTab from "./pages/AboutTab";
 import * as API from "./lib/api";
-import { IOutputData } from "./lib/LoideAPIInterfaces";
 import { LocalStorageItems, LoidePath } from "./lib/constants";
 import AppearanceTab from "./pages/AppearanceTab";
 import Utils from "./lib/utils";
-import { useDispatch, useSelector } from "react-redux";
-import { UIStatusSelector } from "./redux/slices/UIStatus";
-import { setError, setModel } from "./redux/slices/Output";
+import { useDispatch } from "react-redux";
 import { setLanguages } from "./redux/slices/LanguagesData";
 import Mousetrap from "mousetrap";
 import ShortcutsModal from "./modals/ShortcutsModal";
+import useOutput from "./hooks/useOutput";
 
 setupIonicReact();
 
@@ -62,8 +60,7 @@ const App: React.FC = () => {
   const dispatch = useDispatch();
 
   const [showShortcutsModal, setShowShortcutsModal] = useState<boolean>(false);
-
-  const { newOutput } = useSelector(UIStatusSelector);
+  const { newOutput, setNewOutput, resetNewOutputBadge } = useOutput();
 
   useEffect(() => {
     API.createSocket();
@@ -72,27 +69,22 @@ const App: React.FC = () => {
       dispatch(setLanguages(output));
     });
 
-    API.setRunProjectListener((output: IOutputData) => {
-      dispatch(setModel(output.model));
-      dispatch(setError(output.error));
-
-      Utils.addNewOutputBadge();
-    });
+    API.setRunProjectListener(setNewOutput);
 
     return () => API.disconnectAndClearSocket();
-  }, [dispatch]);
+  }, [dispatch, setNewOutput]);
 
   useEffect(() => {
     const button = document.querySelector(".output-tab-button");
     button?.addEventListener("click", () => {
-      Utils.removeNewOutputBadge();
+      resetNewOutputBadge();
     });
 
     window.onbeforeunload = function () {
       const loideProject = Utils.getLoideProjectData();
       localStorage.setItem(LocalStorageItems.loideProject, JSON.stringify(loideProject));
     };
-  }, []);
+  }, [resetNewOutputBadge]);
 
   useEffect(() => {
     Mousetrap.bind("?", () => {
