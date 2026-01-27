@@ -1,0 +1,10 @@
+{
+  "constraints": {
+    ":-": {
+      "label": ":-",
+      "snippet": ":- ${1:body}.",
+      "detail": "Constraint",
+      "documentation": "Eliminates models where body holds"
+    }
+  }
+}

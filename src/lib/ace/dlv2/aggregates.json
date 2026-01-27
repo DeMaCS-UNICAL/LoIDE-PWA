@@ -1,0 +1,34 @@
+{
+  "#": {
+    "#count": {
+      "label": "#count",
+      "snippet": "#count{${1:Vars} : ${2:Conj}}",
+      "detail": "Aggregate #count",
+      "documentation": "Returns the cardinality of the instantiations of Vars satisfying Conj"
+    },
+    "#sum": {
+      "label": "#sum",
+      "snippet": "#sum{${1:Vars} : ${2:Conj}}",
+      "detail": "Aggregate #sum",
+      "documentation": "Returns the sum over the first variable in Vars for instantiations satisfying Conj"
+    },
+    "#min": {
+      "label": "#min",
+      "snippet": "#min{${1:Vars} : ${2:Conj}}",
+      "detail": "Aggregate #min",
+      "documentation": "Returns the minimum value of Vars satisfying Conj"
+    },
+    "#max": {
+      "label": "#max",
+      "snippet": "#max{${1:Vars} : ${2:Conj}}",
+      "detail": "Aggregate #max",
+      "documentation": "Returns the maximum value of Vars satisfying Conj"
+    },
+    "#times": {
+      "label": "#times",
+      "snippet": "#times{${1:Vars} : ${2:Conj}}",
+      "detail": "Aggregate #times",
+      "documentation": "Returns the product of Vars satisfying Conj"
+    }
+  }
+}
