@@ -24,11 +24,18 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: loideunical/loide:pwa
+          images: loideunical/loide-pwa
+          tags: |
+            type=semver,pattern={{version}}
+            type=raw,value=latest
+
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
           context: .
           platforms: linux/amd64
           push: true
-          tags: loideunical/loide:pwa
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            APP_VERSION=${{ github.ref_name }}
