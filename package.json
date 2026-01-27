@@ -1,6 +1,6 @@
 {
   "name": "loide-pwa",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Progressive Web App IDE for Logic Programming",
   "bugs": {
     "url": "https://github.com/DeMaCS-UNICAL/LoIDE-PWA/issues"
