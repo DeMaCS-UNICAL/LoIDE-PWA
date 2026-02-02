@@ -8,10 +8,7 @@
 **Progressive Web App IDE for Logic Programming.**
 ![LoIDE web GUI](docs/screenshots/main-page.png)
 
-Part of the [LoIDE](https://github.com/demacs-unical/loide) project – a web-based IDE for Logic Programming.
-
-🌐 Project website: https://demacs-unical.github.io/LoIDE/
-
+Part of the LoIDE project – [:octocat: repository](https://github.com/DeMaCS-UNICAL/LoIDE) , [🌐 website](https://demacs-unical.github.io/LoIDE) .
 
 ## Purpose
 
