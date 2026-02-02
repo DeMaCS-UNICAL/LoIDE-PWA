@@ -20,7 +20,7 @@ describe("<LoideRunNavButton />", () => {
         <LoideRunNavButton />
       </Provider>,
     );
-    await screen.findByText("Run");
+    expect(await screen.findByTitle("run")).toBeDefined();
   });
 
   it("clicks run button", async () => {

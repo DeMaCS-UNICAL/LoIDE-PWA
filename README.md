@@ -34,7 +34,14 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-To run LoIDE-PWA you need to have Node.js and npm installed on your system. You can download and install Node.js from the [official website](https://nodejs.org/).
+To run LoIDE-PWA you need to have Node.js 22 and npm installed on your system.
+
+We recommend using [nvm](https://github.com/nvm-sh/nvm) (Node Version Manager) to install and manage Node.js versions. Once nvm is installed, you can use the `.nvmrc` file in the project to automatically install the correct Node.js version:
+
+```bash
+nvm install
+nvm use
+```
 
 If you want to use the server-side features of LoIDE, you need to have a server that can execute Logic programs. If you like it, you can use our [PythonESE](https://github.com/DeMaCS-UNICAL/PythonESE).
 
@@ -52,6 +59,16 @@ Navigate to the cloned repository directory and install the required dependencie
 npm install
 ```
 
+### Configuration
+
+Create a `.env.local` file in the root of the project to configure the LoIDE API server URL:
+
+```bash
+VITE_LOIDE_API_SERVER=your-api-server-url:8084
+```
+
+Replace `your-api-server-url:8084` with the actual URL of your LoIDE API server (e.g., `localhost:8084`).
+
 Now you can run the application in development or production mode.
 
 ### Run in Development Mode
@@ -63,7 +80,7 @@ npm start
 ```
 
 Runs the app in the development mode.
-Open [http://localhost:9000](http://localhost:9000) to view it in the browser.
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.
 You will also see any lint errors in the console.
@@ -71,10 +88,14 @@ You will also see any lint errors in the console.
 ### Run in Production Mode
 
 ```bash
+npm run build
+
 npm run start:prod
 ```
 
 Builds the app for production to the `build` folder and start a server that serve the build.
+
+Open [http://localhost:9000](http://localhost:9000) to view it in the browser.
 
 If you wish to run _LoIDE_ over HTTPS, you must provide paths to certificate files in the `server-config.json` file.
 Then, you can start _LoIDE_ in a browser at [http://localhost:9001](http://localhost:9001)
@@ -116,10 +137,18 @@ git clone https://github.com/DeMaCS-UNICAL/LoIDE-PWA.git
 
 ### Building the Docker Image
 
-A Docker image is a package that contains all the necessary to run application and it's used to create Docker containers. To create one navigate to the cloned repository directory and build the Docker image using the provided Dockerfile:
+A Docker image is a package that contains all the necessary to run application and it's used to create Docker containers. To create one navigate to the cloned repository directory and build the Docker image using the provided script:
 
 ```bash
-docker build -t loide-pwa .
+./docker-build.sh
+```
+
+This script automatically extracts the version from `package.json` and tags the image accordingly (e.g., `loide-pwa:1.3.1` and `loide-pwa:latest`).
+
+Alternatively, you can build manually:
+
+```bash
+docker build --build-arg APP_VERSION=$(node -p "require('./package.json').version") -t loide-pwa .
 ```
 
 ### Running the Docker Container
@@ -127,19 +156,43 @@ docker build -t loide-pwa .
 Once the Docker image is built, you can run a Docker container using the following command:
 
 ```bash
-docker run -d --network host --mount type=bind,source=[your/path/to/config],target=/app/config loide-pwa
+docker run -d -p 9000:9000 -e LOIDE_API_SERVER=your-api-server:8084 loide-pwa
 ```
 
-The `--network host` option in the docker run command tells Docker to use the host network for the container. This means the container shares the same network stack as the host and can access network services running on the host directly.
+#### Environment Variables
 
-The `--mount type=bind, source=[your/path/to/config], target=/app/config` option is used to create a bind mount. A bind mount is a type of mount that allows you to map a host file or directory to a container file or directory (for more information refer to the [official Docker documentation](https://docs.docker.com/storage/bind-mounts/)).
-In this case we use mounts to provide the configuration file to the container.
+| Variable           | Description                                          | Default          |
+| ------------------ | ---------------------------------------------------- | ---------------- |
+| `LOIDE_API_SERVER` | URL of the LoIDE API server (e.g., `localhost:8084`) | `localhost:8084` |
+
+#### Example
+
+```bash
+# Run with custom API server
+docker run -d -p 9000:9000 -e LOIDE_API_SERVER=api.example.com:8084 loide-pwa
+
+# Run with default API server
+docker run -d -p 9000:9000 loide-pwa
+```
+
+#### Advanced: Custom Configuration
+
+You can also mount a custom server configuration file:
+
+```bash
+docker run -d -p 9000:9000 \
+  -e LOIDE_API_SERVER=your-api-server:8084 \
+  --mount type=bind,source=/your/path/to/config,target=/app/config \
+  loide-pwa
+```
+
+The `--mount type=bind,source=[your/path/to/config],target=/app/config` option is used to create a bind mount. A bind mount is a type of mount that allows you to map a host file or directory to a container file or directory (for more information refer to the [official Docker documentation](https://docs.docker.com/storage/bind-mounts/)).
 
 The configuration file is a JSON file that contains the configuration of the LoIDE PWA. It must be placed in a directory on the host and the _full_ path to this directory must be specified in the source option of the --mount option. The JSON schema needs also to be in the same directory.
 
 For examples on how to create the configuration file refer to the one provided in the repository. If no configuration file is provided the default configuration will be used.
 
-Once the Docker container is running, you can open your web browser and navigate to `http://localhost:[specified-port]` to access the LoIDE GUI.
+Once the Docker container is running, you can open your web browser and navigate to `http://localhost:9000` to access the LoIDE GUI.
 
 # Configuration
 
