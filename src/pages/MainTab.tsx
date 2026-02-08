@@ -59,7 +59,7 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
   }>({ open: false, event: undefined });
 
   const { languages } = useSelector(languagesDataSelector);
-  const { newOutput, resetNewOutputBadge } = useOutput();
+  const { newOutput, resetNewOutputBadge, setOutputPanelVisible } = useOutput();
 
   useEffect(() => {
     if (languages.length > 0) {
@@ -226,7 +226,11 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
           <IonMenu contentId="main">
             <IonSegment
               value={selectedSegment}
-              onIonChange={(e) => setSelectedSegment(e.detail.value as string)}
+              onIonChange={(e) => {
+                const value = e.detail.value as string;
+                setSelectedSegment(value);
+                setOutputPanelVisible(value === "output");
+              }}
             >
               <IonSegmentButton value="run-settings" contentId="run-settings">
                 <IonLabel>Run Settings</IonLabel>
@@ -241,11 +245,6 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
                     </IonBadge>
                   )}
                 </div>
-                {newOutput && selectedSegment !== "output" && (
-                  <IonBadge color="success" style={{ marginRight: "4px" }}>
-                    !
-                  </IonBadge>
-                )}
               </IonSegmentButton>
             </IonSegment>
             <IonSegmentView>

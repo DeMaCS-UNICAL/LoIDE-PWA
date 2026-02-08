@@ -60,7 +60,7 @@ const App: React.FC = () => {
   const dispatch = useDispatch();
 
   const [showShortcutsModal, setShowShortcutsModal] = useState<boolean>(false);
-  const { newOutput, setNewOutput, resetNewOutputBadge } = useOutput();
+  const { newOutput, outputPanelVisible, setNewOutput, resetNewOutputBadge } = useOutput();
 
   useEffect(() => {
     API.createSocket();
@@ -143,7 +143,7 @@ const App: React.FC = () => {
             >
               <IonIcon icon={documentTextOutline} />
               <IonLabel>Output</IonLabel>
-              {newOutput && <IonBadge color="success">!</IonBadge>}
+              {newOutput && !outputPanelVisible && <IonBadge color="success">!</IonBadge>}
             </IonTabButton>
 
             <IonTabButton tab={LoidePath.Appearance} href={`/${LoidePath.Appearance}`}>
