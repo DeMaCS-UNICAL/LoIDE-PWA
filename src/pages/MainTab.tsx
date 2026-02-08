@@ -72,6 +72,13 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [languages]);
 
+  // Cleanup: reset output visibility when navigating away from MainTab
+  useEffect(() => {
+    return () => {
+      setOutputPanelVisible(false);
+    };
+  }, [setOutputPanelVisible]);
+
   useEffect(() => {
     Mousetrap.bind(["ctrl+o", "command+o"], () => {
       setShowOpenModal(!showOpenModal);
@@ -229,13 +236,18 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
               onIonChange={(e) => {
                 const value = e.detail.value as string;
                 setSelectedSegment(value);
-                setOutputPanelVisible(value === "output");
+                const isOutputVisible = value === "output";
+                setOutputPanelVisible(isOutputVisible);
+                // Reset badge when output panel becomes visible
+                if (isOutputVisible) {
+                  resetNewOutputBadge();
+                }
               }}
             >
               <IonSegmentButton value="run-settings" contentId="run-settings">
                 <IonLabel>Run Settings</IonLabel>
               </IonSegmentButton>
-              <IonSegmentButton value="output" contentId="output" onClick={resetNewOutputBadge}>
+              <IonSegmentButton value="output" contentId="output">
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                   <IonLabel>Output</IonLabel>
 
@@ -253,7 +265,7 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
                   <RunSettings />
                 </IonContent>
               </IonSegmentContent>
-              <IonSegmentContent id="output" onClick={resetNewOutputBadge}>
+              <IonSegmentContent id="output">
                 <OutputPane />
               </IonSegmentContent>
             </IonSegmentView>
