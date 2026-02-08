@@ -479,7 +479,11 @@ const removeNewOutputBadge = () => {
 };
 
 const addNewOutputBadge = () => {
-  store.dispatch(setNewOutput(true));
+  // Only set badge if output is not currently visible
+  const outputPanelVisible = store.getState().UIStatus.outputPanelVisible;
+  if (!outputPanelVisible) {
+    store.dispatch(setNewOutput(true));
+  }
 };
 
 const restoreAppearanceFromLocalStorage = () => {

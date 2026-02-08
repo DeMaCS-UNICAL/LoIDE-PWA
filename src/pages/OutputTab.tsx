@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import {
   IonButton,
   IonButtons,
@@ -18,9 +18,20 @@ import useOutput from "../hooks/useOutput";
 import useAppearance from "../hooks/useAppearance";
 
 const OutputTab: React.FC = () => {
-  const { clearOutput, model, error } = useOutput();
+  const { clearOutput, model, error, resetNewOutputBadge, setOutputPanelVisible } = useOutput();
   const { fontSizeOutput } = useAppearance();
   const downloadOutput = useCallback(() => Utils.downloadOutput(model, error), [model, error]);
+
+  // Mark output as visible and reset badge when viewing the standalone Output page
+  useEffect(() => {
+    setOutputPanelVisible(true);
+    resetNewOutputBadge();
+
+    // Mark as not visible when unmounting
+    return () => {
+      setOutputPanelVisible(false);
+    };
+  }, [resetNewOutputBadge, setOutputPanelVisible]);
 
   return (
     <IonPage>
