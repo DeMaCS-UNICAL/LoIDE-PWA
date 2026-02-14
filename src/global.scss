@@ -404,3 +404,38 @@ body.dark .logo {
   font-size: 20px;
   cursor: pointer;
 }
+
+.panel-resize-handle {
+  width: 6px;
+  background: var(--ion-color-light);
+  cursor: col-resize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background: rgb(168, 168, 168) !important;
+  }
+  .separator-pill {
+    background: rgb(125, 125, 125) !important;
+    width: 2px;
+    height: 40px;
+    border-radius: 1px;
+    pointer-events: none;
+  }
+
+  &:hover .separator-pill {
+    background: white !important;
+  }
+}
+
+body.dark .panel-resize-handle {
+  &:hover {
+    background: var(--ion-color-medium) !important;
+  }
+
+  &:hover .separator-pill {
+    background: black !important;
+  }
+}
