@@ -39,7 +39,6 @@ const OutputPane = () => {
               <span className="margin-button-left">Download</span>
             </IonButton>
             <IonButton
-              size="small"
               color="medium"
               title="Clear"
               disabled={model.length === 0 && error.length === 0}
