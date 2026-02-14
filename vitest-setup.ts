@@ -7,14 +7,6 @@ import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
 import { afterEach, vi } from "vitest";
 
-// Defer importing @ionic/react until after we apply DOM polyfills/mocks.
-// Importing it earlier leads to @ionic/core (Stencil) code running which
-// expects newer DOM APIs and throws in our test environment.
-void (async () => {
-  const { setupIonicReact } = await import("@ionic/react");
-  setupIonicReact();
-})();
-
 // Ensure cleanup after each test
 afterEach(() => {
   cleanup();
@@ -103,4 +95,8 @@ if (!Object.prototype.hasOwnProperty.call(Element.prototype, "adoptedStyleSheets
     },
   });
 }
+
+// Import @ionic/react only after DOM polyfills/mocks are in place.
+const { setupIonicReact } = await import("@ionic/react");
+setupIonicReact();
 /* eslint-enable @typescript-eslint/no-explicit-any */
