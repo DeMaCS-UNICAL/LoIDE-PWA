@@ -35,13 +35,13 @@ window.matchMedia =
 
 vi.useRealTimers();
 
-const ResizeObserver = vi.fn(() => ({
-  observe: function () {},
-  unobserve: function () {},
-  disconnect: function () {},
-}));
+class ResizeObserverMock {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
 
-vi.stubGlobal("ResizeObserver", ResizeObserver);
+vi.stubGlobal("ResizeObserver", ResizeObserverMock);
 
 // Polyfill scrollTo for JSDOM (used by IonSegmentView)
 if (!Element.prototype.scrollTo) {
