@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  IonBadge,
   IonButton,
   IonButtons,
   IonContent,
@@ -8,14 +9,16 @@ import {
   IonItem,
   IonLabel,
   IonList,
-  IonMenu,
   IonPage,
   IonPopover,
-  IonSplitPane,
-  IonTitle,
+  IonSegment,
+  IonSegmentButton,
+  IonSegmentContent,
+  IonSegmentView,
   IonToolbar,
 } from "@ionic/react";
 import { alertController, actionSheetController } from "@ionic/core";
+import { Group, Panel, Separator } from "react-resizable-panels";
 import logo from "../assets/img/logo_LoIDE.svg";
 import RunSettings from "../components/RunSettings";
 import LoideRunNavButton from "../components/LoideRunNavButton";
@@ -37,6 +40,10 @@ import { useSelector } from "react-redux";
 import { languagesDataSelector } from "../redux/slices/LanguagesData";
 import RestoreButton from "../components/RestoreButton";
 import Mousetrap from "mousetrap";
+import OutputPane from "../components/OutputPane";
+import useOutput from "../hooks/useOutput";
+import { useIsMobile } from "../hooks/useIsMobile";
+import useMainPanelLayout from "../hooks/useMainPanelLayout";
 
 type MainTabPageProps = RouteComponentProps<{
   data: string;
@@ -46,12 +53,16 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
   const [showOpenModal, setShowOpenModal] = useState<boolean>(false);
   const [showSaveModal, setShowSaveModal] = useState<boolean>(false);
   const [showShareModal, setShowShareModal] = useState<boolean>(false);
+  const [selectedSegment, setSelectedSegment] = useState<string>("run-settings");
   const [buttonsPopover, setButtonsPopover] = useState<{
     open: boolean;
     event: Event | undefined;
   }>({ open: false, event: undefined });
 
   const { languages } = useSelector(languagesDataSelector);
+  const { newOutput, resetNewOutputBadge, setOutputPanelVisible } = useOutput();
+  const isMobile = useIsMobile();
+  const { groupRef, initialLayout, handleLayoutChanged } = useMainPanelLayout(isMobile);
 
   useEffect(() => {
     if (languages.length > 0) {
@@ -63,6 +74,13 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [languages]);
+
+  // Cleanup: reset output visibility when navigating away from MainTab
+  useEffect(() => {
+    return () => {
+      setOutputPanelVisible(false);
+    };
+  }, [setOutputPanelVisible]);
 
   useEffect(() => {
     Mousetrap.bind(["ctrl+o", "command+o"], () => {
@@ -213,24 +231,68 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
         </IonToolbar>
       </IonHeader>
       <IonContent scrollY={false} className="tab-content-of-hidden">
-        <IonSplitPane contentId="main" when="lg">
-          {/*--  the side menu  --*/}
-          <IonMenu contentId="main">
-            <IonHeader>
-              <IonToolbar className="side-toolbar">
-                <IonTitle>Run settings</IonTitle>
-              </IonToolbar>
-            </IonHeader>
-            <IonContent forceOverscroll={true}>
-              <RunSettings />
-            </IonContent>
-          </IonMenu>
+        {/* Resizable split pane */}
+        <Group
+          defaultLayout={initialLayout}
+          onLayoutChanged={handleLayoutChanged}
+          groupRef={groupRef}
+          id="main-tab-layout"
+        >
+          {!isMobile && (
+            <>
+              <Panel id="sidebar" defaultSize="25%" minSize="15%" maxSize="60%">
+                <IonSegment
+                  value={selectedSegment}
+                  onIonChange={(e) => {
+                    const value = e.detail.value as string;
+                    setSelectedSegment(value);
+                    const isOutputVisible = value === "output";
+                    setOutputPanelVisible(isOutputVisible);
+                    // Reset badge when output panel becomes visible
+                    if (isOutputVisible) {
+                      resetNewOutputBadge();
+                    }
+                  }}
+                >
+                  <IonSegmentButton value="run-settings" contentId="run-settings">
+                    <IonLabel>Run Settings</IonLabel>
+                  </IonSegmentButton>
+                  <IonSegmentButton value="output" contentId="output">
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <IonLabel>Output</IonLabel>
 
-          {/*-- the main content --*/}
-          <div id="main" className="main-side-editor">
+                      {newOutput && selectedSegment !== "output" && (
+                        <IonBadge color="tertiary" style={{ marginRight: "4px" }}>
+                          new
+                        </IonBadge>
+                      )}
+                    </div>
+                  </IonSegmentButton>
+                </IonSegment>
+                <IonSegmentView style={{ flex: 1, overflow: "hidden" }}>
+                  <IonSegmentContent id="run-settings">
+                    <IonContent forceOverscroll={true}>
+                      <RunSettings />
+                    </IonContent>
+                  </IonSegmentContent>
+                  <IonSegmentContent id="output">
+                    <OutputPane />
+                  </IonSegmentContent>
+                </IonSegmentView>
+              </Panel>
+
+              <Separator id="main-tab-separator" className="panel-resize-handle">
+                <div className="separator-pill" />
+              </Separator>
+            </>
+          )}
+
+          {/* Main Content Panel */}
+          <Panel id="editor" defaultSize={isMobile ? "100%" : "75%"} minSize="40%">
             <Editor />
-          </div>
-        </IonSplitPane>
+          </Panel>
+        </Group>
+
         <OpenProjectModal isOpen={showOpenModal} onDismiss={setShowOpenModal} />
         <SaveProjectModal isOpen={showSaveModal} onDismiss={setShowSaveModal} />
         <ShareProjectModal isOpen={showShareModal} onDismiss={setShowShareModal} />
