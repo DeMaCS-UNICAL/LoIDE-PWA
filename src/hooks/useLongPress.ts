@@ -6,8 +6,8 @@ const useLongPress = (
   { shouldPreventDefault = true, delay = 300 } = {},
 ) => {
   const [longPressTriggered, setLongPressTriggered] = useState(false);
-  const timeout = useRef<ReturnType<typeof setTimeout>>();
-  const target = useRef<EventTarget>();
+  const timeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const target = useRef<EventTarget | null>(null);
   const start = useCallback(
     (event: React.MouseEvent | React.TouchEvent) => {
       if (shouldPreventDefault && event.target) {
@@ -26,11 +26,17 @@ const useLongPress = (
 
   const clear = useCallback(
     (_event: React.MouseEvent | React.TouchEvent, shouldTriggerClick = true) => {
-      timeout.current && clearTimeout(timeout.current);
-      shouldTriggerClick && !longPressTriggered && onClick && onClick();
+      if (timeout.current) {
+        clearTimeout(timeout.current);
+        timeout.current = null;
+      }
+      if (shouldTriggerClick && !longPressTriggered && onClick) {
+        onClick();
+      }
       setLongPressTriggered(false);
       if (shouldPreventDefault && target.current) {
         target.current.removeEventListener("touchend", preventDefault);
+        target.current = null;
       }
     },
     [shouldPreventDefault, onClick, longPressTriggered],

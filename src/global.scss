@@ -369,7 +369,6 @@ body.dark .logo {
     border: 1px var(--output-border-color) solid;
     border-radius: 8px;
     background: var(--output-background-color);
-    margin-top: 10px;
     // padding: 5px 5px 5px 5px;
     line-height: 1.5;
     white-space: pre-wrap;
@@ -404,4 +403,39 @@ body.dark .logo {
   color: #b3b3b3;
   font-size: 20px;
   cursor: pointer;
+}
+
+.panel-resize-handle {
+  width: 6px;
+  background: var(--ion-color-light);
+  cursor: col-resize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background: rgb(168, 168, 168) !important;
+  }
+  .separator-pill {
+    background: rgb(125, 125, 125) !important;
+    width: 2px;
+    height: 40px;
+    border-radius: 1px;
+    pointer-events: none;
+  }
+
+  &:hover .separator-pill {
+    background: white !important;
+  }
+}
+
+body.dark .panel-resize-handle {
+  &:hover {
+    background: var(--ion-color-medium) !important;
+  }
+
+  &:hover .separator-pill {
+    background: black !important;
+  }
 }
