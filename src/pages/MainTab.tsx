@@ -46,7 +46,6 @@ import useOutput from "../hooks/useOutput";
 import { useIsMobile } from "../hooks/useIsMobile";
 import useMainPanelLayout from "../hooks/useMainPanelLayout";
 
-
 // Examples
 import { EXAMPLE_PROGRAMS, IExampleProgram } from "../lib/examples";
 import ExampleExplorerModal from "../modals/ExampleExplorerModal";
@@ -68,7 +67,6 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
     event: Event | undefined;
   }>({ open: false, event: undefined });
 
-
   // Examples: modal + popover
   const [showExamplesModal, setShowExamplesModal] = useState<boolean>(false);
   const [examplesPopover, setExamplesPopover] = useState<{
@@ -76,15 +74,13 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
     event: Event | undefined;
   }>({ open: false, event: undefined });
 
-
   const { languages } = useSelector(languagesDataSelector);
-  
+
   // editor state (per caricare esempi in tab corrente/nuova)
   const { tabCountID, currentTabIndex, tabs } = useSelector(editorSelector);
 
   const visibleExamples = EXAMPLE_PROGRAMS.slice(0, VISIBLE_EXAMPLES_LIMIT);
 
-  
   const { newOutput, resetNewOutputBadge, setOutputPanelVisible } = useOutput();
   const isMobile = useIsMobile();
   const { groupRef, initialLayout, handleLayoutChanged } = useMainPanelLayout(isMobile);
@@ -183,8 +179,6 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
       })
       .then((alert) => alert.present());
   };
-
-
 
   // ==========================
   // Examples logic
