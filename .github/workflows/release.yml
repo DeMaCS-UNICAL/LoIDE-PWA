@@ -1,0 +1,102 @@
+name: Create Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g., 1.5.0)"
+        required: true
+        type: string
+      prerelease:
+        description: "Mark as pre-release"
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: write
+
+    steps:
+      - name: Validate version format
+        run: |
+          if ! echo "${{ inputs.version }}" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?$'; then
+            echo "Error: Version must be in semver format (e.g., 1.5.0 or 1.5.0-beta.1)"
+            exit 1
+          fi
+
+      - name: Checkout develop
+        uses: actions/checkout@v4
+        with:
+          ref: develop
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Create release branch
+        run: |
+          git checkout -b release/v${{ inputs.version }}
+
+      - name: Bump version in package.json
+        run: |
+          npm version ${{ inputs.version }} --no-git-tag-version
+          git add package.json package-lock.json
+          git commit -m "Bump version to ${{ inputs.version }}"
+
+      - name: Merge release branch to main
+        run: |
+          git checkout main
+          git pull origin main
+          git merge release/v${{ inputs.version }} --no-ff -m "Release v${{ inputs.version }}"
+          git push origin main
+
+      - name: Create and push tag
+        run: |
+          git tag -a "v${{ inputs.version }}" -m "Release v${{ inputs.version }}"
+          git push origin "v${{ inputs.version }}"
+
+      - name: Merge main back to develop
+        run: |
+          git checkout develop
+          git pull origin develop
+          git merge main --no-ff -m "Merge main back to develop after v${{ inputs.version }} release"
+          git push origin develop
+
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          # Get the previous tag
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+
+          if [ -n "$PREV_TAG" ]; then
+            echo "Generating changelog from $PREV_TAG to v${{ inputs.version }}"
+            CHANGELOG=$(git log $PREV_TAG..v${{ inputs.version }} --pretty=format:"- %s (%h)" --no-merges | head -50)
+          else
+            echo "No previous tag found, generating recent commits"
+            CHANGELOG=$(git log --pretty=format:"- %s (%h)" --no-merges -20)
+          fi
+
+          # Save to file to handle multiline
+          echo "$CHANGELOG" > changelog.txt
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ inputs.version }}
+          name: v${{ inputs.version }}
+          body_path: changelog.txt
+          prerelease: ${{ inputs.prerelease }}
+          generate_release_notes: true
