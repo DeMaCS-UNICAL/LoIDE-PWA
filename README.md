@@ -8,6 +8,8 @@
 **Progressive Web App IDE for Logic Programming.**
 ![LoIDE web GUI](docs/screenshots/main-page.png)
 
+Part of the LoIDE project – [:octocat: repository](https://github.com/DeMaCS-UNICAL/LoIDE) , [🌐 website](https://demacs-unical.github.io/LoIDE) .
+
 ## Purpose
 
 The primary objective of LoIDE-PWA is to develop a Progressive Web App (PWA) that serves as an Integrated Development Environment (IDE) for Logic Programming, leveraging modern technologies and languages.
