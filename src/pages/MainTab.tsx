@@ -76,7 +76,7 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
 
   const { languages } = useSelector(languagesDataSelector);
 
-  // editor state (per caricare esempi in tab corrente/nuova)
+  // editor state (to load examples into current/new tab)
   const { tabCountID, currentTabIndex, tabs } = useSelector(editorSelector);
 
   const visibleExamples = EXAMPLE_PROGRAMS.slice(0, VISIBLE_EXAMPLES_LIMIT);
@@ -199,7 +199,7 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
 
     if (!isCurrentEmpty) {
       Utils.Editor.addTab();
-      // nuovo id tab (coerente con il reducer addNewTab)
+      // new tab id (consistent with the addNewTab reducer)
       targetTabKey = tabCountID + 1;
     }
 

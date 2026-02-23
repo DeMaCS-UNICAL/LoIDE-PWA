@@ -10,8 +10,8 @@ export interface IExampleProgram {
 }
 
 /**
- * Tipo del contenuto dei file JSON di esempio.
- * Ogni JSON deve avere questi campi.
+ * Content type of sample JSON files.
+ * Each JSON must have these fields.
  */
 interface IExampleFile {
   id: string;
@@ -22,20 +22,20 @@ interface IExampleFile {
   suggested_solver?: string;
 }
 
-// Importa TUTTI i .json nella cartella src/examples/
-// grazie a Vite (import.meta.glob)
-//
-// Ogni nuovo file src/examples/*.json viene incluso automaticamente.
+/*
+Import ALL .jsons into the src/examples/ folder; 
+so each new src/examples/*.json file is automatically included.
+The only one not included is the examples-schema.
+*/
 const exampleModules = import.meta.glob("../examples/!(examples-schema).json", {
   eager: true,
 });
 
 /**
- * Converte i moduli importati in un array di IExampleProgram.
+ * Converts imported modules into an array of IExampleProgram.
  */
 export const EXAMPLE_PROGRAMS: IExampleProgram[] = Object.values(exampleModules)
   .map((mod) => {
-    // Vite esporta il JSON di solito come default
     const data = (mod as any).default as IExampleFile;
 
     return {
@@ -47,5 +47,4 @@ export const EXAMPLE_PROGRAMS: IExampleProgram[] = Object.values(exampleModules)
       suggested_solver: data.suggested_solver ?? undefined,
     };
   })
-  // opzionale: ordina per titolo, così la lista è deterministica
   .sort((a, b) => a.title.localeCompare(b.title));

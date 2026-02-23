@@ -35,7 +35,7 @@ const ExampleExplorerModal: React.FC<ExampleExplorerModalProps> = ({
 
   useEffect(() => {
     if (isOpen) {
-      // Quando apro la modal, seleziono il primo esempio (se esiste)
+      // When I open the modal, I select the first example (if it exists)
       if (EXAMPLE_PROGRAMS.length > 0) {
         setSelectedId(EXAMPLE_PROGRAMS[0].id);
       } else {
@@ -53,12 +53,12 @@ const ExampleExplorerModal: React.FC<ExampleExplorerModalProps> = ({
     }
   };
 
-  // 👇 Helper per mostrare uno o più badge "Suggested solver"
+  // Helper to display one or more "Suggested solver" badges
   const renderSuggestedSolverBadge = (example: IExampleProgram) => {
     const raw = example.suggested_solver;
 
     if (!raw || raw.trim().length === 0) {
-      // Nessun solver suggerito → N/A
+      // No suggested solver → N/A
       return (
         <div
           style={{
@@ -74,14 +74,14 @@ const ExampleExplorerModal: React.FC<ExampleExplorerModalProps> = ({
       );
     }
 
-    // Supporta "clingo, dlv,solverx ,  solvery"
+    // Supports "clingo,dlv,solverx,solvery"
     const solvers = raw
       .split(",")
       .map((s) => s.trim())
       .filter((s) => s.length > 0);
 
     if (solvers.length === 0) {
-      // Stringa sporca ma senza valori utili → fallback N/A
+      // Dirty string but no useful values - Fallback N/A
       return (
         <div
           style={{
@@ -135,7 +135,7 @@ const ExampleExplorerModal: React.FC<ExampleExplorerModalProps> = ({
       <IonContent fullscreen>
         <IonGrid style={{ height: "100%" }}>
           <IonRow style={{ height: "100%" }}>
-            {/* Colonna sinistra: lista esempi */}
+            {/* Left column: list of examples */}
             <IonCol
               size="12"
               sizeMd="4"
@@ -160,7 +160,7 @@ const ExampleExplorerModal: React.FC<ExampleExplorerModalProps> = ({
               </IonList>
             </IonCol>
 
-            {/* Colonna destra: anteprima */}
+            {/* Column right: preview left: list of examples */}
             <IonCol size="12" sizeMd="8" className="ion-padding">
               {selectedExample ? (
                 <>
@@ -170,7 +170,7 @@ const ExampleExplorerModal: React.FC<ExampleExplorerModalProps> = ({
                     Language: <strong>{selectedExample.language}</strong>
                   </p>
 
-                  {/* 👇 Badge "Suggested solver" (uno o più) */}
+                  {/* "Suggested solver" badge (one or more) */}
                   {renderSuggestedSolverBadge(selectedExample)}
 
                   <p style={{ marginBottom: "1rem" }}>{selectedExample.description}</p>
