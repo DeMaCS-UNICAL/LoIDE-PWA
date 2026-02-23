@@ -21,10 +21,7 @@ const ExampleExplorerModal: React.FC<ExampleExplorerModalProps> = ({
       <IonNav
         ref={navRef}
         root={() => (
-          <ExampleListPage
-            onDismiss={() => onDismiss(false)}
-            onSelectExample={onSelectExample}
-          />
+          <ExampleListPage onDismiss={() => onDismiss(false)} onSelectExample={onSelectExample} />
         )}
       />
     </IonModal>

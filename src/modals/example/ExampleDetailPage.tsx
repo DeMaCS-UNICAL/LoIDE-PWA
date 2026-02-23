@@ -17,10 +17,7 @@ interface ExampleDetailPageProps {
   onSelectExample: (example: IExampleProgram) => void;
 }
 
-const ExampleDetailPage: React.FC<ExampleDetailPageProps> = ({
-  example,
-  onSelectExample,
-}) => {
+const ExampleDetailPage: React.FC<ExampleDetailPageProps> = ({ example, onSelectExample }) => {
   const renderSuggestedSolverBadge = () => {
     const raw = example.suggested_solver;
 

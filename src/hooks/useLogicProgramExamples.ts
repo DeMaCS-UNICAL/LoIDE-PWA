@@ -13,7 +13,7 @@ export const useLogicProgramExamples = () => {
 
   const selectedExample = useMemo(
     () => examples.find((e) => e.id === selectedId) || null,
-    [examples, selectedId]
+    [examples, selectedId],
   );
 
   const selectExample = useCallback((id: string) => {
@@ -44,7 +44,7 @@ export const useLogicProgramExamples = () => {
       Utils.Editor.changeTabName(targetTabKey, example.title);
       Utils.Editor.changeTabValue(targetTabKey, example.code);
     },
-    [tabs, currentTabIndex, tabCountID]
+    [tabs, currentTabIndex, tabCountID],
   );
 
   return {

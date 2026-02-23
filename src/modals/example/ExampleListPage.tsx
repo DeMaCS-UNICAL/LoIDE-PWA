@@ -21,20 +21,9 @@ interface ExampleListPageProps {
   onSelectExample: (example: IExampleProgram) => void;
 }
 
-const ExampleListPage: React.FC<ExampleListPageProps> = ({
-  onDismiss,
-  onSelectExample,
-}) => {
-  const pushDetail = async (
-    nav: HTMLIonNavElement,
-    example: IExampleProgram
-  ) => {
-    await nav.push(() => (
-      <ExampleDetailPage
-        example={example}
-        onSelectExample={onSelectExample}
-      />
-    ));
+const ExampleListPage: React.FC<ExampleListPageProps> = ({ onDismiss, onSelectExample }) => {
+  const pushDetail = async (nav: HTMLIonNavElement, example: IExampleProgram) => {
+    await nav.push(() => <ExampleDetailPage example={example} onSelectExample={onSelectExample} />);
   };
 
   return (
