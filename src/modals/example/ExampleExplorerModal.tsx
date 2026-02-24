@@ -16,13 +16,21 @@ const ExampleExplorerModal: React.FC<ExampleExplorerModalProps> = ({
 }) => {
   const navRef = useRef<HTMLIonNavElement>(null);
 
+  const handleSelectExample = (example: IExampleProgram) => {
+    onSelectExample(example);
+    onDismiss(false); // 🔥 chiude automaticamente la modal
+  };
+
   return (
     <IonModal isOpen={isOpen} onDidDismiss={() => onDismiss(false)}>
       <IonNav
         ref={navRef}
-        root={() => (
-          <ExampleListPage onDismiss={() => onDismiss(false)} onSelectExample={onSelectExample} />
-        )}
+        root={ExampleListPage}
+        rootParams={{
+          navRef,
+          onDismiss: () => onDismiss(false),
+          onSelectExample: handleSelectExample,
+        }}
       />
     </IonModal>
   );

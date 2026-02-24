@@ -17,13 +17,22 @@ import { EXAMPLE_PROGRAMS, IExampleProgram } from "../../lib/examples";
 import ExampleDetailPage from "./ExampleDetailPage";
 
 interface ExampleListPageProps {
+  navRef: React.RefObject<HTMLIonNavElement>;
   onDismiss: () => void;
   onSelectExample: (example: IExampleProgram) => void;
 }
 
-const ExampleListPage: React.FC<ExampleListPageProps> = ({ onDismiss, onSelectExample }) => {
-  const pushDetail = async (nav: HTMLIonNavElement, example: IExampleProgram) => {
-    await nav.push(() => <ExampleDetailPage example={example} onSelectExample={onSelectExample} />);
+const ExampleListPage: React.FC<ExampleListPageProps> = ({
+  navRef,
+  onDismiss,
+  onSelectExample,
+}) => {
+  const pushDetail = async (example: IExampleProgram) => {
+    if (!navRef.current) return;
+
+    await navRef.current.push(() => (
+      <ExampleDetailPage example={example} onSelectExample={onSelectExample} />
+    ));
   };
 
   return (
@@ -42,19 +51,7 @@ const ExampleListPage: React.FC<ExampleListPageProps> = ({ onDismiss, onSelectEx
       <IonContent>
         <IonList>
           {EXAMPLE_PROGRAMS.map((example) => (
-            <IonItem
-              key={example.id}
-              button
-              detail
-              onClick={(e) => {
-                const nav =
-                  (e.currentTarget.closest("ion-nav") as any) ||
-                  (document.querySelector("ion-nav") as any);
-                if (nav) {
-                  pushDetail(nav, example);
-                }
-              }}
-            >
+            <IonItem key={example.id} button detail onClick={() => pushDetail(example)}>
               <IonLabel>
                 <h2>{example.title}</h2>
                 <p>{example.description}</p>
