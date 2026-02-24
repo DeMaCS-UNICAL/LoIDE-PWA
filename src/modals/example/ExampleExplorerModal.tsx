@@ -18,7 +18,7 @@ const ExampleExplorerModal: React.FC<ExampleExplorerModalProps> = ({
 
   const handleSelectExample = (example: IExampleProgram) => {
     onSelectExample(example);
-    onDismiss(false); // 🔥 chiude automaticamente la modal
+    onDismiss(false);
   };
 
   return (
