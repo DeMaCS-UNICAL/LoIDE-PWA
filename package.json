@@ -69,7 +69,7 @@
     "@ionic/react-router": "^8.7.17",
     "@reduxjs/toolkit": "^2.11.2",
     "ace-builds": "^1.43.3",
-    "ajv": "^8.17.1",
+    "ajv": "^8.18.0",
     "compression": "^1.8.1",
     "express": "^5.2.1",
     "express-force-ssl": "^0.3.2",
