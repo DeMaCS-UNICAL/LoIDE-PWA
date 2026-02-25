@@ -1,8 +1,16 @@
 import { renderHook, waitFor } from "@testing-library/react";
 import { act } from "react";
+import { afterEach, vi } from "vitest";
 import useSelectedAtomName from "../../hooks/useSelectedAtomName";
 
 describe("hook - useSelectedAtomName", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    const selection = window.getSelection();
+    selection?.removeAllRanges();
+    document.body.innerHTML = "";
+  });
+
   it("renders without crashing", () => {
     renderHook(() => useSelectedAtomName());
   });
@@ -78,7 +86,7 @@ describe("hook - useSelectedAtomName", () => {
 
     expect(seletion).toBeTruthy();
 
-    seletion?.empty();
+    seletion?.removeAllRanges();
 
     const element = document.createElement("span");
     element.textContent = "3242423423";
@@ -100,7 +108,7 @@ describe("hook - useSelectedAtomName", () => {
   });
 
   it("should return empty string as atom name when selection is not supported", async () => {
-    window.getSelection = () => null;
+    vi.spyOn(window, "getSelection").mockReturnValue(null);
     const { result } = renderHook(() => useSelectedAtomName());
     expect(result.current.atomNameSelected).toBe("");
     act(() => result.current.updateSelectedText());

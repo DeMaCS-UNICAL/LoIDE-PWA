@@ -1,24 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Redirect, Route } from "react-router-dom";
-import {
-  IonApp,
-  IonBadge,
-  IonIcon,
-  IonLabel,
-  IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
-  setupIonicReact,
-} from "@ionic/react";
+import { IonApp, IonRouterOutlet, IonTabs, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import {
-  codeSlashOutline,
-  documentTextOutline,
-  cog,
-  informationCircleOutline,
-  colorPaletteOutline,
-} from "ionicons/icons";
 import MainTab from "./pages/MainTab";
 import RunSettingsTab from "./pages/RunSettingsTab";
 import OutputTab from "./pages/OutputTab";
@@ -45,16 +28,15 @@ import "./theme/variables.scss";
 import "./global.scss";
 import AboutTab from "./pages/AboutTab";
 import * as API from "./lib/api";
-import { IOutputData } from "./lib/LoideAPIInterfaces";
 import { LocalStorageItems, LoidePath } from "./lib/constants";
 import AppearanceTab from "./pages/AppearanceTab";
 import Utils from "./lib/utils";
-import { useDispatch, useSelector } from "react-redux";
-import { UIStatusSelector } from "./redux/slices/UIStatus";
-import { setError, setModel } from "./redux/slices/Output";
+import { useDispatch } from "react-redux";
 import { setLanguages } from "./redux/slices/LanguagesData";
 import Mousetrap from "mousetrap";
 import ShortcutsModal from "./modals/ShortcutsModal";
+import useOutput from "./hooks/useOutput";
+import LoideTabBar from "./components/LoideTabBar";
 
 setupIonicReact();
 
@@ -62,8 +44,7 @@ const App: React.FC = () => {
   const dispatch = useDispatch();
 
   const [showShortcutsModal, setShowShortcutsModal] = useState<boolean>(false);
-
-  const { newOutput } = useSelector(UIStatusSelector);
+  const { newOutput, outputPanelVisible, setNewOutput } = useOutput();
 
   useEffect(() => {
     API.createSocket();
@@ -72,22 +53,12 @@ const App: React.FC = () => {
       dispatch(setLanguages(output));
     });
 
-    API.setRunProjectListener((output: IOutputData) => {
-      dispatch(setModel(output.model));
-      dispatch(setError(output.error));
-
-      Utils.addNewOutputBadge();
-    });
+    API.setRunProjectListener(setNewOutput);
 
     return () => API.disconnectAndClearSocket();
-  }, [dispatch]);
+  }, [dispatch, setNewOutput]);
 
   useEffect(() => {
-    const button = document.querySelector(".output-tab-button");
-    button?.addEventListener("click", () => {
-      Utils.removeNewOutputBadge();
-    });
-
     window.onbeforeunload = function () {
       const loideProject = Utils.getLoideProjectData();
       localStorage.setItem(LocalStorageItems.loideProject, JSON.stringify(loideProject));
@@ -129,41 +100,7 @@ const App: React.FC = () => {
             {/* <Route component={MainTab} /> */}
           </IonRouterOutlet>
 
-          <IonTabBar slot="bottom">
-            <IonTabButton tab={LoidePath.Editor} href={`/${LoidePath.Editor}`}>
-              <IonIcon icon={codeSlashOutline} />
-              <IonLabel>Editor</IonLabel>
-            </IonTabButton>
-
-            <IonTabButton
-              tab={LoidePath.RunSettings}
-              href={`/${LoidePath.RunSettings}`}
-              className="ion-hide-lg-up"
-            >
-              <IonIcon icon={cog} />
-              <IonLabel>Run Settings</IonLabel>
-            </IonTabButton>
-
-            <IonTabButton
-              tab={LoidePath.Output}
-              href={`/${LoidePath.Output}`}
-              className="output-tab-button"
-            >
-              <IonIcon icon={documentTextOutline} />
-              <IonLabel>Output</IonLabel>
-              {newOutput && <IonBadge color="success">!</IonBadge>}
-            </IonTabButton>
-
-            <IonTabButton tab={LoidePath.Appearance} href={`/${LoidePath.Appearance}`}>
-              <IonIcon icon={colorPaletteOutline} />
-              <IonLabel>Appearance</IonLabel>
-            </IonTabButton>
-
-            <IonTabButton tab={LoidePath.About} href={`/${LoidePath.About}`}>
-              <IonIcon icon={informationCircleOutline} />
-              <IonLabel>About</IonLabel>
-            </IonTabButton>
-          </IonTabBar>
+          <LoideTabBar newOutput={newOutput} outputPanelVisible={outputPanelVisible} />
         </IonTabs>
         <ShortcutsModal isOpen={showShortcutsModal} onDismiss={setShowShortcutsModal} />
       </IonReactRouter>

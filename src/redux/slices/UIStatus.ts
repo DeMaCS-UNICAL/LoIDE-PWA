@@ -8,6 +8,7 @@ export const initialUIStatusState: IUIStatusState = {
   fontSizeEditor: 15,
   fontSizeOutput: 20,
   newOutput: false,
+  outputPanelVisible: false,
 };
 
 // A slice for recipes with our 3 reducers
@@ -33,6 +34,9 @@ const UIStatusSlice = createSlice({
     setNewOutput: (state, { payload }) => {
       state.newOutput = payload;
     },
+    setOutputPanelVisible: (state, { payload }) => {
+      state.outputPanelVisible = payload;
+    },
   },
 });
 
@@ -44,6 +48,7 @@ export const {
   setFontSizeEditor,
   setFontSizeOutput,
   setNewOutput,
+  setOutputPanelVisible,
 } = UIStatusSlice.actions;
 
 // A selector

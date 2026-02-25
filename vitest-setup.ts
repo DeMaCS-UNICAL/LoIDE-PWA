@@ -7,14 +7,6 @@ import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
 import { afterEach, vi } from "vitest";
 
-// Defer importing @ionic/react until after we apply DOM polyfills/mocks.
-// Importing it earlier leads to @ionic/core (Stencil) code running which
-// expects newer DOM APIs and throws in our test environment.
-void (async () => {
-  const { setupIonicReact } = await import("@ionic/react");
-  setupIonicReact();
-})();
-
 // Ensure cleanup after each test
 afterEach(() => {
   cleanup();
@@ -35,13 +27,20 @@ window.matchMedia =
 
 vi.useRealTimers();
 
-const ResizeObserver = vi.fn(() => ({
-  observe: function () {},
-  unobserve: function () {},
-  disconnect: function () {},
-}));
+class ResizeObserverMock {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
 
-vi.stubGlobal("ResizeObserver", ResizeObserver);
+vi.stubGlobal("ResizeObserver", ResizeObserverMock);
+
+// Polyfill scrollTo for JSDOM (used by IonSegmentView)
+if (!Element.prototype.scrollTo) {
+  Element.prototype.scrollTo = function () {
+    // no-op: tests don't need actual scrolling
+  };
+}
 
 // Polyfill/stub CSSStyleSheet and adoptedStyleSheets for test environment
 // Stencil/ionic code checks for constructable stylesheets and adoptedStyleSheets
@@ -96,4 +95,8 @@ if (!Object.prototype.hasOwnProperty.call(Element.prototype, "adoptedStyleSheets
     },
   });
 }
+
+// Import @ionic/react only after DOM polyfills/mocks are in place.
+const { setupIonicReact } = await import("@ionic/react");
+setupIonicReact();
 /* eslint-enable @typescript-eslint/no-explicit-any */

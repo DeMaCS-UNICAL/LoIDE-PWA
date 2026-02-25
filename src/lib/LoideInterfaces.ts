@@ -61,6 +61,7 @@ export interface IUIStatusState {
   fontSizeEditor: number;
   fontSizeOutput: number;
   newOutput: boolean;
+  outputPanelVisible: boolean;
 }
 
 export interface IDimensions {

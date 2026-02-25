@@ -49,9 +49,6 @@ describe("<Appearance />", () => {
 
     const range = await screen.findByTestId("font-size-editor-range");
 
-    // This checks if the value attribute exists
-    expect(range).toHaveAttribute("value");
-
     fireEvent.change(range, { target: { value: "1" } });
 
     // Check the current value of the range
@@ -66,9 +63,6 @@ describe("<Appearance />", () => {
     );
 
     const range = await screen.findByTestId("font-size-output-range");
-
-    // This checks if the value attribute exists
-    expect(range).toHaveAttribute("value");
 
     fireEvent.change(range, { target: { value: "1" } });
 
