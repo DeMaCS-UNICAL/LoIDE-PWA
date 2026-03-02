@@ -13,13 +13,13 @@ import {
   IonLabel,
 } from "@ionic/react";
 import { closeOutline } from "ionicons/icons";
-import { EXAMPLE_PROGRAMS, IExampleProgram } from "../../lib/examples";
+import { EXAMPLE_PROGRAMS, ExampleProgram } from "../../lib/examples";
 import ExampleDetailPage from "./ExampleDetailPage";
 
 interface ExampleListPageProps {
   navRef: React.RefObject<HTMLIonNavElement>;
   onDismiss: () => void;
-  onSelectExample: (example: IExampleProgram) => void;
+  onSelectExample: (example: ExampleProgram) => void;
 }
 
 const ExampleListPage: React.FC<ExampleListPageProps> = ({
@@ -27,7 +27,7 @@ const ExampleListPage: React.FC<ExampleListPageProps> = ({
   onDismiss,
   onSelectExample,
 }) => {
-  const pushDetail = async (example: IExampleProgram) => {
+  const pushDetail = async (example: ExampleProgram) => {
     if (!navRef.current) return;
 
     await navRef.current.push(() => (

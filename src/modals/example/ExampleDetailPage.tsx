@@ -10,11 +10,11 @@ import {
   IonButton,
   IonBadge,
 } from "@ionic/react";
-import { IExampleProgram } from "../../lib/examples";
+import { ExampleProgram } from "../../lib/examples";
 
 interface ExampleDetailPageProps {
-  example: IExampleProgram;
-  onSelectExample: (example: IExampleProgram) => void;
+  example: ExampleProgram;
+  onSelectExample: (example: ExampleProgram) => void;
 }
 
 const ExampleDetailPage: React.FC<ExampleDetailPageProps> = ({ example, onSelectExample }) => {

@@ -1,6 +1,6 @@
 // src/lib/examples.ts
 
-export interface IExampleProgram {
+export interface ExampleProgram {
   id: string;
   title: string;
   description: string;
@@ -13,7 +13,7 @@ export interface IExampleProgram {
  * Content type of sample JSON files.
  * Each JSON must have these fields.
  */
-interface IExampleFile {
+interface ExampleFile {
   id: string;
   title: string;
   description: string;
@@ -32,11 +32,11 @@ const exampleModules = import.meta.glob("../examples/!(examples-schema).json", {
 });
 
 /**
- * Converts imported modules into an array of IExampleProgram.
+ * Converts imported modules into an array of ExampleProgram.
  */
-export const EXAMPLE_PROGRAMS: IExampleProgram[] = Object.values(exampleModules)
+export const EXAMPLE_PROGRAMS: ExampleProgram[] = Object.values(exampleModules)
   .map((mod) => {
-    const data = (mod as any).default as IExampleFile;
+    const data = (mod as any).default as ExampleFile;
 
     return {
       id: data.id,

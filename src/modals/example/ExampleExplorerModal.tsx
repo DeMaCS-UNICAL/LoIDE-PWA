@@ -1,12 +1,12 @@
 import React, { useRef } from "react";
 import { IonModal, IonNav } from "@ionic/react";
-import { IExampleProgram } from "../../lib/examples";
+import { ExampleProgram } from "../../lib/examples";
 import ExampleListPage from "./ExampleListPage";
 
 interface ExampleExplorerModalProps {
   isOpen: boolean;
   onDismiss: (open: boolean) => void;
-  onSelectExample: (example: IExampleProgram) => void;
+  onSelectExample: (example: ExampleProgram) => void;
 }
 
 const ExampleExplorerModal: React.FC<ExampleExplorerModalProps> = ({
@@ -16,7 +16,7 @@ const ExampleExplorerModal: React.FC<ExampleExplorerModalProps> = ({
 }) => {
   const navRef = useRef<HTMLIonNavElement>(null);
 
-  const handleSelectExample = (example: IExampleProgram) => {
+  const handleSelectExample = (example: ExampleProgram) => {
     onSelectExample(example);
     onDismiss(false);
   };

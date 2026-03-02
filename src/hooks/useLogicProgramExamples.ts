@@ -1,5 +1,5 @@
 import { useMemo, useState, useCallback } from "react";
-import { EXAMPLE_PROGRAMS, IExampleProgram } from "../lib/examples";
+import { EXAMPLE_PROGRAMS, ExampleProgram } from "../lib/examples";
 import { useSelector } from "react-redux";
 import { editorSelector } from "../redux/slices/Editor";
 import Utils from "../lib/utils";
@@ -21,7 +21,7 @@ export const useLogicProgramExamples = () => {
   }, []);
 
   const loadExampleIntoEditor = useCallback(
-    (example: IExampleProgram) => {
+    (example: ExampleProgram) => {
       const keysTab = Object.keys(tabs).map((item) => Number(item));
       if (keysTab.length === 0) {
         Utils.Editor.addTab();
