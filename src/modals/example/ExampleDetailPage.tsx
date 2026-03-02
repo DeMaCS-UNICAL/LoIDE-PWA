@@ -57,7 +57,12 @@ const ExampleDetailPage: React.FC<ExampleDetailPageProps> = ({ example, onSelect
       </IonHeader>
 
       <IonContent className="ion-padding">
-        <p style={{ color: "var(--ion-color-medium)" }}>
+        <p
+          style={{
+            color: "var(--ion-color-medium)",
+            marginBottom: "12px",
+          }}
+        >
           Language: <strong>{example.language}</strong>
         </p>
 
