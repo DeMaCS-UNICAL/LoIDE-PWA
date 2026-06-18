@@ -1,0 +1,7 @@
+{
+  "id": "graph-coloring",
+  "title": "Graph 3-coloring",
+  "description": "Classic graph 3-coloring example on a tiny triangle graph.",
+  "language": "asp",
+  "code": "% Graph 3-coloring of a triangle\n\nnode(a). node(b). node(c).\nedge(a,b). edge(b,c). edge(c,a).\n\ncolor(red;green;blue).\n\n% each node has exactly one color\n1 { col(N,C) : color(C) } 1 :- node(N).\n\n% adjacent nodes cannot share the same color\n:- edge(X,Y), col(X,C), col(Y,C).\n"
+}

@@ -1,0 +1,7 @@
+{
+  "id": "family-ancestor",
+  "title": "Family: ancestor relation",
+  "description": "Small example with facts and recursive rules to compute the ancestor relation.",
+  "language": "asp",
+  "code": "% Family: ancestor relation\n\nparent(john, mary).\nparent(mary, alice).\nparent(alice, bob).\n\nancestor(X,Y) :- parent(X,Y).\nancestor(X,Y) :- parent(X,Z), ancestor(Z,Y).\n\n% The solver will compute all ancestor/2 atoms.\n"
+}

@@ -30,6 +30,7 @@ import {
   folderOpenOutline,
   saveOutline,
   shareOutline,
+  codeSlashOutline,
 } from "ionicons/icons";
 import SaveProjectModal from "../modals/SaveProjectModal";
 import { ActionSheet, ButtonText, WindowConfirmMessages } from "../lib/constants";
@@ -45,6 +46,12 @@ import useOutput from "../hooks/useOutput";
 import { useIsMobile } from "../hooks/useIsMobile";
 import useMainPanelLayout from "../hooks/useMainPanelLayout";
 
+// Examples
+import ExampleExplorerModal from "../modals/example/ExampleExplorerModal";
+import { useLogicProgramExamples } from "../hooks/useLogicProgramExamples";
+
+const VISIBLE_EXAMPLES_LIMIT = 4;
+
 type MainTabPageProps = RouteComponentProps<{
   data: string;
 }>;
@@ -59,7 +66,19 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
     event: Event | undefined;
   }>({ open: false, event: undefined });
 
+  // Examples: modal + popover
+  const [showExamplesModal, setShowExamplesModal] = useState<boolean>(false);
+  const [examplesPopover, setExamplesPopover] = useState<{
+    open: boolean;
+    event: Event | undefined;
+  }>({ open: false, event: undefined });
+
   const { languages } = useSelector(languagesDataSelector);
+
+  const { examples, loadExampleIntoEditor } = useLogicProgramExamples();
+
+  const visibleExamples = examples.slice(0, VISIBLE_EXAMPLES_LIMIT);
+
   const { newOutput, resetNewOutputBadge, setOutputPanelVisible } = useOutput();
   const isMobile = useIsMobile();
   const { groupRef, initialLayout, handleLayoutChanged } = useMainPanelLayout(isMobile);
@@ -75,7 +94,6 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [languages]);
 
-  // Cleanup: reset output visibility when navigating away from MainTab
   useEffect(() => {
     return () => {
       setOutputPanelVisible(false);
@@ -159,6 +177,19 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
       .then((alert) => alert.present());
   };
 
+  const openExamplesPopoverAtButton = (e: React.MouseEvent) => {
+    setExamplesPopover({ open: true, event: e.nativeEvent });
+  };
+
+  const openExamplesPopoverCentered = () => {
+    setExamplesPopover({ open: true, event: undefined });
+  };
+
+  const handleShowMoreExamples = () => {
+    setExamplesPopover({ open: false, event: undefined });
+    setShowExamplesModal(true);
+  };
+
   return (
     <IonPage>
       <IonHeader>
@@ -166,18 +197,28 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
           <IonButtons slot="start">
             <LoideRunNavButton />
           </IonButtons>
+
           <img
             className="logo"
-            style={{
-              marginTop: "6px",
-              marginLeft: "10px",
-            }}
+            style={{ marginTop: "6px", marginLeft: "10px" }}
             height="30px"
             src={logo}
             alt="loide-logo"
           />
+
           <RestoreButton />
+
           <IonButtons slot="end">
+            <IonButton
+              title="Examples"
+              color="tertiary"
+              className="ion-hide-sm-down"
+              onClick={openExamplesPopoverAtButton}
+            >
+              <IonIcon icon={codeSlashOutline} />
+              <span className="margin-button-left">Examples</span>
+            </IonButton>
+
             <IonButton
               title="Open"
               color="warning"
@@ -187,6 +228,7 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
               <IonIcon icon={folderOpenOutline} />
               <span className="margin-button-left">Open</span>
             </IonButton>
+
             <IonButton
               title="Save"
               color="primary"
@@ -196,6 +238,7 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
               <IonIcon icon={saveOutline} />
               <span className="margin-button-left">Save</span>
             </IonButton>
+
             <IonButton
               title="Share"
               color="success"
@@ -205,15 +248,17 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
               <IonIcon icon={shareOutline} />
               <span className="margin-button-left">Share</span>
             </IonButton>
+
             <IonButton
               title="Reset"
               color="danger"
               className="ion-hide-sm-down"
-              onClick={() => showResetActionSheet()}
+              onClick={showResetActionSheet}
             >
               <IonIcon icon={closeCircleOutline} />
               <span className="margin-button-left">Reset</span>
             </IonButton>
+
             <IonButton
               color="primary"
               className="ion-hide-sm-up"
@@ -230,8 +275,8 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
+
       <IonContent scrollY={false} className="tab-content-of-hidden">
-        {/* Resizable split pane */}
         <Group
           defaultLayout={initialLayout}
           onLayoutChanged={handleLayoutChanged}
@@ -248,19 +293,16 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
                     setSelectedSegment(value);
                     const isOutputVisible = value === "output";
                     setOutputPanelVisible(isOutputVisible);
-                    // Reset badge when output panel becomes visible
-                    if (isOutputVisible) {
-                      resetNewOutputBadge();
-                    }
+                    if (isOutputVisible) resetNewOutputBadge();
                   }}
                 >
                   <IonSegmentButton value="run-settings" contentId="run-settings">
                     <IonLabel>Run Settings</IonLabel>
                   </IonSegmentButton>
+
                   <IonSegmentButton value="output" contentId="output">
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                       <IonLabel>Output</IonLabel>
-
                       {newOutput && selectedSegment !== "output" && (
                         <IonBadge color="tertiary" style={{ marginRight: "4px" }}>
                           new
@@ -269,12 +311,14 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
                     </div>
                   </IonSegmentButton>
                 </IonSegment>
+
                 <IonSegmentView style={{ flex: 1, overflow: "hidden" }}>
                   <IonSegmentContent id="run-settings">
                     <IonContent forceOverscroll={true}>
                       <RunSettings />
                     </IonContent>
                   </IonSegmentContent>
+
                   <IonSegmentContent id="output">
                     <OutputPane />
                   </IonSegmentContent>
@@ -287,7 +331,6 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
             </>
           )}
 
-          {/* Main Content Panel */}
           <Panel id="editor" defaultSize={isMobile ? "100%" : "75%"} minSize="40%">
             <Editor />
           </Panel>
@@ -296,6 +339,7 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
         <OpenProjectModal isOpen={showOpenModal} onDismiss={setShowOpenModal} />
         <SaveProjectModal isOpen={showSaveModal} onDismiss={setShowSaveModal} />
         <ShareProjectModal isOpen={showShareModal} onDismiss={setShowShareModal} />
+
         <IonPopover
           data-testid="operations-popover"
           isOpen={buttonsPopover.open}
@@ -303,25 +347,70 @@ const MainTab: React.FC<MainTabPageProps> = ({ match }) => {
           onDidDismiss={() => setButtonsPopover({ open: false, event: undefined })}
         >
           <IonList>
-            <IonItem button={true} onClick={() => setShowOpenModal(true)} title="Open">
+            <IonItem
+              button
+              onClick={() => {
+                setButtonsPopover({ open: false, event: undefined });
+                openExamplesPopoverCentered();
+              }}
+              title="Examples"
+            >
+              <IonLabel>Examples</IonLabel>
+              <IonIcon color="tertiary" icon={codeSlashOutline} slot="end" />
+            </IonItem>
+
+            <IonItem button onClick={() => setShowOpenModal(true)} title="Open">
               <IonLabel>Open</IonLabel>
               <IonIcon color="warning" icon={folderOpenOutline} slot="end" />
             </IonItem>
-            <IonItem button={true} onClick={() => setShowSaveModal(true)} title="Save">
+
+            <IonItem button onClick={() => setShowSaveModal(true)} title="Save">
               <IonLabel>Save</IonLabel>
               <IonIcon color="primary" icon={saveOutline} slot="end" />
             </IonItem>
-            <IonItem button={true} title="Share" onClick={() => setShowShareModal(true)}>
-              <IonLabel>Share</IonLabel>
 
+            <IonItem button title="Share" onClick={() => setShowShareModal(true)}>
+              <IonLabel>Share</IonLabel>
               <IonIcon color="success" slot="end" icon={shareOutline} />
             </IonItem>
-            <IonItem button={true} title="Reset" onClick={() => showResetActionSheet()}>
+
+            <IonItem button title="Reset" onClick={showResetActionSheet}>
               <IonLabel>Reset</IonLabel>
               <IonIcon color="danger" icon={closeCircleOutline} slot="end" />
             </IonItem>
           </IonList>
         </IonPopover>
+
+        <IonPopover
+          isOpen={examplesPopover.open}
+          event={examplesPopover.event}
+          onDidDismiss={() => setExamplesPopover({ open: false, event: undefined })}
+        >
+          <IonList>
+            {visibleExamples.map((example) => (
+              <IonItem
+                key={example.id}
+                button
+                onClick={() => {
+                  loadExampleIntoEditor(example);
+                  setExamplesPopover({ open: false, event: undefined });
+                }}
+              >
+                <IonLabel>{example.title}</IonLabel>
+              </IonItem>
+            ))}
+
+            <IonItem button onClick={handleShowMoreExamples}>
+              <IonLabel>Show more…</IonLabel>
+            </IonItem>
+          </IonList>
+        </IonPopover>
+
+        <ExampleExplorerModal
+          isOpen={showExamplesModal}
+          onDismiss={setShowExamplesModal}
+          onSelectExample={loadExampleIntoEditor}
+        />
       </IonContent>
     </IonPage>
   );
